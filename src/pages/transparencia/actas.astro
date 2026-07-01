@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import ActaCard from '../../components/ActaCard.astro';
+import { formatDateEs, formatDateEsShort } from '../../utils/date';
 
 type ActaModule = {
 	frontmatter?: {
@@ -36,15 +36,59 @@ const actas = modules
 			(acta.type === 'ordinaria' || acta.type === 'extraordinaria')
 	)
 	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+const getFileName = (url: string) => {
+	const parts = url.split('/').filter(Boolean);
+	const last = parts[parts.length - 1] ?? 'archivo';
+	return decodeURIComponent(last);
+};
+
+const getSafeUrl = (url: string) => encodeURI(url);
 ---
 
 <Layout>
-	<main class="mx-auto max-w-3xl px-4 py-8">
+	<main class="mx-auto max-w-5xl px-4 py-8">
 		<h1 class="mb-6 text-2xl font-bold text-slate-900">Actas Municipales</h1>
-		<ul class="space-y-3">
-		{actas.map((acta) => (
-			<ActaCard title={acta.title} date={acta.date} url={acta.url} type={acta.type} />
-		))}
-		</ul>
+		<div class="overflow-x-auto rounded-xl border border-slate-200">
+			<table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
+				<thead class="bg-slate-50">
+					<tr>
+						<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>
+						<th class="px-4 py-3 text-left font-semibold text-slate-700">Titulo</th>
+						<th class="px-4 py-3 text-left font-semibold text-slate-700">Fecha</th>
+						<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-slate-100">
+					{actas.map((acta) => (
+						<tr class="align-middle odd:bg-white even:bg-slate-50">
+							<td class="w-px whitespace-nowrap px-4 py-3">
+								<span
+									class:list={[
+										'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ring-1 ring-inset',
+										acta.type === 'ordinaria'
+											? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+											: 'bg-amber-50 text-amber-700 ring-amber-200',
+									]}
+								>
+									<span class="sm:hidden">•</span>
+									<span class="hidden sm:inline">{acta.type}</span>
+								</span>
+							</td>
+							<td class="px-4 py-3 font-medium text-slate-900">{acta.title}</td>
+							<td class="px-4 py-3 text-slate-600">
+								<span class="sm:hidden">{formatDateEsShort(acta.date)}</span>
+								<span class="hidden sm:inline">{formatDateEs(acta.date)}</span>
+							</td>
+							<td class="w-px whitespace-nowrap px-4 py-3">
+								<a class="text-blue-700 hover:underline" href={getSafeUrl(acta.url)} target="_blank" rel="noopener noreferrer">
+									Abrir
+								</a>
+							</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</div>
 	</main>
 </Layout>
