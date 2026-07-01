@@ -1,18 +1,18 @@
 export function formatDateEs(value: string | Date): string {
 	// ponytail: ISO YYYY-MM-DD is rendered via split to avoid timezone shifts; fallback uses UTC formatter.
 	const monthNames = [
-		'ene',
-		'feb',
-		'mar',
-		'abr',
-		'may',
-		'jun',
-		'jul',
-		'ago',
-		'sep',
-		'oct',
-		'nov',
-		'dic',
+		'enero',
+		'febrero',
+		'marzo',
+		'abril',
+		'mayo',
+		'junio',
+		'julio',
+		'agosto',
+		'septiembre',
+		'octubre',
+		'noviembre',
+		'diciembre',
 	] as const;
 
 	const rawValue = value instanceof Date ? value.toISOString() : String(value).trim();
@@ -25,9 +25,9 @@ export function formatDateEs(value: string | Date): string {
 		const monthIndex = Number(month) - 1;
 		const monthName = monthNames[monthIndex];
 		if (monthName) {
-			return `${day}.${monthName}.${year}`;
+			return `${day} de ${monthName} de ${year}`;
 		}
-		return `${day}.${month}.${year}`;
+		return `${day} de ${month} de ${year}`;
 	}
 
 	const parsed = new Date(rawValue);

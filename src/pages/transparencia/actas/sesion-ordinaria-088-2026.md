@@ -2,5 +2,5 @@
 title: Sesión Ordinaria 088-2025
 date: 2026-01-13
 type: ordinaria
-url: /files/actas/2026/Sesión-Ordinaria-088-2025.pdf
+url: /files/actas/2026/Sesión Ordinaria 088-2025.pdf
 ---
