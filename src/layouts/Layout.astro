@@ -1,3 +1,7 @@
+---
+import '../styles/global.css';
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -9,15 +13,17 @@
 		<title>Astro Basics</title>
 	</head>
 	<body>
+		<header>
+			<nav>
+				<a href="/">Home</a>
+				<div class="menu-item">
+					<a href="/transparencia">Transparencia</a>
+					<div class="submenu">
+						<a href="/transparencia/actas">Actas Municipales</a>
+					</div>
+				</div>
+			</nav>
+		</header>
 		<slot />
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

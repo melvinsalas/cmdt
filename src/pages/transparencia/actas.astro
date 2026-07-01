@@ -1,0 +1,39 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+type ActaModule = {
+	frontmatter?: {
+		title?: string;
+		date?: string;
+		url?: string;
+		type?: 'ordinaria' | 'extraordinaria';
+	};
+	url?: string;
+};
+
+const modules = Object.values(
+	import.meta.glob('/src/pages/transparencia/actas/*.md', { eager: true })
+) as ActaModule[];
+
+const actas = modules
+	.map((mod) => ({
+		title: mod.frontmatter?.title ?? '',
+		date: mod.frontmatter?.date ?? '',
+		url: mod.frontmatter?.url ?? mod.url ?? '#',
+		type: mod.frontmatter?.type,
+	}))
+	.filter((acta) => acta.title && acta.date && acta.url && acta.type)
+	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+---
+
+<Layout>
+	<h1>Actas Municipales</h1>
+	<ul>
+		{actas.map((acta) => (
+			<li>
+				<span class={`acta-type acta-type-${acta.type}`}>{acta.type}</span> <strong>{acta.title}</strong> - {acta.date} -{' '}
+				<a href={acta.url}>{acta.url}</a>
+			</li>
+		))}
+	</ul>
+</Layout>
