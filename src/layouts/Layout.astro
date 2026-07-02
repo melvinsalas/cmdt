@@ -28,11 +28,5 @@ import '../styles/global.css';
 			</nav>
 		</header>
 		<slot />
-		<script>
-			document.querySelectorAll('a[href]').forEach(link => {
-				link.setAttribute('target', '_blank');
-				link.setAttribute('rel', 'noopener noreferrer');
-			});
-		</script>
 	</body>
 </html>
