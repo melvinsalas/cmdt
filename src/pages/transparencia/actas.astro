@@ -1,47 +1,25 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
 import { formatDateEs, formatDateEsShort } from '../../utils/date';
-
-type ActaModule = {
-	frontmatter?: {
-		title?: string;
-		date?: string;
-		url?: string;
-		type?: 'ordinaria' | 'extraordinaria';
-	};
-	url?: string;
-};
 
 type Acta = {
 	title: string;
-	date: string;
+	date: Date;
 	url: string;
 	type: 'ordinaria' | 'extraordinaria';
 };
 
-const modules = Object.values(
-	import.meta.glob('/src/pages/transparencia/actas/*.md', { eager: true })
-) as ActaModule[];
+const entries = await getCollection('actas');
 
-const actas = modules
-	.map((mod) => ({
-		title: mod.frontmatter?.title ?? '',
-		date: mod.frontmatter?.date ?? '',
-		url: mod.frontmatter?.url ?? mod.url ?? '#',
-		type: mod.frontmatter?.type,
+const actas: Acta[] = entries
+	.map((entry) => ({
+		title: entry.data.title,
+		date: entry.data.date,
+		url: entry.data.url,
+		type: entry.data.type,
 	}))
-	.filter(
-		(acta): acta is Acta =>
-			Boolean(acta.title && acta.date && acta.url) &&
-			(acta.type === 'ordinaria' || acta.type === 'extraordinaria')
-	)
-	.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-const getFileName = (url: string) => {
-	const parts = url.split('/').filter(Boolean);
-	const last = parts[parts.length - 1] ?? 'archivo';
-	return decodeURIComponent(last);
-};
+	.sort((a, b) => b.date.getTime() - a.date.getTime());
 
 const getSafeUrl = (url: string) => encodeURI(url);
 ---
