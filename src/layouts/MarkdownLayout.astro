@@ -1,144 +1,21 @@
 ---
+import Layout from './Layout.astro';
+
 const { frontmatter } = Astro.props;
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content={frontmatter?.description ?? ""} />
-    <title>{frontmatter?.title ?? "Post"}</title>
-  </head>
-  <body>
-    <main class="container">
-      <article class="content">
-        <header class="post-header">
+<Layout title={frontmatter?.title ?? 'Post'} description={frontmatter?.description}>
+    <main class="mx-auto max-w-[760px] px-4 py-8">
+      <article
+        class="markdown-content rounded-xl border border-slate-200 bg-white p-6 md:p-8"
+      >
+        <header class="mb-8 border-b border-slate-200 pb-4">
           <h1>{frontmatter?.title}</h1>
-          {frontmatter?.description && <p class="description">{frontmatter.description}</p>}
-          {frontmatter?.date && <p class="date">{frontmatter.date}</p>}
+          {frontmatter?.description && <p class="m-0 text-slate-600">{frontmatter.description}</p>}
+          {frontmatter?.date && <p class="mt-2 mb-0 text-sm text-slate-500">{frontmatter.date}</p>}
         </header>
 
         <slot />
       </article>
     </main>
-  </body>
-</html>
-
-<style>
-  :root {
-    color-scheme: light;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  }
-
-  body {
-    margin: 0;
-    color: #1f2937;
-    background: #f9fafb;
-    line-height: 1.7;
-  }
-
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 2rem 1rem 4rem;
-  }
-
-  .content {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 2rem;
-  }
-
-  .post-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4 {
-    line-height: 1.25;
-    margin-top: 2rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .post-header h1 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-size: 2rem;
-  }
-
-  .description {
-    margin: 0;
-    color: #4b5563;
-  }
-
-  .date {
-    margin-top: 0.5rem;
-    margin-bottom: 0;
-    color: #6b7280;
-    font-size: 0.95rem;
-  }
-
-  p,
-  ul,
-  ol,
-  pre,
-  blockquote,
-  table {
-    margin-top: 0;
-    margin-bottom: 1rem;
-  }
-
-  ul,
-  ol {
-    padding-left: 1.3rem;
-  }
-
-  a {
-    color: #0f766e;
-  }
-
-  img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    border-radius: 8px;
-  }
-
-  code {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
-    background: #f3f4f6;
-    padding: 0.12rem 0.35rem;
-    border-radius: 4px;
-    font-size: 0.92em;
-  }
-
-  pre {
-    background: #111827;
-    color: #f9fafb;
-    padding: 1rem;
-    border-radius: 8px;
-    overflow-x: auto;
-  }
-
-  pre code {
-    background: transparent;
-    padding: 0;
-    color: inherit;
-  }
-
-  @media (max-width: 640px) {
-    .content {
-      padding: 1.25rem;
-    }
-
-    .post-header h1 {
-      font-size: 1.7rem;
-    }
-  }
-</style>
+</Layout>
