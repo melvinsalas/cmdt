@@ -1,0 +1,13 @@
+---
+layout: '@layouts/MarkdownLayout.astro'
+title: Licitaciones
+description: Listado de licitaciones publicadas por la Municipalidad.
+---
+
+import Collection from '@components/Collection.astro';
+
+<Collection
+	collection="licitaciones"
+	baseUri="/transparencia/licitaciones"
+	emptyMessage="No hay licitaciones publicadas en este momento."
+/>

@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 import DataTable from './DataTable.astro';
 
 type CollectionName = 'actas' | 'concursos' | 'licitaciones';
@@ -11,6 +10,17 @@ type Props = {
 	limit?: number;
 };
 
+type MarkdownModule = {
+	frontmatter: {
+		title: string;
+		date: string | Date;
+		type?: string;
+		file?: string;
+	};
+};
+
+type MarkdownModuleMap = Record<string, MarkdownModule>;
+
 const {
 	collection,
 	baseUri,
@@ -18,16 +28,26 @@ const {
 	limit,
 }: Props = Astro.props;
 
-const entries = await getCollection(collection);
+const modules =
+	collection === 'actas'
+		? (import.meta.glob('../pages/transparencia/actas/*.{md,mdx}', { eager: true }) as MarkdownModuleMap)
+		: collection === 'concursos'
+			? (import.meta.glob('../pages/transparencia/concursos/*.{md,mdx}', { eager: true }) as MarkdownModuleMap)
+			: (import.meta.glob('../pages/transparencia/licitaciones/*.{md,mdx}', { eager: true }) as MarkdownModuleMap);
 
-const data = entries
-	.map((entry) => ({
-		title: entry.data.title,
-		date: entry.data.date,
-		type: entry.data.type,
-		file: entry.data.file,
-		href: encodeURI(`${baseUri}/${entry.id.replace(/\.(md|mdx)$/, '')}/`),
-	}))
+const data = Object.entries(modules)
+	.map(([filePath, entry]) => {
+		const fileName = filePath.split('/').pop() ?? '';
+		const slug = fileName.replace(/\.(md|mdx)$/, '');
+
+		return {
+			title: entry.frontmatter.title,
+			date: new Date(entry.frontmatter.date),
+			type: entry.frontmatter.type,
+			file: entry.frontmatter.file,
+			href: encodeURI(`${baseUri}/${slug}/`),
+		};
+	})
 	.sort((a, b) => b.date.getTime() - a.date.getTime());
 
 const safeLimit = Number.isInteger(limit) && (limit as number) > 0 ? (limit as number) : undefined;

@@ -1,0 +1,13 @@
+---
+layout: '@layouts/MarkdownLayout.astro'
+title: Actas Municipales
+description: Consulta de actas ordinarias y extraordinarias del Concejo Municipal.
+---
+
+import Collection from '@components/Collection.astro';
+
+<Collection
+	collection="actas"
+	baseUri="/transparencia/actas"
+	emptyMessage="No hay actas publicadas"
+/>

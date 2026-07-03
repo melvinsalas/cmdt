@@ -1,0 +1,13 @@
+---
+layout: '@layouts/MarkdownLayout.astro'
+title: Concursos
+description: Listado de concursos publicados por la Municipalidad.
+---
+
+import Collection from '@components/Collection.astro';
+
+<Collection
+	collection="concursos"
+	baseUri="/transparencia/concursos"
+	emptyMessage="No hay concursos publicados en este momento."
+/>

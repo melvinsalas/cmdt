@@ -1,10 +1,9 @@
 ---
-title: "Licitación Pública CMDT-2026-001"
+layout: ../../../layouts/MarkdownLayout.astro
+title: "Licitación Pública CMDT-2026-002"
 date: 2026-05-15
 type: "privada"
 ---
-
-# Licitación Pública CMDT-2026-001
 
 Se abre la licitación pública para la contratación de servicios de mantenimiento vial en el distrito de Tucurrique.
 
