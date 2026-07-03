@@ -1,6 +1,5 @@
 ---
-import { existsSync, statSync } from 'node:fs';
-import path from 'node:path';
+import { FileSize } from '../utils/file-size';
 
 type Props = {
 	href: string;
@@ -8,46 +7,25 @@ type Props = {
 
 const { href }: Props = Astro.props;
 
-const toLocalFilePath = (urlPath: string) => {
-	if (!urlPath.startsWith('/')) return null;
-	const safePath = urlPath.replace(/^\/+/, '');
-	return path.join(process.cwd(), 'public', safePath);
-};
-
-const formatSize = (bytes: number) => {
-	const kb = bytes / 1024;
-	if (kb < 1024) return `${kb.toFixed(1)} KB`;
-	const mb = kb / 1024;
-	return `${mb.toFixed(2)} MB`;
-};
-
-const localPath = toLocalFilePath(href);
-
 const fileName = (() => {
-	const last = href.split('/').filter(Boolean).pop();
-	if (!last) return 'Archivo';
+	const last = href.split("/").filter(Boolean).pop();
+	if (!last) return "Archivo";
 	return decodeURIComponent(last);
 })();
 
-let sizeText = 'Tamaño no disponible';
-if (localPath && existsSync(localPath)) {
-	const stats = statSync(localPath);
-	if (stats.isFile()) {
-		sizeText = formatSize(stats.size);
-	}
-}
+let sizeText = "Tamaño no disponible";
+sizeText = FileSize.getFromPublicHref(href);
 ---
 
-<a
-	href={href}
-	target="_blank"
-	rel="noopener noreferrer"
-	class="my-2 block rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-900 no-underline transition hover:border-blue-300 hover:bg-blue-50 hover:no-underline"
-	style="text-decoration: none;"
+<aside
+	class:list={[
+		"my-3 border-l-4 p-4",
+		"border-gray-500 bg-gray-50 text-gray-900",
+	]}
+	role="alert"
 >
-	<span class="inline-flex items-center gap-2.5">
-		<span aria-hidden="true">📎</span>
-		<span>{fileName}</span>
-		<em class="text-slate-500">{sizeText}</em>
-	</span>
-</a>
+	<a href={href} target="_blank" rel="noopener noreferrer" class="file-callout-link">
+		{fileName}
+	</a>
+	<em class="ml-2 text-slate-600">({sizeText})</em>
+</aside>

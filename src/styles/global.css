@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@layer base {
+	a {
+		color: #334155;
+	}
+
+	a:hover {
+		color: #0f172a;
+	}
+}
+
 html,
 body {
 	margin: 0;
@@ -102,11 +112,6 @@ body {
 
 .markdown-content ol {
 	list-style: decimal;
-}
-
-.markdown-content a {
-	color: #1d4ed8;
-	text-underline-offset: 2px;
 }
 
 .markdown-content a:hover {
