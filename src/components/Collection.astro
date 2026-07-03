@@ -1,51 +1,42 @@
 ---
 import DataTable from './DataTable.astro';
+import { getCollection } from 'astro:content';
 
 type CollectionName = 'actas' | 'concursos' | 'licitaciones';
 
 type Props = {
-	collection: CollectionName;
 	baseUri: string;
 	emptyMessage?: string;
 	limit?: number;
 };
 
-type MarkdownModule = {
-	frontmatter: {
-		title: string;
-		date: string | Date;
-		type?: string;
-		file?: string;
-	};
-};
-
-type MarkdownModuleMap = Record<string, MarkdownModule>;
-
 const {
-	collection,
 	baseUri,
 	emptyMessage = 'No hay registros publicados.',
 	limit,
 }: Props = Astro.props;
 
-const modules =
-	collection === 'actas'
-		? (import.meta.glob('../pages/transparencia/actas/*.{md,mdx}', { eager: true }) as MarkdownModuleMap)
-		: collection === 'concursos'
-			? (import.meta.glob('../pages/transparencia/concursos/*.{md,mdx}', { eager: true }) as MarkdownModuleMap)
-			: (import.meta.glob('../pages/transparencia/licitaciones/*.{md,mdx}', { eager: true }) as MarkdownModuleMap);
+const normalizeBaseUri = (value: string): string => {
+	const trimmed = value.trim();
+	if (!trimmed) return '';
+	const withoutTrailingSlash = trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
+	return withoutTrailingSlash.startsWith('/') ? withoutTrailingSlash : `/${withoutTrailingSlash}`;
+};
 
-const data = Object.entries(modules)
-	.map(([filePath, entry]) => {
-		const fileName = filePath.split('/').pop() ?? '';
-		const slug = fileName.replace(/\.(md|mdx)$/, '');
+const normalizedBaseUri = normalizeBaseUri(baseUri);
+const collectionKey = normalizedBaseUri.split('/').filter(Boolean).at(-1) as CollectionName | undefined;
+const entries = collectionKey ? await getCollection(collectionKey) : [];
+
+const data = entries
+	.map((entry) => {
+		const slug = entry.id.replace(/\.(md|mdx)$/, '');
 
 		return {
-			title: entry.frontmatter.title,
-			date: new Date(entry.frontmatter.date),
-			type: entry.frontmatter.type,
-			file: entry.frontmatter.file,
-			href: encodeURI(`${baseUri}/${slug}/`),
+			title: entry.data.title,
+			date: new Date(entry.data.date),
+			type: entry.data.type,
+			file: entry.data.file,
+			href: encodeURI(`${normalizedBaseUri}/${slug}/`),
 		};
 	})
 	.sort((a, b) => b.date.getTime() - a.date.getTime());

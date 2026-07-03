@@ -1,5 +1,6 @@
 ---
 import { formatDateEs, formatDateEsShort } from '../utils/date';
+import TypeBadge from './TypeBadge.astro';
 
 type DataRow = {
 	title: string;
@@ -17,17 +18,7 @@ interface Props {
 const { data, emptyMessage = 'No hay registros' } = Astro.props;
 
 // Ordenar por fecha descendente
-const sortedData = data.sort((a, b) => b.date.getTime() - a.date.getTime());
-
-// Mapear colores de tipo
-const typeColors: Record<string, string> = {
-	ordinaria: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-	extraordinaria: 'bg-amber-50 text-amber-700 ring-amber-200',
-};
-
-const getTypeColor = (type?: string) => {
-	return type && typeColors[type] ? typeColors[type] : 'bg-slate-100 text-slate-700 ring-slate-200';
-};
+const sortedData = [...data].sort((a, b) => b.date.getTime() - a.date.getTime());
 ---
 
 {sortedData.length === 0 ? (
@@ -46,21 +37,8 @@ const getTypeColor = (type?: string) => {
 			<tbody class="divide-y divide-slate-100">
 				{sortedData.map((row) => (
 					<tr class="align-middle odd:bg-white even:bg-slate-50">
-						{/* Columna de tipo */}
 						<td class="w-px whitespace-nowrap px-4 py-3">
-							{row.type ? (
-								<span
-									class:list={[
-										'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ring-1 ring-inset',
-										getTypeColor(row.type),
-									]}
-								>
-									<span class="sm:hidden">•</span>
-									<span class="hidden sm:inline">{row.type}</span>
-								</span>
-							) : (
-								<span></span>
-							)}
+							<TypeBadge type={row.type} />
 						</td>
 
 						{/* Columna de título */}
