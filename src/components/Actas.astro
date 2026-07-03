@@ -1,0 +1,73 @@
+---
+import { getCollection } from 'astro:content';
+import { formatDateEs, formatDateEsShort } from '../utils/date';
+
+type Acta = {
+	title: string;
+	date: Date;
+	href: string;
+	type: 'ordinaria' | 'extraordinaria';
+};
+
+type Props = {
+	limit?: number;
+};
+
+const { limit }: Props = Astro.props;
+
+const entries = await getCollection('actas');
+
+const actas: Acta[] = entries
+	.map((entry) => ({
+		title: entry.data.title,
+		date: entry.data.date,
+		href: encodeURI(`/transparencia/actas/${entry.id.replace(/\.(md|mdx)$/, '')}/`),
+		type: entry.data.type,
+	}))
+	.sort((a, b) => b.date.getTime() - a.date.getTime());
+
+const safeLimit = Number.isInteger(limit) && (limit as number) > 0 ? (limit as number) : undefined;
+const visibleActas = safeLimit ? actas.slice(0, safeLimit) : actas;
+---
+
+<div class="overflow-x-auto rounded-xl border border-slate-200">
+	<table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
+		<thead class="bg-slate-50">
+			<tr>
+				<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>
+				<th class="px-4 py-3 text-left font-semibold text-slate-700">Titulo</th>
+				<th class="px-4 py-3 text-left font-semibold text-slate-700">Fecha</th>
+				<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>
+			</tr>
+		</thead>
+		<tbody class="divide-y divide-slate-100">
+			{visibleActas.map((acta) => (
+				<tr class="align-middle odd:bg-white even:bg-slate-50">
+					<td class="w-px whitespace-nowrap px-4 py-3">
+						<span
+							class:list={[
+								'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ring-1 ring-inset',
+								acta.type === 'ordinaria'
+									? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+									: 'bg-amber-50 text-amber-700 ring-amber-200',
+							]}
+						>
+							<span class="sm:hidden">•</span>
+							<span class="hidden sm:inline">{acta.type}</span>
+						</span>
+					</td>
+					<td class="px-4 py-3 font-medium text-slate-900">{acta.title}</td>
+					<td class="px-4 py-3 text-slate-600">
+						<span class="sm:hidden">{formatDateEsShort(acta.date)}</span>
+						<span class="hidden sm:inline">{formatDateEs(acta.date)}</span>
+					</td>
+					<td class="w-px whitespace-nowrap px-4 py-3">
+						<a class="text-blue-700 hover:underline" href={acta.href}>
+							Ver
+						</a>
+					</td>
+				</tr>
+			))}
+		</tbody>
+	</table>
+</div>

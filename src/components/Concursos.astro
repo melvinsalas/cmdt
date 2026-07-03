@@ -1,0 +1,85 @@
+---
+import { getCollection } from "astro:content";
+import { formatDateEs, formatDateEsShort } from "../utils/date";
+
+type Concurso = {
+    title: string;
+    date: string | Date | null;
+    slug: string;
+    href: string;
+};
+
+const entries = await getCollection("concursos");
+
+const concursos: Concurso[] = entries
+    .map((entry) => {
+        const slug = entry.id.replace(/\.(md|mdx)$/, "");
+
+        return {
+            title: entry.data.title,
+            date: entry.data.date ?? null,
+            slug,
+            href: encodeURI(`/transparencia/concursos/${slug}/`),
+        };
+    })
+    .sort((a, b) => {
+        const left = a.date
+            ? new Date(a.date).getTime()
+            : Number.NEGATIVE_INFINITY;
+        const right = b.date
+            ? new Date(b.date).getTime()
+            : Number.NEGATIVE_INFINITY;
+        return right - left;
+    });
+---
+
+{
+    concursos.length === 0 ? (
+        <p>No hay concursos publicados en este momento.</p>
+    ) : (
+        <div class="overflow-x-auto rounded-xl border border-slate-200">
+            <table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700">
+                            Fecha
+                        </th>
+                        <th class="px-4 py-3 text-left font-semibold text-slate-700">
+                            Concurso
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {concursos.map((concurso) => (
+                        
+                        <tr class="align-middle odd:bg-white even:bg-slate-50">
+                            <td class="w-px whitespace-nowrap px-4 py-3 text-slate-600">
+                                {concurso.date ? (
+                                    <>
+                                        <span class="sm:hidden">
+                                            {formatDateEsShort(concurso.date)}
+                                        </span>
+                                        <span class="hidden sm:inline">
+                                            {formatDateEs(concurso.date)}
+                                        </span>
+                                    </>
+                                ) : (
+                                    "Sin fecha"
+                                )}
+                            </td>
+                            <td class="px-4 py-3 font-medium text-slate-900">
+                                <a
+                                    class="text-blue-700 hover:underline"
+                                    href={concurso.href}
+                                >
+                                    {concurso.title}
+                                </a>
+                            </td>
+                            
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
+}

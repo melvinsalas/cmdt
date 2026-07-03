@@ -14,6 +14,21 @@ const actas = defineCollection({
 	}),
 });
 
+const concursos = defineCollection({
+	loader: glob({
+		base: './src/content/concursos',
+		pattern: '**/*.md',
+	}),
+	schema: z.object({
+		title: z.string(),
+		description: z.string().optional(),
+		date: z.coerce.date().optional(),
+		category: z.string().optional(),
+		document: z.string().optional(),
+	}),
+});
+
 export const collections = {
 	actas,
+	concursos,
 };

@@ -1,0 +1,26 @@
+---
+import { getCollection, render } from 'astro:content';
+import MarkdownLayout from '../../../layouts/MarkdownLayout.astro';
+
+export async function getStaticPaths() {
+	const concursos = await getCollection('concursos');
+
+	return concursos.map((entry) => ({
+		params: { slug: entry.id.replace(/\.(md|mdx)$/, '') },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const pageFrontmatter = {
+	title: entry.data.title,
+	description: entry.data.description,
+	date: entry.data.date,
+};
+---
+
+<MarkdownLayout frontmatter={pageFrontmatter}>
+	<Content />
+</MarkdownLayout>
