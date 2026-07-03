@@ -1,4 +1,5 @@
 ---
+layout: '@layouts/MarkdownLayout.astro'
 title: "Concurso Externo CMDT-RRHH-CE-01-2026"
 date: 2026-04-08
 ---
