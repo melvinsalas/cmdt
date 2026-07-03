@@ -1,8 +1,12 @@
 ---
-import Actas from '../../components/Actas.astro';
+import Collection from '../../components/Collection.astro';
 import Layout from '../../layouts/MarkdownLayout.astro';
 ---
 
 <Layout title="Actas Municipales" description="Consulta de actas ordinarias y extraordinarias del Concejo Municipal.">
-	<Actas />
+	<Collection
+		collection="actas"
+		baseUri="/transparencia/actas"
+		emptyMessage="No hay actas publicadas"
+	/>
 </Layout>

@@ -1,8 +1,12 @@
 ---
-import Licitaciones from '../../components/Licitaciones.astro';
+import Collection from '../../components/Collection.astro';
 import Layout from '../../layouts/MarkdownLayout.astro';
 ---
 
 <Layout title="Licitaciones" description="Listado de licitaciones publicadas por la Municipalidad.">
-	<Licitaciones />
+	<Collection
+		collection="licitaciones"
+		baseUri="/transparencia/licitaciones"
+		emptyMessage="No hay licitaciones publicadas en este momento."
+	/>
 </Layout>

@@ -1,8 +1,12 @@
 ---
-import Concursos from '../../components/Concursos.astro';
+import Collection from '../../components/Collection.astro';
 import Layout from '../../layouts/MarkdownLayout.astro';
 ---
 
 <Layout title="Concursos" description="Listado de concursos publicados por la Municipalidad.">
-	<Concursos />
+	<Collection
+		collection="concursos"
+		baseUri="/transparencia/concursos"
+		emptyMessage="No hay concursos publicados en este momento."
+	/>
 </Layout>
