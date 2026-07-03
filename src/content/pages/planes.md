@@ -1,6 +1,6 @@
 ---
-layout: ../../layouts/MarkdownLayout.astro
-title: "Licitaciones"
+title: "Planes de Gobierno"
+slug: planes
 ---
 
 ## Plan de Gobierno 2024-2028
@@ -17,10 +17,3 @@ Es un instrumento de planificación que guía la acción del gobierno local en e
 
 ## Plan vial quinquenal de conservación y desarrollo
 Es el instrumento de planificación que a mediano plazo, permite orientar la gestión para la inversión y ejecución de proyectos a realizar en la red vial distrital, asegurando, que la red se mantenga en buena condición y funcionamiento de forma continua, optimizando el uso de los recursos públicos invertidos en su desarrollo y conservación.
-
-[Plan Vial Quinquenal de Conservación y Desarrollo 2022-2026.pdf](/files/planes/Plan_Vial_Quinquenal_de_Conservación_y_Desarrollo_2022-2026.pdf)
-
-## Plan de Gobierno 2020-2024
-Tiene como propósito fundamental fortalecer la democracia, mediante la participación activa, organizada y responsable de la sociedad civil en las comunidades de tal manera que se podrá aspirar a un desarrollo equitativo y responsable.
-
-[Plan de Gobierno 2020-2024.pdf](/files/planes/Plan_de_Gobierno_2020-2024.pdf)

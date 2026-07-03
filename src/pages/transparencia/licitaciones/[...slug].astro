@@ -3,9 +3,9 @@ import { getCollection, render } from 'astro:content';
 import MarkdownLayout from '../../../layouts/MarkdownLayout.astro';
 
 export async function getStaticPaths() {
-	const concursos = await getCollection('concursos');
+	const licitaciones = await getCollection('licitaciones');
 
-	return concursos.map((entry) => ({
+	return licitaciones.map((entry) => ({
 		params: { slug: entry.id.replace(/\.(md|mdx)$/, '') },
 		props: { entry },
 	}));
@@ -19,7 +19,7 @@ const pageFrontmatter = {
 	date: entry.data.date,
 };
 ---
-	
+
 <MarkdownLayout frontmatter={pageFrontmatter}>
 	<Content />
 </MarkdownLayout>
