@@ -1,0 +1,28 @@
+---
+type Variant = "warning" | "info" | "success";
+
+type Props = {
+    variant?: Variant;
+    text: string;
+};
+
+const { variant = "warning", text }: Props = Astro.props;
+
+const variantStyles: Record<Variant, { box: string }> = {
+    warning: {
+        box: "border-orange-500 bg-orange-50 text-orange-900",
+    },
+    info: {
+        box: "border-sky-500 bg-sky-50 text-sky-900",
+    },
+    success: {
+        box: "border-emerald-500 bg-emerald-50 text-emerald-900",
+    },
+};
+
+const styles = variantStyles[variant];
+---
+
+<aside class:list={["my-3 border-l-4 p-4", styles.box]} role="alert">
+    {text}
+</aside>
