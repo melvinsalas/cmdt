@@ -3,29 +3,45 @@ layout: '@layouts/MarkdownLayout.astro'
 title: Formas de Contacto
 ---
 
-import BotonCard from '@components/BotonCard.astro';
+import Button from '@components/Button.astro';
+import Columns from '@components/Columns.astro';
 
 Para servirle mejor, puede comunicarse con nosotros consultando nuestro directorio interno o rellenando nuestro formulario de contacto
 
-<BotonCard
-	emoji="☎️"
-	text="Ir al directorio interno →"
-	href="https://tucurrique.go.cr/contacto/directorio"
-/>
+<Columns columns={2} mobileColumns={1}>
+	<Button
+		emoji="☎️"
+		text="Ir al directorio interno →"
+		href="/contacto/directorio"
+	/>
 
-<BotonCard
-	emoji="🖥️"
-	text="Ir al formulario de contacto →"
-	href="https://tucurrique.go.cr/contacto/formulario"
-/>
+	<Button
+		emoji="🖥️"
+		text="Ir al formulario de contacto →"
+		href="https://tucurrique.go.cr/contacto/formulario"
+	/>
+</Columns>
 
 ---
 
-### Ubicación
-Estamos ubicados frente a la plaza de deportes en Tucurrique, Jiménez, Cartago
+<Columns columns={2} mobileColumns={1}>
+	<div>
+		<strong>Ubicación</strong>
+		<p>Estamos ubicados frente a la plaza de deportes en Tucurrique, Jiménez, Cartago</p>
 
-### Horario
-Nuestro horario de atención es de lunes a viernes de 7:30 am a 3:30 pm en jornada continua
+		<strong>Horario</strong>
+		<p>Nuestro horario de atención es de lunes a viernes de 7:30 am a 3:30 pm en jornada continua</p>
 
-### Teléfono
-Con gusto le atenderemos en la central telefónica al número 2535-0115
+		<strong>Teléfono</strong>
+		<p>Con gusto le atenderemos en la central telefónica al número 2535-0115</p>
+	</div>
+
+	<iframe
+		title="Mapa de Tucurrique"
+		src="https://www.google.com/maps?q=Tucurrique%2C%20Jim%C3%A9nez%2C%20Cartago&output=embed"
+		loading="lazy"
+		referrerPolicy="no-referrer-when-downgrade"
+		allowFullScreen
+		class="h-80 w-full rounded-lg border border-slate-200"
+	/>
+</Columns>
