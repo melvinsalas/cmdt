@@ -1,15 +1,10 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import { getCollection, render, type CollectionEntry } from 'astro:content';
-import { formatDateEs } from '../../../utils/date';
-import FileCallout from '../../../components/FileCallout.astro';
+import type { CollectionEntry } from 'astro:content';
+import CollectionDetailPage from '../../../components/CollectionDetailPage.astro';
+import { buildCollectionStaticPaths } from '../../../utils/collection-detail';
 
 export async function getStaticPaths() {
-	const entries = await getCollection('actas');
-	return entries.map((entry) => ({
-		params: { slug: entry.id.replace(/\.(md|mdx)$/, '').split('/').pop() ?? '' },
-		props: { entry },
-	}));
+	return buildCollectionStaticPaths('actas');
 }
 
 interface Props {
@@ -17,27 +12,6 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { Content } = await render(entry);
-const description = entry.data['descripción'];
-const files = entry.data.files ?? [];
 ---
 
-<Layout title={entry.data.title}>
-	<main class="mx-auto max-w-[768px] px-4 py-8">
-		<article class="markdown-content">
-			<header class="mb-8 border-b border-slate-200 pb-4">
-				<h1>{entry.data.title}</h1>
-				<p class="mt-2 mb-0 text-sm text-slate-500">{formatDateEs(entry.data.date)}</p>
-				{description && <p class="mt-2 mb-0 text-slate-700">{description}</p>}
-				{files.length > 0 && (
-					<section class="mt-4">
-						{files.map((href) => (
-							<FileCallout href={href} />
-						))}
-					</section>
-				)}
-			</header>
-			<Content />
-		</article>
-	</main>
-</Layout>
+<CollectionDetailPage entry={entry} />
