@@ -19,58 +19,108 @@ const { data, emptyMessage = 'No hay registros' } = Astro.props;
 
 // Ordenar por fecha descendente
 const sortedData = [...data].sort((a, b) => b.date.getTime() - a.date.getTime());
+const years = Array.from(new Set(sortedData.map((row) => row.date.getFullYear()))).sort((a, b) => b - a);
+const latestYear = years[0];
 ---
 
 {sortedData.length === 0 ? (
 	<p>{emptyMessage}</p>
 ) : (
-	<div class="overflow-x-auto rounded-xl border border-slate-200">
-		<table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
-			<thead class="bg-slate-50">
-				<tr>
-					{true && <th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>}
-					<th class="px-4 py-3 text-left font-semibold text-slate-700">Título</th>
-					<th class="px-4 py-3 text-left font-semibold text-slate-700">Fecha</th>
-					<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>
-				</tr>
-			</thead>
-			<tbody class="divide-y divide-slate-100">
-				{sortedData.map((row) => (
-					<tr class="align-middle odd:bg-white even:bg-slate-50">
-						<td class="w-px whitespace-nowrap px-4 py-3">
-							<TypeBadge type={row.type} />
-						</td>
-
-						{/* Columna de título */}
-						<td class="px-4 py-3 font-medium text-slate-900">{row.title}</td>
-
-						{/* Columna de fecha */}
-						<td class="px-4 py-3 text-slate-600">
-							<span class="sm:hidden">{formatDateEsShort(row.date)}</span>
-							<span class="hidden sm:inline">{formatDateEs(row.date)}</span>
-						</td>
-
-						{/* Columna de acción */}
-						<td class="w-px whitespace-nowrap px-4 py-3">
-							{row.file ? (
-								<a
-									class="text-blue-700 hover:underline"
-									href={row.file}
-									target="_blank"
-									rel="noopener noreferrer"
-									title="Abrir en otra pestaña"
-								>
-									Archivo
-								</a>
-							) : row.href ? (
-								<a class="text-blue-700 hover:underline" href={row.href}>
-									Ver
-								</a>
-							) : null}
-						</td>
-					</tr>
+	<div data-data-table>
+		<div class="mb-3 flex items-center justify-end gap-2">
+			<label class="text-sm font-medium text-slate-700" for="year-filter">Año</label>
+			<select
+				id="year-filter"
+				data-year-select
+				class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
+			>
+				{years.map((year) => (
+					<option value={year} selected={year === latestYear}>{year}</option>
 				))}
-			</tbody>
-		</table>
+			</select>
+		</div>
+
+		<div class="overflow-x-auto rounded-xl border border-slate-200">
+			<table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
+				<thead class="bg-slate-50">
+					<tr>
+						{true && <th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700">Tipo</th>}
+						<th class="px-4 py-3 text-left font-semibold text-slate-700">Título</th>
+						<th class="px-4 py-3 text-left font-semibold text-slate-700">Fecha</th>
+						<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>
+					</tr>
+				</thead>
+				<tbody class="divide-y divide-slate-100">
+					{sortedData.map((row) => {
+						const rowYear = row.date.getFullYear();
+						const hiddenByDefault = rowYear !== latestYear;
+
+						return (
+							<tr
+								data-row
+								data-year={rowYear}
+								class={`align-middle odd:bg-white even:bg-slate-50${hiddenByDefault ? ' hidden' : ''}`}
+							>
+								<td class="w-px whitespace-nowrap px-4 py-3">
+									<TypeBadge type={row.type} />
+								</td>
+
+								{/* Columna de título */}
+								<td class="px-4 py-3 font-medium text-slate-900">{row.title}</td>
+
+								{/* Columna de fecha */}
+								<td class="px-4 py-3 text-slate-600">
+									<span class="sm:hidden">{formatDateEsShort(row.date)}</span>
+									<span class="hidden sm:inline">{formatDateEs(row.date)}</span>
+								</td>
+
+								{/* Columna de acción */}
+								<td class="w-px whitespace-nowrap px-4 py-3">
+									{row.file ? (
+										<a
+											class="text-blue-700 hover:underline"
+											href={row.file}
+											target="_blank"
+											rel="noopener noreferrer"
+											title="Abrir en otra pestaña"
+										>
+											Archivo
+										</a>
+									) : row.href ? (
+										<a class="text-blue-700 hover:underline" href={row.href}>
+											Ver
+										</a>
+									) : null}
+								</td>
+							</tr>
+						);
+					})}
+				</tbody>
+			</table>
+		</div>
+
+		<script is:inline>
+			const tableRoot = document.currentScript?.closest('[data-data-table]');
+
+			if (tableRoot) {
+				const select = tableRoot.querySelector('[data-year-select]');
+				const rows = tableRoot.querySelectorAll('tr[data-row]');
+
+				const applyYearFilter = (year) => {
+					rows.forEach((row) => {
+						const rowYear = row.getAttribute('data-year');
+						row.classList.toggle('hidden', rowYear !== year);
+					});
+				};
+
+				if (select instanceof HTMLSelectElement) {
+					applyYearFilter(select.value);
+
+					select.addEventListener('change', () => {
+						applyYearFilter(select.value);
+					});
+				}
+			}
+		</script>
 	</div>
 )}
