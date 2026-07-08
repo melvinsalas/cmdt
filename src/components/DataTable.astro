@@ -6,7 +6,7 @@ type DataRow = {
 	title: string;
 	date: Date;
 	type?: string;
-	file?: string;
+	files?: string[];
 	href?: string;
 };
 
@@ -79,16 +79,32 @@ const latestYear = years[0];
 
 								{/* Columna de acción */}
 								<td class="w-px whitespace-nowrap px-4 py-3">
-									{row.file ? (
-										<a
-											class="text-blue-700 hover:underline"
-											href={row.file}
-											target="_blank"
-											rel="noopener noreferrer"
-											title="Abrir en otra pestaña"
-										>
-											Archivo
-										</a>
+									{row.files && row.files.length > 0 ? (
+										row.files.length === 1 ? (
+											<a
+												class="text-blue-700 hover:underline"
+												href={row.files[0]}
+												target="_blank"
+												rel="noopener noreferrer"
+												title="Abrir en otra pestaña"
+											>
+												Archivo
+											</a>
+										) : (
+											<div class="flex flex-wrap gap-2">
+												{row.files.map((fileUrl, index) => (
+													<a
+														class="text-blue-700 hover:underline"
+														href={fileUrl}
+														target="_blank"
+														rel="noopener noreferrer"
+														title="Abrir en otra pestaña"
+													>
+														Archivo {index + 1}
+													</a>
+												))}
+											</div>
+										)
 									) : row.href ? (
 										<a class="text-blue-700 hover:underline" href={row.href}>
 											Ver

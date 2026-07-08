@@ -2,5 +2,6 @@
 title: Sesión Ordinaria 110-2026
 date: 2026-06-16
 type: ordinaria
-file: /files/2026/Sesion Ordinaria 110-2026.pdf
+files:
+  - /files/2026/Sesion Ordinaria 110-2026.pdf
 ---

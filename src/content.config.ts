@@ -5,7 +5,7 @@ const schema = z.object({
 	title: z.string(),
 	date: z.coerce.date(),
 	type: z.string().optional(),
-	file: z.string().optional(),
+	files: z.array(z.string()).optional(),
 });
 
 const actas = defineCollection({

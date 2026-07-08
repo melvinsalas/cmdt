@@ -38,7 +38,7 @@ const data = entries
 			title: entry.data.title,
 			date: new Date(entry.data.date),
 			type: entry.data.type,
-			file: entry.data.file,
+			files: entry.data.files ?? [],
 			href: encodeURI(`${normalizedBaseUri}/${routeSlug}/`),
 		};
 	})
