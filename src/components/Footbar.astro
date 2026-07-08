@@ -1,0 +1,41 @@
+---
+import { menus } from "../data/menus";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-10 border-t border-slate-200 bg-slate-50 px-4 py-8 text-sm text-slate-700">
+	<div class="mx-auto grid w-full max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+		{
+			menus.map((section) => (
+				<section aria-labelledby={`footbar-${section.id}`}>
+					<h2
+						id={`footbar-${section.id}`}
+						class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-900"
+					>
+						{section.title}
+					</h2>
+					<ul class="space-y-1.5">
+						{section.items.map((item) => (
+							<li>
+								<a
+									class="hover:text-slate-900 hover:underline"
+									href={item.href}
+									target={item.external ? "_blank" : undefined}
+									rel={item.external ? "noopener noreferrer" : undefined}
+								>
+									{item.title}
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			))
+		}
+	</div>
+
+	<div class="mx-auto mt-8 flex w-full max-w-5xl flex-col gap-2 border-t border-slate-200 pt-4 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+		<p>Municipalidad de Tucurrique · {year}</p>
+		
+	</div>
+</footer>
