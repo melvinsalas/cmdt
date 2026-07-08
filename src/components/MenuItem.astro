@@ -2,7 +2,10 @@
 import {
 	faArrowUpRightFromSquare,
 	faBriefcase,
+	faChartColumn,
 	faChartSimple,
+	faCookieBite,
+	faEnvelope,
 	faFileLines,
 	faFilePen,
 	faLeaf,
@@ -11,7 +14,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
 
-type IconName = 'document' | 'chart' | 'briefcase' | 'users' | 'external' | 'form' | 'leaf' | 'people';
+type IconName = 'document' | 'chart' | 'chart-column' | 'briefcase' | 'users' | 'external' | 'form' | 'leaf' | 'people' | 'envelope' | 'cookie-bite';
 
 const { href, title, description, icon, external = false } = Astro.props as {
 	href: string;
@@ -24,12 +27,15 @@ const { href, title, description, icon, external = false } = Astro.props as {
 const iconMap = {
 	document: faFileLines,
 	chart: faChartSimple,
+	'chart-column': faChartColumn,
 	briefcase: faBriefcase,
 	users: faUsers,
 	external: faArrowUpRightFromSquare,
 	form: faFilePen,
 	leaf: faLeaf,
 	people: faPeopleGroup,
+	envelope: faEnvelope,
+	'cookie-bite': faCookieBite,
 } satisfies Record<IconName, typeof faFileLines>;
 
 const toPathList = (iconDef: IconDefinition): string[] => {
@@ -40,15 +46,22 @@ const toPathList = (iconDef: IconDefinition): string[] => {
 const iconDef = iconMap[icon];
 const iconPaths = toPathList(iconDef);
 const externalPaths = toPathList(faArrowUpRightFromSquare);
+const hasDescription = Boolean(description);
 ---
 
 <a
-	class="group flex items-start gap-3 rounded-lg px-3 py-2 text-slate-700 transition hover:bg-slate-100 hover:text-slate-900"
+	class:list={[
+		'group flex gap-3 rounded-lg px-3 py-2 text-slate-700 transition hover:bg-slate-100 hover:text-slate-900',
+		hasDescription ? 'items-start' : 'items-center',
+	]}
 	href={href}
 	target={external ? '_blank' : undefined}
 	rel={external ? 'noopener noreferrer' : undefined}
 >
-	<span class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900">
+	<span class:list={[
+		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900',
+		hasDescription ? 'mt-0.5' : 'mt-0',
+	]}>
 		<svg aria-hidden="true" class="h-4.5 w-4.5" viewBox={`0 0 ${iconDef.icon[0]} ${iconDef.icon[1]}`} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 			{iconPaths.map((pathData) => <path d={pathData} fill="currentColor" />)}
 		</svg>
@@ -60,7 +73,13 @@ const externalPaths = toPathList(faArrowUpRightFromSquare);
 	</span>
 
 	{external ? (
-		<svg aria-hidden="true" class="mt-1 h-4 w-4 shrink-0 text-slate-400" viewBox={`0 0 ${faArrowUpRightFromSquare.icon[0]} ${faArrowUpRightFromSquare.icon[1]}`} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+		<svg
+			aria-hidden="true"
+			class:list={['h-4 w-4 shrink-0 text-slate-400', hasDescription ? 'mt-1' : 'mt-0']}
+			viewBox={`0 0 ${faArrowUpRightFromSquare.icon[0]} ${faArrowUpRightFromSquare.icon[1]}`}
+			fill="currentColor"
+			xmlns="http://www.w3.org/2000/svg"
+		>
 			{externalPaths.map((pathData) => <path d={pathData} fill="currentColor" />)}
 		</svg>
 	) : null}

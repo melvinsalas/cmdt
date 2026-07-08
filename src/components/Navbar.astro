@@ -1,45 +1,349 @@
 ---
-const { brand = 'Home' } = Astro.props;
+const { brand = "Home" } = Astro.props;
 
-import MenuItem from './MenuItem.astro';
+import MenuItem from "./MenuItem.astro";
+import {
+	faBars,
+	faChevronDown,
+	faXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import type { IconDefinition } from "@fortawesome/fontawesome-common-types";
 
-const transparenciaItems = [
-	{ href: '/transparencia/actas', title: 'Actas Municipales', description: 'Sesiones, acuerdos y documentos oficiales.', icon: 'document' },
-	{ href: '/transparencia/planes', title: 'Planes de Gobierno', description: 'Metas, programas y seguimiento institucional.', icon: 'chart' },
-	{ href: '/transparencia/licitaciones', title: 'Licitaciones', description: 'Procesos de contratación y expedientes abiertos.', icon: 'briefcase' },
-	{ href: '/transparencia/concursos', title: 'Concursos', description: 'Convocatorias, bases y resultados de concursos.', icon: 'users' },
-	{ href: 'https://www.sicop.go.cr/moduloPcont/expedientesElectronicos.jsp?code=5b50159fd3121462b1c225df56cb576a6748d82660198ce2b542b60b71b14f7a636262775d3921e40ed145a357ca401ec7c84d3b3379023e6a103591d5d8cba7304f5a798bb8a68273d8228cbf092c0f7645687eabc5552a56bb2bad877b489494e1a891333eb56bcc0a371d12ac94987580b427cae622234462e448186da624', title: 'Expediente', description: 'Acceso al sistema externo de expedientes electrónicos.', icon: 'external', external: true },
+const menus = [
+	{
+		id: "transparencia",
+		title: "Transparencia",
+		items: [
+			{
+				href: "/transparencia/actas",
+				title: "Actas Municipales",
+				description: "Registros públicos de sesiones municipales",
+				icon: "document",
+			},
+			{
+				href: "/transparencia/planes",
+				title: "Planes de Gobierno",
+				description: "Planes de la administración actual",
+				icon: "chart",
+			},
+			{
+				href: "/transparencia/licitaciones",
+				title: "Licitaciones",
+				description: "Concursos públicos para empresas",
+				icon: "briefcase",
+			},
+			{
+				href: "/transparencia/concursos",
+				title: "Concursos",
+				description: "Concursos públicos para particulares",
+				icon: "users",
+			},
+			{
+				href: "https://www.sicop.go.cr/moduloPcont/expedientesElectronicos.jsp?code=5b50159fd3121462b1c225df56cb576a6748d82660198ce2b542b60b71b14f7a636262775d3921e40ed145a357ca401ec7c84d3b3379023e6a103591d5d8cba7304f5a798bb8a68273d8228cbf092c0f7645687eabc5552a56bb2bad877b489494e1a891333eb56bcc0a371d12ac94987580b427cae622234462e448186da624",
+				title: "Expediente",
+				description: "Expediente electrónico en SICOP",
+				icon: "external",
+				external: true,
+			},
+		],
+	},
+	{
+		id: "gestion",
+		title: "Gestión",
+		items: [
+			{
+				href: "/gestion/formularios/",
+				title: "Formularios",
+				description: "Trámites y solicitudes para la ciudadanía.",
+				icon: "form",
+			},
+			{
+				href: "/gestion/ambiental/",
+				title: "Gestión Ambiental",
+				description: "Iniciativas, reportes y acciones ambientales.",
+				icon: "leaf",
+			},
+			{
+				href: "/gestion/desarrollo-humano/",
+				title: "Desarrollo Humano",
+				description: "Programas sociales y atención comunitaria.",
+				icon: "people",
+			},
+		],
+	},
+	{
+		id: "nosotros",
+		title: "Nosotros",
+		items: [
+			{ href: "/nosotros/", title: "Misión y Visión", icon: "form" },
+			{ href: "/nosotros/historia", title: "Historia", icon: "form" },
+			{ href: "/nosotros/cantonato", title: "Cantonato", icon: "form" },
+		],
+	},
+	{
+		id: "mas",
+		title: "Más",
+		items: [
+			{ href: "/contacto/", title: "Contacto", icon: "form" },
+			{ href: "/privacidad", title: "Privacidad", icon: "cookie-bite" },
+			{
+				href: "https://cloud.umami.is/analytics/eu/share/XDt82GVFDkyVKTP2?date=30day&country=eq.CR",
+				title: "Estadísticas",
+				icon: "chart-column",
+				external: true,
+			},
+			{
+				href: "https://www.spacemail.com/es-ES/login/",
+				title: "Correo",
+				icon: "envelope",
+				external: true,
+			},
+		],
+	},
 ];
 
-const gestionItems = [
-	{ href: '/gestion/formularios/', title: 'Formularios', description: 'Trámites y solicitudes para la ciudadanía.', icon: 'form' },
-	{ href: '/gestion/ambiental/', title: 'Gestión Ambiental', description: 'Iniciativas, reportes y acciones ambientales.', icon: 'leaf' },
-	{ href: '/gestion/desarrollo-humano/', title: 'Desarrollo Humano', description: 'Programas sociales y atención comunitaria.', icon: 'people' },
-];
+const toPathList = (iconDef: IconDefinition): string[] => {
+	const data = iconDef.icon[4];
+	return Array.isArray(data) ? data : [data];
+};
+
+const barsPaths = toPathList(faBars);
+const xmarkPaths = toPathList(faXmark);
+const chevronPaths = toPathList(faChevronDown);
 ---
 
 <header class="border-b border-slate-200 bg-white px-4 py-3">
-	<nav class="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 text-sm font-medium text-slate-700">
-		<a class="rounded px-2 py-1 text-slate-900 hover:bg-slate-100" href="/">{brand}</a>
+	<nav
+		class="mx-auto flex w-full max-w-5xl flex-wrap items-start justify-between gap-4 text-sm font-medium text-slate-700"
+		data-navbar
+	>
+		<a
+			class="self-center rounded px-2 py-1 text-slate-900 hover:bg-slate-100"
+			href="/">{brand}</a
+		>
 
-		<div class="flex items-center gap-2">
-			<div class="group relative">
-				<button class="rounded px-2 py-1 hover:bg-slate-100 hover:text-slate-900" type="button">Transparencia</button>
-				<div class="invisible absolute right-0 top-full z-10 min-w-80 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-					<div class="rounded-xl border border-slate-200 bg-white p-2 shadow-lg shadow-slate-200/60">
-						{transparenciaItems.map((item) => <MenuItem {...item} />)}
-					</div>
-				</div>
-			</div>
+		<button
+			class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 md:hidden"
+			type="button"
+			data-mobile-toggle
+			aria-expanded="false"
+			aria-controls="mobile-menu-panel"
+			aria-label="Abrir menú"
+		>
+			<svg
+				aria-hidden="true"
+				class="h-5 w-5 aria-expanded:hidden"
+				viewBox={`0 0 ${faBars.icon[0]} ${faBars.icon[1]}`}
+				fill="currentColor"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				{
+					barsPaths.map((pathData) => (
+						<path d={pathData} fill="currentColor" />
+					))
+				}
+			</svg>
+			<svg
+				aria-hidden="true"
+				class="hidden h-5 w-5 aria-expanded:block"
+				viewBox={`0 0 ${faXmark.icon[0]} ${faXmark.icon[1]}`}
+				fill="currentColor"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				{
+					xmarkPaths.map((pathData) => (
+						<path d={pathData} fill="currentColor" />
+					))
+				}
+			</svg>
+		</button>
 
-			<div class="group relative">
-				<button class="rounded px-2 py-1 hover:bg-slate-100 hover:text-slate-900" type="button">Gestión</button>
-				<div class="invisible absolute right-0 top-full z-10 min-w-80 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-					<div class="rounded-xl border border-slate-200 bg-white p-2 shadow-lg shadow-slate-200/60">
-						{gestionItems.map((item) => <MenuItem {...item} />)}
+		<div class="hidden items-center gap-2 md:flex">
+			{
+				menus.map((menu) => (
+					<div class="relative" data-dropdown>
+						<button
+							class="inline-flex items-center gap-1 rounded px-2 py-1 hover:bg-slate-100 hover:text-slate-900 aria-expanded:bg-slate-100 aria-expanded:text-slate-900"
+							type="button"
+							data-dropdown-trigger={menu.id}
+							aria-expanded="false"
+							aria-controls={`menu-${menu.id}`}
+						>
+							<span>{menu.title}</span>
+							<svg
+								aria-hidden="true"
+								class="h-3.5 w-3.5"
+								viewBox={`0 0 ${faChevronDown.icon[0]} ${faChevronDown.icon[1]}`}
+								fill="currentColor"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								{chevronPaths.map((pathData) => (
+									<path d={pathData} fill="currentColor" />
+								))}
+							</svg>
+						</button>
+						<div
+							id={`menu-${menu.id}`}
+							data-dropdown-menu
+							hidden
+							class="absolute right-0 top-full z-10 min-w-80 pt-2"
+						>
+							<div class="rounded-xl border border-slate-200 bg-white p-2 shadow-lg shadow-slate-200/60">
+								{menu.items.map((item) => (
+									<MenuItem {...item} />
+								))}
+							</div>
+						</div>
 					</div>
-				</div>
-			</div>
+				))
+			}
+		</div>
+
+		<div
+			id="mobile-menu-panel"
+			data-mobile-panel
+			hidden
+			class="w-full md:hidden"
+			data-mobile-accordion
+		>
+			{
+				menus.map((menu, index) => (
+					<details
+						class:list={[
+							"group rounded-lg border border-slate-200 bg-white",
+							index > 0 && "mt-2",
+						]}
+						data-mobile-section
+					>
+						<summary class="flex cursor-pointer list-none items-center justify-between rounded-lg px-3 py-2 text-slate-900 marker:content-none hover:bg-slate-50">
+							<span class="font-semibold">{menu.title}</span>
+							<svg
+								aria-hidden="true"
+								class="h-4 w-4 text-slate-500 transition group-open:rotate-180"
+								viewBox={`0 0 ${faChevronDown.icon[0]} ${faChevronDown.icon[1]}`}
+								fill="currentColor"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								{chevronPaths.map((pathData) => (
+									<path d={pathData} fill="currentColor" />
+								))}
+							</svg>
+						</summary>
+						<div class="border-t border-slate-200 p-2">
+							{menu.items.map((item) => (
+								<MenuItem {...item} />
+							))}
+						</div>
+					</details>
+				))
+			}
 		</div>
 	</nav>
 </header>
+
+<script>
+	const nav = document.querySelector("[data-navbar]");
+
+	if (nav) {
+		const dropdowns = [
+			...nav.querySelectorAll<HTMLElement>("[data-dropdown]"),
+		];
+		const mobileToggle = nav.querySelector<HTMLButtonElement>(
+			"[data-mobile-toggle]",
+		);
+		const mobilePanel = nav.querySelector<HTMLElement>(
+			"[data-mobile-panel]",
+		);
+		const mobileSections = [
+			...nav.querySelectorAll<HTMLDetailsElement>(
+				"[data-mobile-section]",
+			),
+		];
+
+		const setDropdown = (dropdown: HTMLElement, open: boolean) => {
+			const trigger = dropdown.querySelector<HTMLButtonElement>(
+				"[data-dropdown-trigger]",
+			);
+			const menu = dropdown.querySelector<HTMLElement>(
+				"[data-dropdown-menu]",
+			);
+			if (!trigger || !menu) return;
+			trigger.setAttribute("aria-expanded", String(open));
+			menu.hidden = !open;
+		};
+
+		const closeDesktop = () =>
+			dropdowns.forEach((d) => setDropdown(d, false));
+
+		const closeMobile = () => {
+			if (!mobileToggle || !mobilePanel) return;
+			mobileToggle.setAttribute("aria-expanded", "false");
+			mobileToggle.setAttribute("aria-label", "Abrir menú");
+			mobilePanel.hidden = true;
+			mobileSections.forEach((s) => (s.open = false));
+		};
+
+		const openMobile = () => {
+			if (!mobileToggle || !mobilePanel) return;
+			mobileToggle.setAttribute("aria-expanded", "true");
+			mobileToggle.setAttribute("aria-label", "Cerrar menú");
+			mobilePanel.hidden = false;
+		};
+
+		dropdowns.forEach((dropdown) => {
+			const trigger = dropdown.querySelector<HTMLButtonElement>(
+				"[data-dropdown-trigger]",
+			);
+			if (!trigger) return;
+
+			trigger.addEventListener("click", () => {
+				const isOpen = trigger.getAttribute("aria-expanded") === "true";
+				closeDesktop();
+				if (!isOpen) setDropdown(dropdown, true);
+			});
+
+			dropdown.addEventListener("mouseenter", () => {
+				closeDesktop();
+				setDropdown(dropdown, true);
+			});
+
+			dropdown.addEventListener("mouseleave", () =>
+				setDropdown(dropdown, false),
+			);
+		});
+
+		document.addEventListener("click", (event) => {
+			if (event.target instanceof Node && nav.contains(event.target))
+				return;
+			closeDesktop();
+			closeMobile();
+		});
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key !== "Escape") return;
+			closeDesktop();
+			closeMobile();
+		});
+
+		mobileToggle?.addEventListener("click", () => {
+			const isOpen =
+				mobileToggle.getAttribute("aria-expanded") === "true";
+			if (isOpen) closeMobile();
+			else openMobile();
+		});
+
+		mobilePanel?.addEventListener("click", (event) => {
+			if (event.target instanceof Element && event.target.closest("a"))
+				closeMobile();
+		});
+
+		mobileSections.forEach((section) => {
+			section.addEventListener("toggle", () => {
+				if (!section.open) return;
+				mobileSections.forEach((item) => {
+					if (item !== section) item.open = false;
+				});
+			});
+		});
+	}
+</script>
