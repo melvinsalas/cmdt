@@ -4,8 +4,7 @@ title: Sobre Nosotros
 ---
 
 
-import TextCallout from '@components/TextCallout.astro';
-import FileCallout from '@components/FileCallout.astro';
+import BotonCard from '@components/BotonCard.astro';
 
 ## Misión
 
@@ -20,11 +19,18 @@ Llegar a ser una institución líder a nivel nacional al brindar una mejor calid
 
 El nombre de Tucurrique corresponde a una de las poblaciones más antiguas de Costa Rica, en la provincia de Cartago... 
 
-<TextCallout text="<a href='/nosotros/historia'>Ir a Historia</a>" variant='info' />
-
+<BotonCard
+	emoji="📘"
+	text="Ir a Historia →"
+	href="/nosotros/historia"
+/>
 
 ## Proyecto Cantonato
 
 El nombre de Tucurrique corresponde a una de las poblaciones más antiguas de Costa Rica, en la provincia de Cartago...  
 
-<FileCallout title="Ir al Proyecto Cantonato" href="/nosotros/cantonato" />
+<BotonCard
+    emoji="📗"
+    text="Ir al Proyecto Cantonato →"
+    href="/nosotros/cantonato"
+/>

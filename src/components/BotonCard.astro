@@ -1,0 +1,32 @@
+---
+type Props = {
+	href: string;
+	text: string;
+	emoji?: string;
+};
+
+const { href, text, emoji }: Props = Astro.props;
+---
+
+<a
+	href={href}
+	class="boton-card-link my-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-slate-900 no-underline transition-colors hover:border-slate-300 hover:bg-slate-100"
+>
+	{emoji && <span class="boton-card-emoji text-2xl leading-none" aria-hidden="true">{emoji}</span>}
+	<span class="boton-card-text font-medium">{text}</span>
+</a>
+
+<style>
+	.boton-card-link:hover {
+		text-decoration: none;
+	}
+
+	.boton-card-link:hover .boton-card-text {
+		text-decoration: underline;
+	}
+
+	.boton-card-emoji {
+		display: inline-block;
+		text-decoration: none;
+	}
+</style>
