@@ -3,8 +3,8 @@ layout: '@layouts/MarkdownLayout.astro'
 title: Sobre Nosotros
 ---
 
-
 import Button from '@components/Button.astro';
+import Columns from '@components/Columns.astro';
 
 ## Misión
 
@@ -15,22 +15,26 @@ Llegar a ser una institución líder a nivel nacional al brindar una mejor calid
 
 ---
 
-## Historia
+<Columns columns={2} mobileColumns={1}>
+    <div>
+        ### Historia
+        El nombre de Tucurrique corresponde a una de las poblaciones más antiguas de Costa Rica, en la provincia de Cartago... 
 
-El nombre de Tucurrique corresponde a una de las poblaciones más antiguas de Costa Rica, en la provincia de Cartago... 
+        <Button
+            emoji="📘"
+            text="Ir a Historia →"
+            href="/nosotros/historia"
+        />
+    </div>
+    <div>
+        ### Proyecto Cantonato
+        El nombre de Tucurrique corresponde a una de las poblaciones más antiguas de Costa Rica, en la provincia de Cartago...  
 
-<Button
-	emoji="📘"
-	text="Ir a Historia →"
-	href="/nosotros/historia"
-/>
+        <Button
+            emoji="📗"
+            text="Ir al Proyecto Cantonato →"
+            href="/nosotros/cantonato"
+        />
+    </div>
+</Columns>
 
-## Proyecto Cantonato
-
-El nombre de Tucurrique corresponde a una de las poblaciones más antiguas de Costa Rica, en la provincia de Cartago...  
-
-<Button
-    emoji="📗"
-    text="Ir al Proyecto Cantonato →"
-    href="/nosotros/cantonato"
-/>
