@@ -57,12 +57,17 @@ const latestYear = years[0];
 					{sortedData.map((row) => {
 						const rowYear = row.date.getFullYear();
 						const hiddenByDefault = showYearFilter && rowYear !== latestYear;
+						const rowHref = row.href?.trim();
+						const isRowClickable = Boolean(rowHref);
 
 						return (
 							<tr
 								data-row
+								data-href={rowHref}
 								data-year={rowYear}
-								class={`align-middle${hiddenByDefault ? ' hidden' : ''}`}
+								tabindex={isRowClickable ? 0 : undefined}
+								role={isRowClickable ? 'link' : undefined}
+								class={`align-middle${hiddenByDefault ? ' hidden' : ''}${isRowClickable ? ' cursor-pointer hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline-none' : ''}`}
 							>
 								<td class="w-px whitespace-nowrap px-4 py-3">
 									<TypeBadge type={row.type} />
@@ -79,33 +84,7 @@ const latestYear = years[0];
 
 								{/* Columna de acción */}
 								<td class="w-px whitespace-nowrap px-4 py-3">
-									{row.files && row.files.length > 0 ? (
-										row.files.length === 1 ? (
-											<a
-												class="text-blue-700 hover:underline"
-												href={row.files[0]}
-												target="_blank"
-												rel="noopener noreferrer"
-												title="Abrir en otra pestaña"
-											>
-												Archivo
-											</a>
-										) : (
-											<div class="flex flex-wrap gap-2">
-												{row.files.map((fileUrl, index) => (
-													<a
-														class="text-blue-700 hover:underline"
-														href={fileUrl}
-														target="_blank"
-														rel="noopener noreferrer"
-														title="Abrir en otra pestaña"
-													>
-														Archivo {index + 1}
-													</a>
-												))}
-											</div>
-										)
-									) : row.href ? (
+									{row.href ? (
 										<a class="text-blue-700 hover:underline" href={row.href}>
 											Ver
 										</a>
@@ -125,6 +104,29 @@ const latestYear = years[0];
 				const select = tableRoot.querySelector('[data-year-select]');
 				const rows = tableRoot.querySelectorAll('tr[data-row]');
 				const rowStripeClasses = ['bg-white', 'bg-slate-50'];
+				const interactiveSelector = 'a, button, input, select, textarea, label';
+
+				rows.forEach((row) => {
+					const href = row.getAttribute('data-href');
+
+					if (!href) return;
+
+					row.addEventListener('click', (event) => {
+						const target = event.target;
+						if (target instanceof Element && target.closest(interactiveSelector)) {
+							return;
+						}
+
+						window.location.href = href;
+					});
+
+					row.addEventListener('keydown', (event) => {
+						if (event.key !== 'Enter' && event.key !== ' ') return;
+
+						event.preventDefault();
+						window.location.href = href;
+					});
+				});
 
 				const applyRowStriping = () => {
 					let visibleIndex = 0;

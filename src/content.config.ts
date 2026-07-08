@@ -5,6 +5,7 @@ const schema = z.object({
 	title: z.string(),
 	date: z.coerce.date(),
 	type: z.string().optional(),
+	'\u0064\u0065\u0073\u0063\u0072\u0069\u0070\u0063\u0069\u00f3\u006e': z.string().optional(),
 	files: z.array(z.string()).optional(),
 });
 

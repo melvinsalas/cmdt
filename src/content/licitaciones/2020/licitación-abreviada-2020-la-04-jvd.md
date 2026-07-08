@@ -1,7 +1,7 @@
 ---
-title: "Licitación Abreviada 2021-LA-05-JVD"
-date: 2021-08-17
+title: "Licitación Abreviada 2020-LA-04-JVD"
+date: 2020-10-20
 type: "licitación"
 files:
-  - /files/2021/LICITACIÓN 2021-LA-05-PISIRI.pdf
+  - /files/2020/2020-LA-000004.pdf
 ---

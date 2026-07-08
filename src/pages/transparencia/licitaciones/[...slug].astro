@@ -2,6 +2,7 @@
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection, render, type CollectionEntry } from 'astro:content';
 import { formatDateEs } from '../../../utils/date';
+import FileCallout from '../../../components/FileCallout.astro';
 
 export async function getStaticPaths() {
 	const entries = await getCollection('licitaciones');
@@ -17,6 +18,8 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const description = entry.data['descripción'];
+const files = entry.data.files ?? [];
 ---
 
 <Layout title={entry.data.title}>
@@ -25,6 +28,14 @@ const { Content } = await render(entry);
 			<header class="mb-8 border-b border-slate-200 pb-4">
 				<h1>{entry.data.title}</h1>
 				<p class="mt-2 mb-0 text-sm text-slate-500">{formatDateEs(entry.data.date)}</p>
+				{description && <p class="mt-2 mb-0 text-slate-700">{description}</p>}
+				{files.length > 0 && (
+					<section class="mt-4">
+						{files.map((href) => (
+							<FileCallout href={href} />
+						))}
+					</section>
+				)}
 			</header>
 			<Content />
 		</article>
