@@ -13,9 +13,10 @@ type DataRow = {
 interface Props {
 	data: DataRow[];
 	emptyMessage?: string;
+	showYearFilter?: boolean;
 }
 
-const { data, emptyMessage = 'No hay registros' } = Astro.props;
+const { data, emptyMessage = 'No hay registros', showYearFilter = true } = Astro.props;
 
 // Ordenar por fecha descendente
 const sortedData = [...data].sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -27,18 +28,20 @@ const latestYear = years[0];
 	<p>{emptyMessage}</p>
 ) : (
 	<div data-data-table>
-		<div class="mb-3 flex items-center justify-end gap-2">
-			<label class="text-sm font-medium text-slate-700" for="year-filter">Año</label>
-			<select
-				id="year-filter"
-				data-year-select
-				class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
-			>
-				{years.map((year) => (
-					<option value={year} selected={year === latestYear}>{year}</option>
-				))}
-			</select>
-		</div>
+		{showYearFilter && (
+			<div class="mb-3 flex items-center justify-end gap-2">
+				<label class="text-sm font-medium text-slate-700" for="year-filter">Año</label>
+				<select
+					id="year-filter"
+					data-year-select
+					class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
+				>
+					{years.map((year) => (
+						<option value={year} selected={year === latestYear}>{year}</option>
+					))}
+				</select>
+			</div>
+		)}
 
 		<div class="overflow-x-auto rounded-xl border border-slate-200">
 			<table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
@@ -53,13 +56,13 @@ const latestYear = years[0];
 				<tbody class="divide-y divide-slate-100">
 					{sortedData.map((row) => {
 						const rowYear = row.date.getFullYear();
-						const hiddenByDefault = rowYear !== latestYear;
+						const hiddenByDefault = showYearFilter && rowYear !== latestYear;
 
 						return (
 							<tr
 								data-row
 								data-year={rowYear}
-								class={`align-middle odd:bg-white even:bg-slate-50${hiddenByDefault ? ' hidden' : ''}`}
+								class={`align-middle${hiddenByDefault ? ' hidden' : ''}`}
 							>
 								<td class="w-px whitespace-nowrap px-4 py-3">
 									<TypeBadge type={row.type} />
@@ -105,12 +108,30 @@ const latestYear = years[0];
 			if (tableRoot) {
 				const select = tableRoot.querySelector('[data-year-select]');
 				const rows = tableRoot.querySelectorAll('tr[data-row]');
+				const rowStripeClasses = ['bg-white', 'bg-slate-50'];
+
+				const applyRowStriping = () => {
+					let visibleIndex = 0;
+
+					rows.forEach((row) => {
+						row.classList.remove(...rowStripeClasses);
+
+						if (row.classList.contains('hidden')) {
+							return;
+						}
+
+						row.classList.add(rowStripeClasses[visibleIndex % rowStripeClasses.length]);
+						visibleIndex += 1;
+					});
+				};
 
 				const applyYearFilter = (year) => {
 					rows.forEach((row) => {
 						const rowYear = row.getAttribute('data-year');
 						row.classList.toggle('hidden', rowYear !== year);
 					});
+
+					applyRowStriping();
 				};
 
 				if (select instanceof HTMLSelectElement) {
@@ -119,6 +140,8 @@ const latestYear = years[0];
 					select.addEventListener('change', () => {
 						applyYearFilter(select.value);
 					});
+				} else {
+					applyRowStriping();
 				}
 			}
 		</script>

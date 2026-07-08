@@ -2,10 +2,11 @@
 type Props = {
 	href: string;
 	text: string;
+	description?: string;
 	emoji?: string;
 };
 
-const { href, text, emoji }: Props = Astro.props;
+const { href, text, description, emoji }: Props = Astro.props;
 ---
 
 <a
@@ -13,16 +14,27 @@ const { href, text, emoji }: Props = Astro.props;
 	class="boton-card-link my-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-slate-900 no-underline transition-colors hover:border-slate-300 hover:bg-slate-100"
 >
 	{emoji && <span class="boton-card-emoji text-2xl leading-none" aria-hidden="true">{emoji}</span>}
-	<span class="boton-card-text font-medium">{text}</span>
+	<span class="boton-card-content flex flex-col gap-1">
+		<span class="boton-card-text font-medium">{text}</span>
+		{description && <span class="boton-card-description text-sm leading-6 text-slate-600">{description}</span>}
+	</span>
 </a>
 
 <style>
+	.boton-card-link {
+		align-items: flex-start;
+	}
+
 	.boton-card-link:hover {
 		text-decoration: none;
 	}
 
 	.boton-card-link:hover .boton-card-text {
 		text-decoration: underline;
+	}
+
+	.boton-card-link:hover .boton-card-description {
+		text-decoration: none;
 	}
 
 	.boton-card-emoji {

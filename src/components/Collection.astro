@@ -45,4 +45,4 @@ const safeLimit = Number.isInteger(limit) && (limit as number) > 0 ? (limit as n
 const visibleData = safeLimit ? data.slice(0, safeLimit) : data;
 ---
 
-<DataTable data={visibleData} emptyMessage={emptyMessage} />
+<DataTable data={visibleData} emptyMessage={emptyMessage} showYearFilter={!safeLimit} />

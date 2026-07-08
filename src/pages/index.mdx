@@ -1,0 +1,41 @@
+---
+layout: '@layouts/MarkdownLayout.astro'
+title: Municipalidad de Tucurrique
+description: Trabajamos para servirle
+---
+
+import Collection from '@components/Collection.astro';
+import Columns from '@components/Columns.astro';
+import Button from '@components/Button.astro';
+
+## Transparencia de Información
+
+Nos preocupamos por informar a la población sobre nuestro trabajo, por lo que tenemos una política de datos abiertos.
+
+### Últimas Actas Municipales
+
+<Collection
+	baseUri="/transparencia/actas"
+	emptyMessage="No hay actas publicadas"
+	limit={6}
+/>
+
+<Columns columns={2} mobileColumns={1} gap="1rem">
+	<Button href="/transparencia/actas" text="Ir a Actas Municipales →" emoji="📚" />
+	<Button href="/transparencia" variant="secondary" text="Ir a Transparencia de Información →" emoji="🔍" />
+</Columns>
+
+## Otras Secciones
+
+<Columns columns={2} mobileColumns={1} gap="1rem">
+	<div>
+		<Button href="/nosotros" text="Sobre Nosotros" emoji="🏛️" />
+		<Button href="/covid-19" text="Información sobre COVID-19" emoji="🦠" />
+	</div>
+	<div>
+		<Button href="/contacto" text="Formas de Contacto" emoji="☎️" description="Para servirle mejor, puede comunicarse con nosotros consultando nuestro directorio interno o rellenando nuestro formulario de contacto." />
+	</div>
+</Columns>
+
+
+
