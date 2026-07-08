@@ -1,5 +1,4 @@
 ---
-layout: '@layouts/MarkdownLayout.astro'
 title: "Licitación Pública CMDT-2026-001"
 date: 2026-05-15
 type: "pública"

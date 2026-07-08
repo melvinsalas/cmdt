@@ -30,13 +30,16 @@ const entries = collectionKey ? await getCollection(collectionKey) : [];
 const data = entries
 	.map((entry) => {
 		const slug = entry.id.replace(/\.(md|mdx)$/, '');
+		const routeSlug = ['actas', 'concursos', 'licitaciones'].includes(collectionKey ?? '')
+			? (slug.split('/').pop() ?? slug)
+			: slug;
 
 		return {
 			title: entry.data.title,
 			date: new Date(entry.data.date),
 			type: entry.data.type,
 			file: entry.data.file,
-			href: encodeURI(`${normalizedBaseUri}/${slug}/`),
+			href: encodeURI(`${normalizedBaseUri}/${routeSlug}/`),
 		};
 	})
 	.sort((a, b) => b.date.getTime() - a.date.getTime());

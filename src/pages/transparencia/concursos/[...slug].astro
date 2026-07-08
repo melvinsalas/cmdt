@@ -6,7 +6,7 @@ import { formatDateEs } from '../../../utils/date';
 export async function getStaticPaths() {
 	const entries = await getCollection('concursos');
 	return entries.map((entry) => ({
-		params: { slug: entry.id.replace(/\.(md|mdx)$/, '') },
+		params: { slug: entry.id.replace(/\.(md|mdx)$/, '').split('/').pop() ?? '' },
 		props: { entry },
 	}));
 }

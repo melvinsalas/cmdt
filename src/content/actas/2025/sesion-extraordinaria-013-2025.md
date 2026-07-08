@@ -1,7 +1,6 @@
 ---
-layout: '@layouts/MarkdownLayout.astro'
 title: Sesión Extraordinaria 013-2025
 date: 2025-05-23
 type: extraordinaria
-file: /files/actas/2025/Sesion Extraordinaria 013-2025.pdf
+file: /files/2025/Sesion Extraordinaria 013-2025.pdf
 ---
