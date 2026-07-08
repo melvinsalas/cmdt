@@ -1,20 +1,24 @@
 ---
 import {
-	faArrowUpRightFromSquare,
-	faBriefcase,
-	faChartColumn,
-	faChartSimple,
-	faCookieBite,
-	faEnvelope,
-	faFileLines,
-	faFilePen,
-	faLeaf,
-	faPeopleGroup,
-	faUsers,
-} from '@fortawesome/free-solid-svg-icons';
-import type { IconDefinition } from '@fortawesome/fontawesome-common-types';
+	Award,
+	Building,
+	ClipboardPen,
+	Cookie,
+	ExternalLink,
+	Eye,
+	FolderOpen,
+	GlobeCheck,
+	Heart,
+	Landmark,
+	Mail,
+	Map,
+	PhoneCall,
+	TreeDeciduous,
+	User,
+	UserRoundCheck,
+} from '@lucide/astro';
 
-type IconName = 'document' | 'chart' | 'chart-column' | 'briefcase' | 'users' | 'external' | 'form' | 'leaf' | 'people' | 'envelope' | 'cookie-bite';
+type IconName = 'award' | 'map' | 'building' | 'user' | 'folder-open' | 'clipboard-pen' | 'tree-deciduous' | 'user-round-check' | 'eye' | 'landmark' | 'heart' | 'phone-call' | 'cookie' | 'globe-check' | 'mail';
 
 const { href, title, description, icon, external = false } = Astro.props as {
 	href: string;
@@ -25,27 +29,24 @@ const { href, title, description, icon, external = false } = Astro.props as {
 };
 
 const iconMap = {
-	document: faFileLines,
-	chart: faChartSimple,
-	'chart-column': faChartColumn,
-	briefcase: faBriefcase,
-	users: faUsers,
-	external: faArrowUpRightFromSquare,
-	form: faFilePen,
-	leaf: faLeaf,
-	people: faPeopleGroup,
-	envelope: faEnvelope,
-	'cookie-bite': faCookieBite,
-} satisfies Record<IconName, typeof faFileLines>;
+	award: Award,
+	map: Map,
+	building: Building,
+	user: User,
+	'folder-open': FolderOpen,
+	'clipboard-pen': ClipboardPen,
+	'tree-deciduous': TreeDeciduous,
+	'user-round-check': UserRoundCheck,
+	eye: Eye,
+	landmark: Landmark,
+	heart: Heart,
+	'phone-call': PhoneCall,
+	cookie: Cookie,
+	'globe-check': GlobeCheck,
+	mail: Mail,
+} satisfies Record<IconName, typeof Award>;
 
-const toPathList = (iconDef: IconDefinition): string[] => {
-	const data = iconDef.icon[4];
-	return Array.isArray(data) ? data : [data];
-};
-
-const iconDef = iconMap[icon];
-const iconPaths = toPathList(iconDef);
-const externalPaths = toPathList(faArrowUpRightFromSquare);
+const IconComponent = iconMap[icon];
 const hasDescription = Boolean(description);
 ---
 
@@ -62,9 +63,7 @@ const hasDescription = Boolean(description);
 		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900',
 		hasDescription ? 'mt-0.5' : 'mt-0',
 	]}>
-		<svg aria-hidden="true" class="h-4.5 w-4.5" viewBox={`0 0 ${iconDef.icon[0]} ${iconDef.icon[1]}`} fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-			{iconPaths.map((pathData) => <path d={pathData} fill="currentColor" />)}
-		</svg>
+		<IconComponent aria-hidden="true" class="h-4.5 w-4.5" />
 	</span>
 
 	<span class="min-w-0 flex-1">
@@ -73,14 +72,6 @@ const hasDescription = Boolean(description);
 	</span>
 
 	{external ? (
-		<svg
-			aria-hidden="true"
-			class:list={['h-4 w-4 shrink-0 text-slate-400', hasDescription ? 'mt-1' : 'mt-0']}
-			viewBox={`0 0 ${faArrowUpRightFromSquare.icon[0]} ${faArrowUpRightFromSquare.icon[1]}`}
-			fill="currentColor"
-			xmlns="http://www.w3.org/2000/svg"
-		>
-			{externalPaths.map((pathData) => <path d={pathData} fill="currentColor" />)}
-		</svg>
+		<ExternalLink aria-hidden="true" class="h-4 w-4 shrink-0 text-slate-400 self-center" />
 	) : null}
 </a>
