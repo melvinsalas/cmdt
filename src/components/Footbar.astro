@@ -1,5 +1,6 @@
 ---
 import { menus } from "../data/menus";
+import { SITE_NAME } from "../data/site";
 import logo from "../assets/logo.png";
 import { ExternalLink } from "@lucide/astro";
 
@@ -23,7 +24,7 @@ const year = new Date().getFullYear();
 					/>
 					<div>
 						<p class="text-lg font-semibold leading-tight">
-							Concejo Municipal del Distrito de Tucurrique
+							{SITE_NAME}
 						</p>
 						<p
 							class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500"
@@ -87,7 +88,7 @@ const year = new Date().getFullYear();
 			class="mt-6 flex justify-end pt-5 text-right text-xs text-slate-500"
 		>
 			<p class="flex flex-wrap justify-end gap-x-1 gap-y-0.5">
-				<span class="whitespace-nowrap">Concejo Municipal del Distrito de Tucurrique ·</span>
+				<span class="whitespace-nowrap">{SITE_NAME} ·</span>
 				<span class="whitespace-nowrap">{year}. Todos los derechos reservados.</span>
 			</p>
 		</div>
