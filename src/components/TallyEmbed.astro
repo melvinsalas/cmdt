@@ -1,0 +1,49 @@
+---
+const {
+	formId = "m6Q8Nn",
+	title = "Tucurrique • Formulario de Contacto",
+	height = 746,
+} = Astro.props;
+
+const src = `https://tally.so/embed/${formId}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1`;
+---
+
+<div data-tally-embed>
+	<iframe
+		data-tally-src={src}
+		loading="lazy"
+		width="100%"
+		height={height}
+		title={title}
+		class="block w-full overflow-hidden rounded-xl bg-white"
+	></iframe>
+
+	<script is:inline>
+		const root = document.currentScript?.closest('[data-tally-embed]');
+		const iframe = root?.querySelector('iframe[data-tally-src]');
+		const scriptSrc = 'https://tally.so/widgets/embed.js';
+
+		const loadEmbed = () => {
+			if (typeof Tally !== 'undefined') {
+				Tally.loadEmbeds();
+				return;
+			}
+
+			if (iframe instanceof HTMLIFrameElement && !iframe.src) {
+				iframe.src = iframe.dataset.tallySrc ?? '';
+			}
+		};
+
+		if (typeof Tally !== 'undefined') {
+			loadEmbed();
+		} else if (!document.querySelector(`script[src="${scriptSrc}"]`)) {
+			const script = document.createElement('script');
+			script.src = scriptSrc;
+			script.onload = loadEmbed;
+			script.onerror = loadEmbed;
+			document.body.appendChild(script);
+		} else {
+			loadEmbed();
+		}
+	</script>
+</div>
