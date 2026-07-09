@@ -4,13 +4,16 @@ type Props = {
 	text: string;
 	description?: string;
 	emoji?: string;
+	external?: boolean;
 };
 
-const { href, text, description, emoji }: Props = Astro.props;
+const { href, text, description, emoji, external = false }: Props = Astro.props;
 ---
 
 <a
 	href={href}
+	target={external ? '_blank' : undefined}
+	rel={external ? 'noopener noreferrer' : undefined}
 	class="boton-card-link my-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-slate-900 no-underline transition-colors hover:border-slate-300 hover:bg-slate-100"
 >
 	{emoji && <span class="boton-card-emoji text-2xl leading-none" aria-hidden="true">{emoji}</span>}

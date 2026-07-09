@@ -1,46 +1,32 @@
-# Astro Starter Kit: Basics
+# CMDT Web
 
-```sh
-npm create astro@latest -- --template basics
-```
+Institutional website for the Tucurrique District Municipal Council, built with Astro and MDX.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Requirements
 
-## 🚀 Project Structure
+- Node.js 22.12 or higher
+- npm
 
-Inside of your Astro project, you'll see the following folders and files:
+## Commands
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+- `npm run dev`: starts the development server
+- `npm run stop`: stops the server started with `astro dev --background`
+- `npm run check`: runs Astro type and content checks
+- `npm run build`: builds the site for production
+- `npm run preview`: previews the production build locally
+- `npm run validate`: runs `check` and then `build`
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Main Structure
 
-## 🧞 Commands
+- `src/pages`: site pages (including MDX pages)
+- `src/content`: versioned content collections (`actas`, `concursos`, `licitaciones`)
+- `src/components`: reusable components
+- `src/layouts`: base HTML/MDX layouts
+- `src/data`: navigation and site metadata configuration
+- `public/files`: downloadable public files
 
-All commands are run from the root of the project, from a terminal:
+## Content Notes
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Transparency collections are rendered using dynamic routes and a shared component.
+- Transparency section links come from a single data source (`menus`).
+- Slugs keep their full hierarchy to avoid collisions between years or subfolders.

@@ -1,3 +1,5 @@
+import { SITE_URLS } from './site';
+
 export type MenuIconName =
 	| "award"
 	| "map"
@@ -60,7 +62,7 @@ export const menus: MenuSection[] = [
 				icon: "user",
 			},
 			{
-				href: "https://www.sicop.go.cr/moduloPcont/expedientesElectronicos.jsp?code=5b50159fd3121462b1c225df56cb576a6748d82660198ce2b542b60b71b14f7a636262775d3921e40ed145a357ca401ec7c84d3b3379023e6a103591d5d8cba7304f5a798bb8a68273d8228cbf092c0f7645687eabc5552a56bb2bad877b489494e1a891333eb56bcc0a371d12ac94987580b427cae622234462e448186da624",
+				href: SITE_URLS.expediente,
 				title: "Expediente",
 				description: "Expediente electrónico en SICOP",
 				icon: "folder-open",
@@ -108,19 +110,19 @@ export const menus: MenuSection[] = [
 			{ href: "/contacto/", title: "Contacto", icon: "phone-call" },
 			{ href: "/privacidad", title: "Privacidad", icon: "cookie" },
 			{
-				href: "https://cloud.umami.is/analytics/eu/share/XDt82GVFDkyVKTP2?date=30day&country=eq.CR",
+				href: SITE_URLS.estadisticas,
 				title: "Estadísticas",
 				icon: "globe-check",
 				external: true,
 			},
 			{
-				href: "https://www.spacemail.com/es-ES/login/",
+				href: SITE_URLS.correo,
 				title: "Correo",
 				icon: "mail",
 				external: true,
 			},
 			{
-				href: "https://www.facebook.com/tucurrique.go.cr",
+				href: SITE_URLS.facebook,
 				title: "Facebook",
 				icon: "thumbs-up",
 				external: true,

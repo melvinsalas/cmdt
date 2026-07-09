@@ -6,7 +6,7 @@ export async function buildCollectionStaticPaths(collection: TransparencyCollect
 	const entries = await getCollection(collection);
 
 	return entries.map((entry) => ({
-		params: { slug: entry.id.replace(/\.(md|mdx)$/, '').split('/').pop() ?? '' },
+		params: { slug: entry.id.replace(/\.(md|mdx)$/, '') },
 		props: { entry },
 	}));
 }

@@ -2,12 +2,14 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footbar from '../components/Footbar.astro';
+import { SITE_BRAND, SITE_DESCRIPTION_DEFAULT, SITE_LOCALE, SITE_NAME, USERWAY_ACCOUNT } from '../data/site';
 
-const { title = 'Astro Basics', description } = Astro.props;
+const { title = SITE_NAME, description = SITE_DESCRIPTION_DEFAULT } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+
+<html lang={SITE_LOCALE}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
@@ -15,11 +17,13 @@ const { title = 'Astro Basics', description } = Astro.props;
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		{description && <meta name="description" content={description} />}
-		<script src="https://cdn.userway.org/widget.js" data-account="Txt3QSFuIj"></script>
+		{USERWAY_ACCOUNT && (
+			<script defer src="https://cdn.userway.org/widget.js" data-account={USERWAY_ACCOUNT}></script>
+		)}
 		<title>{title}</title>
 	</head>
 	<body>
-		<Navbar brand="tucurrique.go.cr" />
+		<Navbar brand={SITE_BRAND} />
 		<slot />
 		<Footbar />
 	</body>

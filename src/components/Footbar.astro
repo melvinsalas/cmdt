@@ -1,24 +1,9 @@
 ---
 import { menus } from "../data/menus";
 import logo from "../assets/logo.png";
-import { BarChart3, ExternalLink, Mail, ThumbsUp } from "@lucide/astro";
+import { ExternalLink } from "@lucide/astro";
 
 const year = new Date().getFullYear();
-
-const moreSection = menus.find((section) => section.id === "mas");
-
-const findMoreLink = (title: string) =>
-	moreSection?.items.find((item) => item.title === title)?.href;
-
-const socialLinks = [
-	{ title: "Facebook", href: findMoreLink("Facebook"), icon: ThumbsUp },
-	{ title: "Correo", href: findMoreLink("Correo"), icon: Mail },
-	{
-		title: "Estadísticas",
-		href: findMoreLink("Estadísticas"),
-		icon: BarChart3,
-	},
-].filter((item) => Boolean(item.href));
 ---
 
 <footer class="paper-surface-strong mt-10 px-4 py-8 text-sm text-slate-700">
