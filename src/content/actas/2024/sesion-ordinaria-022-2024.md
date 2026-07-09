@@ -1,7 +1,7 @@
 ---
-title: Sesión Ordinaria 035-2025
-date: 2025-01-07
+title: Sesión Ordinaria 022-2024
+date: 2024-10-08
 type: ordinaria
 files:
-  - /files/2026/Sesion Ordinaria 035-2025.pdf
+  - /files/2024/Sesion Ordinaria 022-2024.pdf
 ---
