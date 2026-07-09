@@ -9,6 +9,7 @@ type Props = {
 	emptyMessage?: string;
 	limit?: number;
 	enableYearFilter?: boolean;
+	heading?: string;
 };
 
 const {
@@ -16,6 +17,7 @@ const {
 	emptyMessage = 'No hay registros publicados.',
 	limit,
 	enableYearFilter = true,
+	heading,
 }: Props = Astro.props;
 
 const normalizeBaseUri = (value: string): string => {
@@ -50,4 +52,4 @@ const safeLimit = Number.isInteger(limit) && (limit as number) > 0 ? (limit as n
 const visibleData = safeLimit ? data.slice(0, safeLimit) : data;
 ---
 
-<DataTable data={visibleData} emptyMessage={emptyMessage} showYearFilter={!safeLimit && enableYearFilter} />
+<DataTable data={visibleData} emptyMessage={emptyMessage} showYearFilter={enableYearFilter} heading={heading} />

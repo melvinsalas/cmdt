@@ -12,12 +12,12 @@ import Button from '@components/Button.astro';
 
 Nos preocupamos por informar a la población sobre nuestro trabajo, por lo que tenemos una política de datos abiertos.
 
-### Últimas Actas Municipales
-
 <Collection
 	baseUri="/transparencia/actas"
 	emptyMessage="No hay actas publicadas"
 	limit={6}
+	enableYearFilter={false}
+	heading='Últimas Actas Municipales'
 />
 
 <Columns columns={2} mobileColumns={1} gap="1rem">

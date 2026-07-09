@@ -14,9 +14,10 @@ interface Props {
 	data: DataRow[];
 	emptyMessage?: string;
 	showYearFilter?: boolean;
+	heading?: string;
 }
 
-const { data, emptyMessage = 'No hay registros', showYearFilter = true } = Astro.props;
+const { data, emptyMessage = 'No hay registros', showYearFilter = true, heading } = Astro.props;
 
 // Ordenar por fecha descendente
 const sortedData = [...data].sort((a, b) => b.date.getTime() - a.date.getTime());
@@ -27,19 +28,24 @@ const latestYear = years[0];
 {sortedData.length === 0 ? (
 	<p>{emptyMessage}</p>
 ) : (
-	<div data-data-table>
-		{showYearFilter && (
-			<div class="mb-3 flex items-center justify-end gap-2">
-				<label class="text-sm font-medium text-slate-700" for="year-filter">Año</label>
-				<select
-					id="year-filter"
-					data-year-select
-					class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
-				>
-					{years.map((year) => (
-						<option value={year} selected={year === latestYear}>{year}</option>
-					))}
-				</select>
+	<div data-data-table class="mt-4">
+		{(showYearFilter || heading) && (
+			<div class="mb-3 flex items-center justify-between gap-2">
+				{heading ? <span class="text-base font-semibold text-slate-800">{heading}</span> : <span />}
+				{showYearFilter && (
+					<div class="flex items-center gap-2">
+						<label class="text-sm font-medium text-slate-700" for="year-filter">Año</label>
+						<select
+							id="year-filter"
+							data-year-select
+							class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
+						>
+							{years.map((year) => (
+								<option value={year} selected={year === latestYear}>{year}</option>
+							))}
+						</select>
+					</div>
+				)}
 			</div>
 		)}
 
