@@ -24,9 +24,9 @@ const socialLinks = [
 <footer class="mt-10 bg-slate-50 px-4 py-8 text-sm text-slate-700">
 	<div class="mx-auto w-full max-w-5xl">
 		<div
-			class="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.95fr)]"
+			class="flex flex-col gap-y-12 lg:flex-row lg:items-start"
 		>
-			<section class="px-2 py-1 lg:px-4 lg:py-2">
+			<section class="px-2 py-1 lg:max-w-[17rem] lg:flex-none lg:px-4 lg:py-2">
 				<a
 					href="/"
 					class="inline-flex flex-col items-start gap-3 text-slate-900"
@@ -49,13 +49,13 @@ const socialLinks = [
 				</a>
 			</section>
 
-			<section class="px-2 py-1 lg:px-4 lg:py-2">
-				<div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+			<section class="px-2 py-1 lg:min-w-0 lg:flex-1 lg:px-4 lg:py-2">
+				<div class="flex flex-wrap gap-x-8 gap-y-6">
 					{
 						menus.map((section) => (
 							<section
 								aria-labelledby={`footbar-${section.id}`}
-								class="min-w-0"
+								class="basis-full sm:basis-[calc(50%-1rem)] xl:basis-[calc(25%-1.5rem)]"
 							>
 								<h3
 									id={`footbar-${section.id}`}
