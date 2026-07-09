@@ -1,55 +1,112 @@
 ---
 import { menus } from "../data/menus";
 import logo from "../assets/logo.png";
+import { BarChart3, ExternalLink, Mail, ThumbsUp } from "@lucide/astro";
 
 const year = new Date().getFullYear();
+
+const moreSection = menus.find((section) => section.id === "mas");
+
+const findMoreLink = (title: string) =>
+	moreSection?.items.find((item) => item.title === title)?.href;
+
+const socialLinks = [
+	{ title: "Facebook", href: findMoreLink("Facebook"), icon: ThumbsUp },
+	{ title: "Correo", href: findMoreLink("Correo"), icon: Mail },
+	{
+		title: "Estadísticas",
+		href: findMoreLink("Estadísticas"),
+		icon: BarChart3,
+	},
+].filter((item) => Boolean(item.href));
 ---
 
-<footer class="mt-10 border-t border-slate-200 bg-slate-50 px-4 py-8 text-sm text-slate-700">
-	<div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
-		<a
-			href="/"
-			class="inline-flex items-center gap-4 self-start rounded-xl px-3 py-2 text-slate-900 transition hover:bg-white/70"
+<footer class="mt-10 bg-slate-50 px-4 py-8 text-sm text-slate-700">
+	<div class="mx-auto w-full max-w-5xl">
+		<div
+			class="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.95fr)]"
 		>
-			<img src={logo.src} alt="Logo Municipalidad de Tucurrique" class="h-16 w-16 object-contain" />
-			<div>
-				<p class="text-lg font-semibold leading-tight">Concejo Municipal del Distrito de Tucurrique</p>
-				<p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Gobierno local</p>
-			</div>
-		</a>
-
-		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-			{
-				menus.map((section) => (
-					<section aria-labelledby={`footbar-${section.id}`}>
-						<h2
-							id={`footbar-${section.id}`}
-							class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-900"
+			<section class="px-2 py-1 lg:px-4 lg:py-2">
+				<a
+					href="/"
+					class="inline-flex flex-col items-start gap-3 text-slate-900"
+				>
+					<img
+						src={logo.src}
+						alt="Logo Municipalidad de Tucurrique"
+						class="h-14 w-14 object-contain"
+					/>
+					<div>
+						<p class="text-lg font-semibold leading-tight">
+							Concejo Municipal del Distrito de Tucurrique
+						</p>
+						<p
+							class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500"
 						>
-							{section.title}
-						</h2>
-						<ul class="space-y-1.5">
-							{section.items.map((item) => (
-								<li>
-									<a
-										class="hover:text-slate-900 hover:underline"
-										href={item.href}
-										target={item.external ? "_blank" : undefined}
-										rel={item.external ? "noopener noreferrer" : undefined}
-									>
-										{item.title}
-									</a>
-								</li>
-							))}
-						</ul>
-					</section>
-				))
-			}
-		</div>
-	</div>
+							Gobierno local
+						</p>
+					</div>
+				</a>
+			</section>
 
-	<div class="mx-auto mt-8 flex w-full max-w-5xl flex-col gap-2 border-t border-slate-200 pt-4 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-		<p>Municipalidad de Tucurrique · {year}</p>
-		
+			<section class="px-2 py-1 lg:px-4 lg:py-2">
+				<div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+					{
+						menus.map((section) => (
+							<section
+								aria-labelledby={`footbar-${section.id}`}
+								class="min-w-0"
+							>
+								<h3
+									id={`footbar-${section.id}`}
+									class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
+								>
+									{section.title}
+								</h3>
+								<ul class="mt-3 space-y-2">
+									{section.items.map((item) => (
+										<li>
+											<a
+												class="inline-flex items-center gap-1.5 text-sm text-slate-700 transition hover:text-slate-900 hover:underline"
+												href={item.href}
+												target={
+													item.external
+														? "_blank"
+														: undefined
+												}
+												rel={
+													item.external
+														? "noopener noreferrer"
+														: undefined
+												}
+											>
+												<span>{item.title}</span>
+												{item.external ? (
+													<ExternalLink
+														aria-hidden="true"
+														class="h-3.5 w-3.5 shrink-0 text-slate-500"
+													/>
+												) : null}
+											</a>
+										</li>
+									))}
+								</ul>
+							</section>
+						))
+					}
+				</div>
+			</section>
+		</div>
+
+		<div
+			class="mt-6 flex justify-end pt-5 text-right text-xs text-slate-500"
+		>
+			
+
+			<p>
+				Concejo Municipal del Distrito de Tucurrique · {year}. Todos los derechos
+				reservados.
+			</p>
+		</div>
 	</div>
 </footer>
