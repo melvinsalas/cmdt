@@ -7,7 +7,7 @@ import { Menu, X } from "@lucide/astro";
 import logo from "../assets/logo_alt_96x96.png";
 ---
 
-<header class="relative z-[60] border-b border-slate-200 bg-white px-4 py-3">
+<header class="paper-surface relative z-[60] border-b border-slate-200 px-4 py-3">
 	<nav
 		class="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-4 text-sm font-medium text-slate-700"
 	>
@@ -28,7 +28,7 @@ import logo from "../assets/logo_alt_96x96.png";
 			</summary>
 
 			<div
-				class="fixed right-0 top-0 z-[80] h-full w-[min(22rem,calc(100vw-2rem))] overflow-y-auto border-l border-slate-200 bg-white px-4 py-3"
+				class="paper-surface fixed right-0 top-0 z-[80] h-full w-[min(22rem,calc(100vw-2rem))] overflow-y-auto border-l border-slate-200 px-4 py-3"
 				id="mobile-nav-accordion"
 			>
 				<div class="mb-4 flex items-center justify-end">
@@ -63,7 +63,7 @@ import logo from "../assets/logo_alt_96x96.png";
 							<span>{menu.title}</span>
 						</summary>
 						<div class="animate-surface absolute right-0 top-full z-[70] min-w-80 pt-2">
-							<div class="rounded-xl border border-slate-200 bg-white p-2">
+							<div class="paper-surface-soft rounded-xl border border-slate-200 p-2">
 								{menu.items.map((item) => (
 									<MenuItem {...item} />
 								))}

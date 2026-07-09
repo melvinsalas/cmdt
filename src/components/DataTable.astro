@@ -37,7 +37,7 @@ const latestYear = years[0];
 						<select
 							id="year-filter"
 							data-year-select
-							class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
+							class="paper-surface rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
 						>
 							{years.map((year) => (
 								<option value={year} selected={year === latestYear}>{year}</option>
@@ -49,7 +49,7 @@ const latestYear = years[0];
 		)}
 
 		<div class="overflow-x-auto rounded-xl border border-slate-200">
-			<table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
+			<table class="paper-surface min-w-full divide-y divide-slate-200 text-sm">
 				<thead class="bg-slate-50">
 					<tr>
 						<th class="hidden w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700 sm:table-cell">Tipo</th>
@@ -67,16 +67,27 @@ const latestYear = years[0];
 							<tr
 								data-row
 								data-year={rowYear}
-								data-href={rowHref}
-								tabindex={rowHref ? '0' : undefined}
-								role={rowHref ? 'link' : undefined}
-								aria-label={rowHref ? row.title : undefined}
-								class={`relative align-middle${showYearFilter && rowYear !== latestYear ? ' hidden' : ''}${rowHref ? ' cursor-pointer hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500' : ''}`}
+								data-row-link={rowHref ? 'true' : undefined}
+								class={`relative align-middle${showYearFilter && rowYear !== latestYear ? ' hidden' : ''}${rowHref ? ' cursor-pointer' : ''}`}
 							>
-								<td class="hidden w-px whitespace-nowrap px-4 py-3 sm:table-cell">
+								<td class="relative hidden w-px whitespace-nowrap px-4 py-3 sm:table-cell">
+									{rowHref && (
+										<a
+											href={rowHref}
+											aria-label={row.title}
+											class="absolute inset-0 z-10 hidden rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:block"
+										/>
+									)}
 									<TypeBadge type={row.type} />
 								</td>
-								<td class="px-4 py-3 sm:hidden">
+								<td class="relative px-4 py-3 sm:hidden">
+									{rowHref && (
+										<a
+											href={rowHref}
+											aria-label={row.title}
+											class="absolute inset-0 z-10 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:hidden"
+										/>
+									)}
 									<div class="flex items-start justify-between gap-3">
 										<TypeBadge type={row.type} />
 										<span class="whitespace-nowrap text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -85,8 +96,27 @@ const latestYear = years[0];
 									</div>
 									<div class="mt-2 text-sm font-medium text-slate-900">{row.title}</div>
 								</td>
-								<td class="hidden px-4 py-3 font-medium text-slate-900 sm:table-cell">{row.title}</td>
-								<td class="hidden px-4 py-3 text-slate-600 sm:table-cell">
+								<td class="relative hidden px-4 py-3 font-medium text-slate-900 sm:table-cell">
+									{rowHref && (
+										<a
+											href={rowHref}
+											tabindex="-1"
+											aria-hidden="true"
+											class="absolute inset-y-0 z-10 hidden rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:block"
+											style="left: 0; right: 0;"
+										/>
+									)}
+									{row.title}
+								</td>
+								<td class="relative hidden px-4 py-3 text-slate-600 sm:table-cell">
+									{rowHref && (
+										<a
+											href={rowHref}
+											tabindex="-1"
+											aria-hidden="true"
+											class="absolute inset-0 z-10 hidden rounded-sm sm:block"
+										/>
+									)}
 									<span class="sm:hidden">{formatDateEsShort(row.date)}</span>
 									<span class="hidden sm:inline">{formatDateEs(row.date)}</span>
 								</td>
@@ -103,12 +133,7 @@ const latestYear = years[0];
 			if (tableRoot) {
 				const select = tableRoot.querySelector('[data-year-select]');
 				const rows = tableRoot.querySelectorAll('tr[data-row]');
-				const stripeClasses = ['bg-white', 'bg-slate-50'];
-
-					const navigateRow = (row) => {
-						const href = row.getAttribute('data-href');
-						if (href) window.location.assign(href);
-					};
+				const stripeClasses = ['paper-surface-soft', 'paper-surface'];
 
 				const applyStriping = () => {
 					let i = 0;
@@ -129,23 +154,14 @@ const latestYear = years[0];
 				} else {
 					applyStriping();
 				}
-
-					rows.forEach((row) => {
-						if (!row.getAttribute('data-href')) return;
-
-						row.addEventListener('click', (event) => {
-							if (event.defaultPrevented) return;
-							if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-							navigateRow(row);
-						});
-
-						row.addEventListener('keydown', (event) => {
-							if (event.key !== 'Enter' && event.key !== ' ') return;
-							event.preventDefault();
-							navigateRow(row);
-						});
-					});
 			}
 		</script>
+
+		<style>
+			[data-data-table] tr[data-row-link='true']:hover,
+			[data-data-table] tr[data-row-link='true']:focus-within {
+				background-color: rgb(241 245 249);
+			}
+		</style>
 	</div>
 )}
