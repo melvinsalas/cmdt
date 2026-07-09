@@ -13,12 +13,13 @@ import {
 	Mail,
 	Map,
 	PhoneCall,
+	ThumbsUp,
 	TreeDeciduous,
 	User,
 	UserRoundCheck,
 } from '@lucide/astro';
 
-type IconName = 'award' | 'map' | 'building' | 'user' | 'folder-open' | 'clipboard-pen' | 'tree-deciduous' | 'user-round-check' | 'eye' | 'landmark' | 'heart' | 'phone-call' | 'cookie' | 'globe-check' | 'mail';
+type IconName = 'award' | 'map' | 'building' | 'user' | 'folder-open' | 'clipboard-pen' | 'tree-deciduous' | 'user-round-check' | 'eye' | 'landmark' | 'heart' | 'phone-call' | 'cookie' | 'globe-check' | 'mail' | 'thumbs-up';
 
 const { href, title, description, icon, external = false } = Astro.props as {
 	href: string;
@@ -44,6 +45,7 @@ const iconMap = {
 	cookie: Cookie,
 	'globe-check': GlobeCheck,
 	mail: Mail,
+	'thumbs-up': ThumbsUp,
 } satisfies Record<IconName, typeof Award>;
 
 const IconComponent = iconMap[icon];

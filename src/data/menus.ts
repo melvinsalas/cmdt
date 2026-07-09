@@ -13,7 +13,8 @@ export type MenuIconName =
 	| "phone-call"
 	| "cookie"
 	| "globe-check"
-	| "mail";
+	| "mail"
+	| "thumbs-up";
 
 export type MenuItem = {
 	href: string;
@@ -116,6 +117,12 @@ export const menus: MenuSection[] = [
 				href: "https://www.spacemail.com/es-ES/login/",
 				title: "Correo",
 				icon: "mail",
+				external: true,
+			},
+			{
+				href: "https://www.facebook.com/tucurrique.go.cr",
+				title: "Facebook",
+				icon: "thumbs-up",
 				external: true,
 			},
 		],
