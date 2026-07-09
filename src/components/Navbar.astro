@@ -4,15 +4,20 @@ const { brand = "Home" } = Astro.props;
 import MenuItem from "./MenuItem.astro";
 import { menus } from "../data/menus";
 import { Menu, X } from "@lucide/astro";
+import logo from "../assets/logo_alt_96x96.png";
 ---
 
 <header class="relative z-[60] border-b border-slate-200 bg-white px-4 py-3">
 	<nav
-		class="mx-auto flex w-full max-w-5xl flex-wrap items-start justify-between gap-4 text-sm font-medium text-slate-700"
+		class="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-4 text-sm font-medium text-slate-700"
 	>
 		<a
-			class="self-center rounded px-2 py-1 text-slate-900 hover:bg-slate-100"
-			href="/">{brand}</a
+			class="inline-flex items-center gap-2 self-center rounded px-2 py-1 text-slate-900 hover:bg-slate-100"
+			href="/"
+		>
+			<img src={logo.src} alt="Logo" class="h-8 w-8 object-contain" />
+			<span class="text-xl font-semibold leading-none">{brand}</span>
+		</a
 		>
 		<details class="group relative ml-auto md:hidden" id="mobile-menu">
 			<summary
