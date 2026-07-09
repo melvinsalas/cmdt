@@ -1,37 +1,51 @@
 ---
 import { menus } from "../data/menus";
+import logo from "../assets/logo.png";
 
 const year = new Date().getFullYear();
 ---
 
 <footer class="mt-10 border-t border-slate-200 bg-slate-50 px-4 py-8 text-sm text-slate-700">
-	<div class="mx-auto grid w-full max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
-		{
-			menus.map((section) => (
-				<section aria-labelledby={`footbar-${section.id}`}>
-					<h2
-						id={`footbar-${section.id}`}
-						class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-900"
-					>
-						{section.title}
-					</h2>
-					<ul class="space-y-1.5">
-						{section.items.map((item) => (
-							<li>
-								<a
-									class="hover:text-slate-900 hover:underline"
-									href={item.href}
-									target={item.external ? "_blank" : undefined}
-									rel={item.external ? "noopener noreferrer" : undefined}
-								>
-									{item.title}
-								</a>
-							</li>
-						))}
-					</ul>
-				</section>
-			))
-		}
+	<div class="mx-auto flex w-full max-w-5xl flex-col gap-8">
+		<a
+			href="/"
+			class="inline-flex items-center gap-4 self-start rounded-xl px-3 py-2 text-slate-900 transition hover:bg-white/70"
+		>
+			<img src={logo.src} alt="Logo Municipalidad de Tucurrique" class="h-16 w-16 object-contain" />
+			<div>
+				<p class="text-lg font-semibold leading-tight">Concejo Municipal del Distrito de Tucurrique</p>
+				<p class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500">Gobierno local</p>
+			</div>
+		</a>
+
+		<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			{
+				menus.map((section) => (
+					<section aria-labelledby={`footbar-${section.id}`}>
+						<h2
+							id={`footbar-${section.id}`}
+							class="mb-2 text-sm font-semibold uppercase tracking-wide text-slate-900"
+						>
+							{section.title}
+						</h2>
+						<ul class="space-y-1.5">
+							{section.items.map((item) => (
+								<li>
+									<a
+										class="hover:text-slate-900 hover:underline"
+										href={item.href}
+										target={item.external ? "_blank" : undefined}
+										rel={item.external ? "noopener noreferrer" : undefined}
+									>
+										{item.title}
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+		</div>
 	</div>
 
 	<div class="mx-auto mt-8 flex w-full max-w-5xl flex-col gap-2 border-t border-slate-200 pt-4 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
