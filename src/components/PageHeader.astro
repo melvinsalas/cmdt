@@ -1,0 +1,22 @@
+---
+import { formatDateEs } from '../utils/date';
+
+interface Props {
+	title?: string;
+	description?: string;
+	date?: string | Date;
+	emoji?: string;
+}
+
+const { title, description, date, emoji }: Props = Astro.props;
+---
+
+<header class="mb-8 border-b border-slate-200 pb-4">
+	{emoji && (
+		<p class="mb-2 text-7xl leading-none" aria-hidden="true">{emoji}</p>
+	)}
+	{title && <h1>{title}</h1>}
+	{description && <p class="m-0 text-slate-600">{description}</p>}
+	{date && <p class="mt-2 mb-0 text-sm text-slate-500">{formatDateEs(date)}</p>}
+	<slot />
+</header>

@@ -1,6 +1,6 @@
 ---
 import Layout from "./Layout.astro";
-import { formatDateEs } from "../utils/date";
+import PageHeader from "../components/PageHeader.astro";
 
 const { frontmatter } = Astro.props;
 ---
@@ -11,24 +11,12 @@ const { frontmatter } = Astro.props;
 >
   <main class="mx-auto max-w-[768px] px-4 py-8">
     <article class="markdown-content">
-      <header class="mb-8 border-b border-slate-200 pb-4">
-        {
-          frontmatter?.emoji && (
-            <p class="mb-2 text-7xl leading-none" aria-hidden="true">{frontmatter.emoji}</p>
-          )
-        }
-        <h1>{frontmatter?.title}</h1>
-        {
-          frontmatter?.description && (
-            <p class="m-0 text-slate-600">{frontmatter.description}</p>
-          )
-        }
-        {
-          frontmatter?.date && (
-            <p class="mt-2 mb-0 text-sm text-slate-500">{formatDateEs(frontmatter.date)}</p>
-          )
-        }
-      </header>
+      <PageHeader
+        title={frontmatter?.title}
+        description={frontmatter?.description}
+        date={frontmatter?.date}
+        emoji={frontmatter?.emoji}
+      />
 
       <slot />
     </article>
