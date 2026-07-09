@@ -1,11 +1,13 @@
 ---
 import { FileSize } from '../utils/file-size';
+import { getTypeVariant } from '../utils/type-colors';
 
 type Props = {
 	href: string;
+	type?: string;
 };
 
-const { href }: Props = Astro.props;
+const { href, type }: Props = Astro.props;
 
 const fileName = (() => {
 	const last = href.split("/").filter(Boolean).pop();
@@ -13,16 +15,16 @@ const fileName = (() => {
 	return decodeURIComponent(last);
 })();
 
-let sizeText = "Tamaño no disponible";
-sizeText = FileSize.getFromPublicHref(href);
+const sizeText = FileSize.getFromPublicHref(href);
+const { callout } = getTypeVariant(type);
 ---
 
 <aside
 	class:list={[
-		"my-3 border-l-4 p-4",
-		"border-slate-500 bg-slate-50 text-slate-900",
+		"my-3 border-l-4 p-4 text-slate-900",
+		callout,
 	]}
-	role="alert"
+	role="note"
 >
 	<a href={href} target="_blank" rel="noopener noreferrer" class="file-callout-link">
 		{fileName}

@@ -19,7 +19,6 @@ interface Props {
 
 const { data, emptyMessage = 'No hay registros', showYearFilter = true, heading } = Astro.props;
 
-// Ordenar por fecha descendente
 const sortedData = [...data].sort((a, b) => b.date.getTime() - a.date.getTime());
 const years = Array.from(new Set(sortedData.map((row) => row.date.getFullYear()))).sort((a, b) => b - a);
 const latestYear = years[0];
@@ -53,48 +52,32 @@ const latestYear = years[0];
 			<table class="min-w-full divide-y divide-slate-200 bg-white text-sm">
 				<thead class="bg-slate-50">
 					<tr>
-						{true && <th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700">Tipo</th>}
+						<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700">Tipo</th>
 						<th class="px-4 py-3 text-left font-semibold text-slate-700">Título</th>
 						<th class="px-4 py-3 text-left font-semibold text-slate-700">Fecha</th>
-						<th class="w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700"></th>
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-slate-100">
 					{sortedData.map((row) => {
 						const rowYear = row.date.getFullYear();
-						const hiddenByDefault = showYearFilter && rowYear !== latestYear;
 						const rowHref = row.href?.trim();
-						const isRowClickable = Boolean(rowHref);
 
 						return (
 							<tr
 								data-row
-								data-href={rowHref}
 								data-year={rowYear}
-								tabindex={isRowClickable ? 0 : undefined}
-								role={isRowClickable ? 'link' : undefined}
-								class={`align-middle${hiddenByDefault ? ' hidden' : ''}${isRowClickable ? ' cursor-pointer hover:bg-slate-100 focus-visible:bg-slate-100 focus-visible:outline-none' : ''}`}
+								class={`relative align-middle${showYearFilter && rowYear !== latestYear ? ' hidden' : ''}${rowHref ? ' hover:bg-slate-100' : ''}`}
 							>
 								<td class="w-px whitespace-nowrap px-4 py-3">
+									{rowHref && (
+										<a href={rowHref} class="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500" aria-label={row.title} />
+									)}
 									<TypeBadge type={row.type} />
 								</td>
-
-								{/* Columna de título */}
 								<td class="px-4 py-3 font-medium text-slate-900">{row.title}</td>
-
-								{/* Columna de fecha */}
 								<td class="px-4 py-3 text-slate-600">
 									<span class="sm:hidden">{formatDateEsShort(row.date)}</span>
 									<span class="hidden sm:inline">{formatDateEs(row.date)}</span>
-								</td>
-
-								{/* Columna de acción */}
-								<td class="w-px whitespace-nowrap px-4 py-3">
-									{row.href ? (
-										<a class="text-blue-700 hover:underline" href={row.href}>
-											Ver
-										</a>
-									) : null}
 								</td>
 							</tr>
 						);
@@ -109,63 +92,26 @@ const latestYear = years[0];
 			if (tableRoot) {
 				const select = tableRoot.querySelector('[data-year-select]');
 				const rows = tableRoot.querySelectorAll('tr[data-row]');
-				const rowStripeClasses = ['bg-white', 'bg-slate-50'];
-				const interactiveSelector = 'a, button, input, select, textarea, label';
+				const stripeClasses = ['bg-white', 'bg-slate-50'];
 
-				rows.forEach((row) => {
-					const href = row.getAttribute('data-href');
-
-					if (!href) return;
-
-					row.addEventListener('click', (event) => {
-						const target = event.target;
-						if (target instanceof Element && target.closest(interactiveSelector)) {
-							return;
-						}
-
-						window.location.href = href;
-					});
-
-					row.addEventListener('keydown', (event) => {
-						if (event.key !== 'Enter' && event.key !== ' ') return;
-
-						event.preventDefault();
-						window.location.href = href;
-					});
-				});
-
-				const applyRowStriping = () => {
-					let visibleIndex = 0;
-
+				const applyStriping = () => {
+					let i = 0;
 					rows.forEach((row) => {
-						row.classList.remove(...rowStripeClasses);
-
-						if (row.classList.contains('hidden')) {
-							return;
-						}
-
-						row.classList.add(rowStripeClasses[visibleIndex % rowStripeClasses.length]);
-						visibleIndex += 1;
+						row.classList.remove(...stripeClasses);
+						if (!row.classList.contains('hidden')) row.classList.add(stripeClasses[i++ % 2]);
 					});
 				};
 
-				const applyYearFilter = (year) => {
-					rows.forEach((row) => {
-						const rowYear = row.getAttribute('data-year');
-						row.classList.toggle('hidden', rowYear !== year);
-					});
-
-					applyRowStriping();
+				const applyFilter = (year) => {
+					rows.forEach((row) => row.classList.toggle('hidden', row.getAttribute('data-year') !== year));
+					applyStriping();
 				};
 
 				if (select instanceof HTMLSelectElement) {
-					applyYearFilter(select.value);
-
-					select.addEventListener('change', () => {
-						applyYearFilter(select.value);
-					});
+					applyFilter(select.value);
+					select.addEventListener('change', () => applyFilter(select.value));
 				} else {
-					applyRowStriping();
+					applyStriping();
 				}
 			}
 		</script>
