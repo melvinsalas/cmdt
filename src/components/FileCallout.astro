@@ -1,6 +1,7 @@
 ---
 import { FileSize } from '../utils/file-size';
 import { getTypeVariant } from '../utils/type-colors';
+import { FileSpreadsheet, FileText, Package, ShieldQuestionMark } from '@lucide/astro';
 
 type Props = {
 	href: string;
@@ -16,18 +17,29 @@ const fileName = (() => {
 })();
 
 const sizeText = FileSize.getFromPublicHref(href);
-const { callout } = getTypeVariant(type);
+const { callout, calloutIcon } = getTypeVariant(type);
+
+const extension = fileName.split('.').pop()?.toLowerCase();
+const Icon = (() => {
+	if (extension === 'xls' || extension === 'xlsx') return FileSpreadsheet;
+	if (extension === 'doc' || extension === 'docx' || extension === 'pdf') return FileText;
+	if (extension === 'zip') return Package;
+	return ShieldQuestionMark;
+})();
 ---
 
 <aside
 	class:list={[
-		"my-3 border-l-4 p-4 text-slate-900",
+		"my-3 flex items-center gap-3 border-l-4 p-4 text-slate-900",
 		callout,
 	]}
 	role="note"
 >
-	<a href={href} target="_blank" rel="noopener noreferrer" class="file-callout-link">
-		{fileName}
-	</a>
-	<em class="ml-2 text-slate-600">({sizeText})</em>
+	<Icon aria-hidden="true" class:list={['h-5 w-5 shrink-0', calloutIcon]} />
+	<span class="min-w-0">
+		<a href={href} target="_blank" rel="noopener noreferrer" class="file-callout-link block text-lg">
+			{fileName}
+		</a>
+		<span class="block whitespace-nowrap font-mono text-sm text-slate-600">{sizeText}</span>
+	</span>
 </aside>
