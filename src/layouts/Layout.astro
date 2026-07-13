@@ -2,7 +2,8 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footbar from '../components/Footbar.astro';
-import { SITE_BRAND, SITE_DESCRIPTION_DEFAULT, SITE_LOCALE, SITE_NAME, USERWAY_ACCOUNT } from '../data/site';
+import ThirdPartyScripts from '../components/ThirdPartyScripts.astro';
+import { SITE_BRAND, SITE_DESCRIPTION_DEFAULT, SITE_LOCALE, SITE_NAME } from '../data/site';
 
 const { title = SITE_NAME, description = SITE_DESCRIPTION_DEFAULT } = Astro.props;
 ---
@@ -17,10 +18,8 @@ const { title = SITE_NAME, description = SITE_DESCRIPTION_DEFAULT } = Astro.prop
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		{description && <meta name="description" content={description} />}
-		{USERWAY_ACCOUNT && (
-			<script defer src="https://cdn.userway.org/widget.js" data-account={USERWAY_ACCOUNT}></script>
-		)}
 		<title>{title}</title>
+		<ThirdPartyScripts />
 	</head>
 	<body>
 		<Navbar brand={SITE_BRAND} />

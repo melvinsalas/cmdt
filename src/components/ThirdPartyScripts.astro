@@ -1,0 +1,41 @@
+---
+import { GOOGLE_ANALYTICS_ID, UMAMI_WEBSITE_ID, USERWAY_ACCOUNT } from '../data/site';
+
+const googleAnalyticsScriptUrl =
+	`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GOOGLE_ANALYTICS_ID)}`;
+---
+
+<!-- Accessibility: UserWay -->
+{USERWAY_ACCOUNT && (
+	<script
+		is:inline
+		defer
+		src="https://cdn.userway.org/widget.js"
+		data-account={USERWAY_ACCOUNT}
+	></script>
+)}
+
+<!-- Analytics: Umami -->
+{UMAMI_WEBSITE_ID && (
+	<script
+		is:inline
+		defer
+		src="https://cloud.umami.is/script.js"
+		data-website-id={UMAMI_WEBSITE_ID}
+	></script>
+)}
+
+<!-- Analytics: Google Analytics -->
+{GOOGLE_ANALYTICS_ID && (
+	<>
+		<script is:inline async src={googleAnalyticsScriptUrl}></script>
+		<script is:inline define:vars={{ googleAnalyticsId: GOOGLE_ANALYTICS_ID }}>
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag('js', new Date());
+			gtag('config', googleAnalyticsId);
+		</script>
+	</>
+)}

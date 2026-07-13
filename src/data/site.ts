@@ -2,7 +2,11 @@ export const SITE_NAME = 'Concejo Municipal del Distrito de Tucurrique';
 export const SITE_BRAND = 'tucurrique.go.cr';
 export const SITE_DESCRIPTION_DEFAULT = 'Trabajamos para servirle';
 export const SITE_LOCALE = 'es';
+
+// Third-party services. Leave an identifier empty to disable its integration.
 export const USERWAY_ACCOUNT = 'Txt3QSFuIj';
+export const UMAMI_WEBSITE_ID = '6bd6daa6-d2aa-4a52-b7e4-48bf30d6cd3a';
+export const GOOGLE_ANALYTICS_ID = 'G-T64WSMHP7C';
 
 export const SITE_URLS = {
 	expediente:
