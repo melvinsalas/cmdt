@@ -1,13 +1,12 @@
 ---
 import {
+	Archive,
 	Award,
 	Building,
 	ClipboardPen,
-	Cookie,
 	ExternalLink,
 	Eye,
 	FolderOpen,
-	GlobeCheck,
 	Heart,
 	Landmark,
 	Mail,
@@ -29,6 +28,7 @@ const { href, title, description, icon, external = false } = Astro.props as {
 };
 
 const iconMap = {
+	archive: Archive,
 	award: Award,
 	map: Map,
 	building: Building,
@@ -41,8 +41,6 @@ const iconMap = {
 	landmark: Landmark,
 	heart: Heart,
 	'phone-call': PhoneCall,
-	cookie: Cookie,
-	'globe-check': GlobeCheck,
 	mail: Mail,
 	'thumbs-up': ThumbsUp,
 } satisfies Record<MenuIconName, typeof Award>;

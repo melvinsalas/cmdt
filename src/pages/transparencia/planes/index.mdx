@@ -5,10 +5,9 @@ title: Planes de Gobierno
 description: Documentos de planes publicados por la Municipalidad.
 ---
 
-import Collection from '@components/Collection.astro';
+import List from '@components/List.astro';
 
-<Collection
-	baseUri="/transparencia/planes"
+<List
 	types={['plan']}
 	emptyMessage="No hay planes publicados en este momento."
 />

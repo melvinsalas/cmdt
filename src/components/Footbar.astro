@@ -1,6 +1,6 @@
 ---
 import { menus } from "../data/menus";
-import { SITE_NAME } from "../data/site";
+import { SITE_NAME, SITE_URLS } from "../data/site";
 import logo from "../assets/logo.png";
 import { ExternalLink } from "@lucide/astro";
 
@@ -84,13 +84,25 @@ const year = new Date().getFullYear();
 			</section>
 		</div>
 
-		<div
-			class="mt-6 flex justify-end pt-5 text-right text-xs text-slate-500"
-		>
-			<p class="flex flex-wrap justify-end gap-x-1 gap-y-0.5">
+		<div class="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+			<p class="flex flex-wrap gap-x-1 gap-y-0.5">
 				<span class="whitespace-nowrap">{SITE_NAME} ·</span>
 				<span class="whitespace-nowrap">{year}. Todos los derechos reservados.</span>
 			</p>
+			<nav aria-label="Enlaces legales y estadísticas" class="flex flex-wrap items-center gap-x-4 gap-y-2">
+				<a href="/privacidad" class="transition hover:text-slate-900 hover:underline">
+					Privacidad
+				</a>
+				<a
+					href={SITE_URLS.estadisticas}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-flex items-center gap-1.5 transition hover:text-slate-900 hover:underline"
+				>
+					<span>Estadísticas</span>
+					<ExternalLink aria-hidden="true" class="h-3.5 w-3.5 shrink-0" />
+				</a>
+			</nav>
 		</div>
 	</div>
 </footer>

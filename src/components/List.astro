@@ -1,0 +1,53 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import FileCallout from './FileCallout.astro';
+
+type ArchiveType = CollectionEntry<'archive'>['data']['type'];
+
+type Props = {
+	types?: ArchiveType[];
+	emptyMessage?: string;
+};
+
+const {
+	types,
+	emptyMessage = 'No hay documentos publicados.',
+}: Props = Astro.props;
+
+const entries = (await getCollection(
+	'archive',
+	({ data }) => !types || types.includes(data.type),
+)).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+{entries.length === 0 ? (
+	<p>{emptyMessage}</p>
+) : (
+	<div class="divide-y divide-slate-200">
+		{entries.map((entry) => {
+			const files = entry.data.files ?? [];
+
+			return (
+				<section class="archive-list-item py-6 first:pt-0 last:pb-0">
+					<h2>{entry.data.title}</h2>
+					{entry.data.description && (
+						<p class="text-slate-600">{entry.data.description}</p>
+					)}
+					{files.length > 0 && (
+						<div>
+							{files.map((href) => (
+								<FileCallout href={href} type={entry.data.type} />
+							))}
+						</div>
+					)}
+				</section>
+			);
+		})}
+	</div>
+)}
+
+<style>
+	.archive-list-item h2 {
+		margin-top: 0;
+	}
+</style>

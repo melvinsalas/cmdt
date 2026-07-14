@@ -2,6 +2,7 @@ import { SITE_URLS } from './site';
 
 export type MenuIconName =
 	| "award"
+	| "archive"
 	| "map"
 	| "building"
 	| "user"
@@ -13,8 +14,6 @@ export type MenuIconName =
 	| "landmark"
 	| "heart"
 	| "phone-call"
-	| "cookie"
-	| "globe-check"
 	| "mail"
 	| "thumbs-up";
 
@@ -107,14 +106,8 @@ export const menus: MenuSection[] = [
 		id: "mas",
 		title: "Más",
 		items: [
+			{ href: "/archivo", title: "Archivo", icon: "archive" },
 			{ href: "/contacto/", title: "Contacto", icon: "phone-call" },
-			{ href: "/privacidad", title: "Privacidad", icon: "cookie" },
-			{
-				href: SITE_URLS.estadisticas,
-				title: "Estadísticas",
-				icon: "globe-check",
-				external: true,
-			},
 			{
 				href: SITE_URLS.correo,
 				title: "Correo",
