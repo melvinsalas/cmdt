@@ -21,7 +21,7 @@ const { title, description, date, emoji }: Props = Astro.props;
 		</div>
 	)}
 	{title && <h1>{title}</h1>}
-	{description && <p class="m-0 text-slate-600">{description}</p>}
 	{date && <p class="mt-2 mb-0 text-sm text-slate-500">{formatDateEs(date)}</p>}
+	{description && <p class="m-0 text-slate-600">{description}</p>}
 	<slot />
 </header>
