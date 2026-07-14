@@ -1,34 +1,43 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import FileCallout from './FileCallout.astro';
-import PageHeader from './PageHeader.astro';
-import TypeBadge from './TypeBadge.astro';
-import { render, type CollectionEntry } from 'astro:content';
+import Layout from "../layouts/Layout.astro";
+import FileCallout from "./FileCallout.astro";
+import PageHeader from "./PageHeader.astro";
+import TypeBadge from "./TypeBadge.astro";
+import { render, type CollectionEntry } from "astro:content";
 
 interface Props {
-	entry: CollectionEntry<'archive'>;
+	entry: CollectionEntry<"archive">;
 }
 
 const { entry }: Props = Astro.props;
 const { Content } = await render(entry);
-const description = entry.data['descripci\u00f3n'];
+const description = entry.data["descripci\u00f3n"];
 const files = entry.data.files ?? [];
 ---
 
 <Layout title={entry.data.title}>
 	<main class="mx-auto max-w-[768px] px-4 py-8">
 		<article class="markdown-content">
-			<PageHeader title={entry.data.title} description={description} date={entry.data.date}>
-				<div class="mt-2">
+			<PageHeader
+				title={entry.data.title}
+				description={description}
+				date={entry.data.date}
+			>
+				<div slot="eyebrow">
 					<TypeBadge type={entry.data.type} />
 				</div>
-				{files.length > 0 && (
-					<section class="mt-4">
-						{files.map((href) => (
-							<FileCallout href={href} type={entry.data.type} />
-						))}
-					</section>
-				)}
+				{
+					files.length > 0 && (
+						<section class="mt-4">
+							{files.map((href) => (
+								<FileCallout
+									href={href}
+									type={entry.data.type}
+								/>
+							))}
+						</section>
+					)
+				}
 			</PageHeader>
 			<Content />
 		</article>

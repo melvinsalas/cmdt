@@ -6,7 +6,7 @@ type ArchiveType = CollectionEntry<'archive'>['data']['type'];
 
 type Props = {
 	baseUri: string;
-	types: ArchiveType[];
+	types?: ArchiveType[];
 	emptyMessage?: string;
 	limit?: number;
 	enableYearFilter?: boolean;
@@ -30,7 +30,7 @@ const normalizeBaseUri = (value: string): string => {
 };
 
 const normalizedBaseUri = normalizeBaseUri(baseUri);
-const entries = await getCollection('archive', ({ data }) => types.includes(data.type));
+const entries = await getCollection('archive', ({ data }) => !types || types.includes(data.type));
 
 const data = entries
 	.map((entry) => {

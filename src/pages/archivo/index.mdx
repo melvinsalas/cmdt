@@ -1,0 +1,13 @@
+---
+layout: '@layouts/MarkdownLayout.astro'
+emoji: 🗄️
+title: Archivo
+description: Consulta todos los documentos publicados por la Municipalidad.
+---
+
+import Collection from '@components/Collection.astro';
+
+<Collection
+	baseUri="/archivo"
+	emptyMessage="No hay documentos publicados."
+/>
