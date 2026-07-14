@@ -1,0 +1,14 @@
+---
+layout: '@layouts/MarkdownLayout.astro'
+emoji: 🏛️
+title: Planes de Gobierno
+description: Documentos de planes publicados por la Municipalidad.
+---
+
+import Collection from '@components/Collection.astro';
+
+<Collection
+	baseUri="/transparencia/planes"
+	types={['plan']}
+	emptyMessage="No hay planes publicados en este momento."
+/>

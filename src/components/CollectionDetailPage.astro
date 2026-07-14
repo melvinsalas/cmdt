@@ -11,7 +11,7 @@ interface Props {
 
 const { entry }: Props = Astro.props;
 const { Content } = await render(entry);
-const description = entry.data["descripci\u00f3n"];
+const description = entry.data.description;
 const files = entry.data.files ?? [];
 ---
 

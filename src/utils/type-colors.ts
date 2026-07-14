@@ -30,6 +30,12 @@ export const typeVariants: Record<string, TypeVariant> = {
 		callout: 'border-indigo-500 bg-indigo-50',
 		calloutIcon: 'text-indigo-500',
 	},
+	plan: {
+		label: 'Plan',
+		badge: 'bg-violet-50 text-violet-700 ring-violet-200',
+		callout: 'border-violet-500 bg-violet-50',
+		calloutIcon: 'text-violet-500',
+	},
 };
 
 const fallback: TypeVariant = {
