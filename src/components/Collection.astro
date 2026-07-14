@@ -1,11 +1,12 @@
 ---
 import DataTable from './DataTable.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-type CollectionName = 'actas' | 'concursos' | 'licitaciones';
+type ArchiveType = CollectionEntry<'archive'>['data']['type'];
 
 type Props = {
 	baseUri: string;
+	types: ArchiveType[];
 	emptyMessage?: string;
 	limit?: number;
 	enableYearFilter?: boolean;
@@ -14,6 +15,7 @@ type Props = {
 
 const {
 	baseUri,
+	types,
 	emptyMessage = 'No hay registros publicados.',
 	limit,
 	enableYearFilter = true,
@@ -28,8 +30,7 @@ const normalizeBaseUri = (value: string): string => {
 };
 
 const normalizedBaseUri = normalizeBaseUri(baseUri);
-const collectionKey = normalizedBaseUri.split('/').filter(Boolean).at(-1) as CollectionName | undefined;
-const entries = collectionKey ? await getCollection(collectionKey) : [];
+const entries = await getCollection('archive', ({ data }) => types.includes(data.type));
 
 const data = entries
 	.map((entry) => {

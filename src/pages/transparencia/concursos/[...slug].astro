@@ -4,11 +4,11 @@ import CollectionDetailPage from '../../../components/CollectionDetailPage.astro
 import { buildCollectionStaticPaths } from '../../../utils/collection-detail';
 
 export async function getStaticPaths() {
-	return buildCollectionStaticPaths('concursos');
+	return buildCollectionStaticPaths(['concurso']);
 }
 
 interface Props {
-	entry: CollectionEntry<'concursos'>;
+	entry: CollectionEntry<'archive'>;
 }
 
 const { entry } = Astro.props;

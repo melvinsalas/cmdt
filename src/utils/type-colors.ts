@@ -7,13 +7,13 @@ export type TypeVariant = {
 
 export const typeVariants: Record<string, TypeVariant> = {
 	ordinaria: {
-		label: 'Ordinaria',
+		label: 'Sesión Ordinaria',
 		badge: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
 		callout: 'border-emerald-500 bg-emerald-50',
 		calloutIcon: 'text-emerald-500',
 	},
 	extraordinaria: {
-		label: 'Extraordinaria',
+		label: 'Sesión Extraordinaria',
 		badge: 'bg-amber-50 text-amber-700 ring-amber-200',
 		callout: 'border-amber-500 bg-amber-50',
 		calloutIcon: 'text-amber-500',

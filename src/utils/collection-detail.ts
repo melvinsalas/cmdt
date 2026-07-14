@@ -1,9 +1,9 @@
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-type TransparencyCollection = 'actas' | 'concursos' | 'licitaciones';
+type ArchiveType = CollectionEntry<'archive'>['data']['type'];
 
-export async function buildCollectionStaticPaths(collection: TransparencyCollection) {
-	const entries = await getCollection(collection);
+export async function buildCollectionStaticPaths(types: ArchiveType[]) {
+	const entries = await getCollection('archive', ({ data }) => types.includes(data.type));
 
 	return entries.map((entry) => ({
 		params: { slug: entry.id.replace(/\.(md|mdx)$/, '') },
