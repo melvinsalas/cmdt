@@ -1,0 +1,7 @@
+{
+  "site": "dist",
+  "output_subdir": "pagefind",
+  "exclude_selectors": [
+    ".no-search"
+  ]
+}

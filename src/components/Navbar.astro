@@ -2,6 +2,7 @@
 const { brand = "Home" } = Astro.props;
 
 import MenuItem from "./MenuItem.astro";
+import SearchButton from "./SearchButton.astro";
 import { menus } from "../data/menus";
 import { Menu, X } from "@lucide/astro";
 import logo from "../assets/logo_alt_96x96.png";
@@ -17,45 +18,49 @@ import logo from "../assets/logo_alt_96x96.png";
 		>
 			<img src={logo.src} alt="Logo" class="h-8 w-8 object-contain" />
 			<span class="text-xl font-semibold leading-none">{brand}</span>
-		</a
-		>
-		<details class="group relative ml-auto md:hidden" id="mobile-menu">
-			<summary
-				class="inline-flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-slate-200 text-slate-700 marker:content-none hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
-			>
-				<Menu aria-hidden="true" class="h-5 w-5 group-open:hidden" />
-				<X aria-hidden="true" class="hidden h-5 w-5 group-open:block" />
-			</summary>
+		</a>
 
-			<div
-				class="paper-surface fixed right-0 top-0 z-[80] h-full w-[min(22rem,calc(100vw-2rem))] overflow-y-auto border-l border-slate-200 px-4 py-3"
-				id="mobile-nav-accordion"
-			>
-				<div class="mb-4 flex items-center justify-end">
-					<button
-						id="mobile-close-btn"
-						class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-						aria-label="Cerrar menú"
-					>
-						<X aria-hidden="true" class="h-5 w-5" />
-					</button>
+		<div class="ml-auto flex items-center gap-2 md:hidden">
+			<SearchButton />
+			<details class="group relative" id="mobile-menu">
+				<summary
+					class="inline-flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-slate-200 text-slate-700 marker:content-none hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
+				>
+					<Menu aria-hidden="true" class="h-5 w-5 group-open:hidden" />
+					<X aria-hidden="true" class="hidden h-5 w-5 group-open:block" />
+				</summary>
+
+				<div
+					class="paper-surface fixed right-0 top-0 z-[80] h-full w-[min(22rem,calc(100vw-2rem))] overflow-y-auto border-l border-slate-200 px-4 py-3"
+					id="mobile-nav-accordion"
+				>
+					<div class="mb-4 flex items-center justify-end">
+						<button
+							id="mobile-close-btn"
+							class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+							aria-label="Cerrar menú"
+						>
+							<X aria-hidden="true" class="h-5 w-5" />
+						</button>
+					</div>
+					{
+						menus.map((menu, index) => (
+							<div class:list={[index > 0 && "mt-4"]}>
+								<p class="mb-1 px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+									{menu.title}
+								</p>
+								{menu.items.map((item) => (
+									<MenuItem {...item} />
+								))}
+							</div>
+						))
+					}
 				</div>
-				{
-					menus.map((menu, index) => (
-						<div class:list={[index > 0 && "mt-4"]}>
-							<p class="mb-1 px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
-								{menu.title}
-							</p>
-							{menu.items.map((item) => (
-								<MenuItem {...item} />
-							))}
-						</div>
-					))
-				}
-			</div>
-		</details>
+			</details>
+		</div>
 
-		<div class="hidden items-center gap-2 md:flex" id="desktop-nav-menus">
+		<div class="hidden items-center gap-4 md:flex" id="desktop-nav-menus">
+			<SearchButton />
 			{
 				menus.map((menu) => (
 					<details class="group relative">
@@ -129,10 +134,20 @@ import logo from "../assets/logo_alt_96x96.png";
 	};
 
 	if (mobileMenu && backdrop) {
-		mobileMenu.addEventListener("toggle", () => {
+		const mobileBreakpoint = window.matchMedia("(max-width: 767px)");
+		const syncMobileMenu = () => {
+			const isOpen = mobileMenu.open && mobileBreakpoint.matches;
+
 			backdrop.classList.toggle("hidden", !mobileMenu.open);
-			document.body.style.overflow = mobileMenu.open ? "hidden" : "";
+			document.body.style.overflow = isOpen ? "hidden" : "";
+		};
+
+		mobileMenu.addEventListener("toggle", syncMobileMenu);
+		mobileBreakpoint.addEventListener("change", () => {
+			if (!mobileBreakpoint.matches) closeMobileMenu();
+			syncMobileMenu();
 		});
+		window.addEventListener("pageshow", syncMobileMenu);
 		backdrop.addEventListener("click", closeMobileMenu);
 	}
 

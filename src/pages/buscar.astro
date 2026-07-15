@@ -1,0 +1,19 @@
+---
+import Layout from '@layouts/Layout.astro';
+import PagefindUI from '@components/PagefindUI.astro';
+---
+
+<Layout title="Buscador">
+	<main class="mx-auto max-w-3xl px-4 py-12" data-pagefind-ignore="all">
+		<div>
+			<h1 class="mb-4 text-4xl font-bold">Buscador</h1>
+			<p class="mb-8 text-slate-600">
+				Busca en toda la información disponible de la municipalidad
+			</p>
+
+			<div class="rounded-lg border border-slate-200 bg-slate-50 p-4 sm:p-8">
+				<PagefindUI />
+			</div>
+		</div>
+	</main>
+</Layout>
