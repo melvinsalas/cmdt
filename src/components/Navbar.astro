@@ -67,7 +67,7 @@ import logo from "../assets/logo_alt_96x96.png";
 						<summary class="inline-flex cursor-pointer list-none items-center rounded px-2 py-1 marker:content-none hover:bg-slate-100 hover:text-slate-900">
 							<span>{menu.title}</span>
 						</summary>
-						<div class="animate-surface absolute right-0 top-full z-[70] min-w-80 pt-2">
+						<div class="desktop-submenu animate-surface absolute right-0 top-full z-[70] min-w-80 pt-2">
 							<div class="paper-surface-soft rounded-xl border border-slate-200 p-2">
 								{menu.items.map((item) => (
 									<MenuItem {...item} />
@@ -106,21 +106,31 @@ import logo from "../assets/logo_alt_96x96.png";
 
 	if (desktopWrapper) {
 		const desktopMenus = getDirectDetails(desktopWrapper);
+		const closeDesktopMenus = () => {
+			desktopMenus.forEach((menu) => (menu.open = false));
+		};
+		const menuFromTarget = (target: EventTarget | null) =>
+			target instanceof Element
+				? target.closest<HTMLDetailsElement>("#desktop-nav-menus > details")
+				: null;
+		const syncDesktopMenus = (target: EventTarget | null) => {
+			const activeMenu = menuFromTarget(target);
+			desktopMenus.forEach((menu) => (menu.open = menu === activeMenu));
+		};
 
 		desktopMenus.forEach((menu) => {
-			menu.addEventListener("mouseenter", () => {
-				closeSiblings(desktopMenus, menu);
-				menu.open = true;
-			});
-
 			menu.addEventListener("toggle", () => {
 				if (menu.open) closeSiblings(desktopMenus, menu);
 			});
 		});
 
-		desktopWrapper.addEventListener("mouseleave", () => {
-			desktopMenus.forEach((menu) => (menu.open = false));
+		desktopWrapper.addEventListener("mouseover", (event) => {
+			syncDesktopMenus(event.target);
 		});
+		desktopWrapper.addEventListener("focusin", (event) => {
+			syncDesktopMenus(event.target);
+		});
+		desktopWrapper.addEventListener("mouseleave", closeDesktopMenus);
 	}
 
 	const mobileMenu =
@@ -153,3 +163,12 @@ import logo from "../assets/logo_alt_96x96.png";
 
 	closeBtn?.addEventListener("click", closeMobileMenu);
 </script>
+
+<style>
+	@media (min-width: 768px) {
+		#desktop-nav-menus:hover > details:not(:hover) > .desktop-submenu,
+		#desktop-nav-menus:not(:hover) > details:not(:focus-within) > .desktop-submenu {
+			display: none;
+		}
+	}
+</style>

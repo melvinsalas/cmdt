@@ -1,13 +1,12 @@
 ---
-// Botón para acceder al buscador
 import { Search } from '@lucide/astro';
 ---
 
-<a 
-	href="/buscar"
-	class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
+<a
+	href="/buscador"
+	class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 md:h-auto md:w-auto md:rounded md:border-0 md:px-2 md:py-1"
 	aria-label="Abrir buscador"
-	title="Buscar"
 >
-	<Search aria-hidden="true" class="h-5 w-5" />
+	<Search aria-hidden="true" class="h-5 w-5 md:hidden" />
+	<span class="hidden md:inline">Buscador</span>
 </a>

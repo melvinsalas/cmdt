@@ -4,7 +4,7 @@ The site uses [Pagefind](https://pagefind.app/) for static search.
 
 ## Main files
 
-- Search page: `/buscar`
+- Search page: `/buscador`
 - Search UI: `src/components/PagefindUI.astro`
 - Search button: `src/components/SearchButton.astro`
 - Configuration: `pagefind.json`
