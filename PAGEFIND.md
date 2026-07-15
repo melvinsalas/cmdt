@@ -1,18 +1,37 @@
-# 🔍 Buscador con Pagefind
+# Search with Pagefind
 
-Esta es una implementación de [Pagefind](https://pagefind.app/), un motor de búsqueda estático para Astro.
+The site uses [Pagefind](https://pagefind.app/) for static search.
 
-## 📍 Ubicaciones
+## Main files
 
-- **Página de búsqueda**: `/buscar`
-- **Componentes**: 
-  - `src/components/PagefindUI.astro` - Interfaz de búsqueda
-  - `src/components/SearchButton.astro` - Botón para agregar al navbar
-- **Configuración**: `pagefind.json`
+- Search page: `/buscar`
+- Search UI: `src/components/PagefindUI.astro`
+- Search button: `src/components/SearchButton.astro`
+- Configuration: `pagefind.json`
+- Index script: `scripts/build-search-index.mjs`
 
-## 🔧 Configuración
+## How it works
 
-El archivo `pagefind.json` controla la indexación:
+Astro builds the site into `dist`. The index script then reads every generated HTML page.
+
+If a page links to a PDF under `/files/`, the script:
+
+1. Extracts the PDF text with `unpdf`.
+2. Adds the text to an in-memory copy of that page.
+3. Sends the page to Pagefind.
+
+The published HTML and the source Markdown files are not changed. Search results link to the
+page that contains the PDF link, not directly to the PDF.
+
+If two pages link to the same PDF, both pages can appear in search results. A PDF that is not
+linked from any page is not indexed.
+
+Extracted text is cached by file hash in `.cache/pdf-text`. The cache is ignored by Git and is
+updated automatically when a PDF changes.
+
+## Configuration
+
+`pagefind.json` contains the main settings:
 
 ```json
 {
@@ -22,71 +41,50 @@ El archivo `pagefind.json` controla la indexación:
 }
 ```
 
-### Parámetros
+| Setting | Purpose |
+| --- | --- |
+| `site` | Folder that contains the built site |
+| `output_subdir` | Folder where Pagefind writes the search files |
+| `exclude_selectors` | Extra elements that Pagefind should ignore |
 
-| Parámetro | Descripción |
-|-----------|------------|
-| `site` | Carpeta del sitio estático compilado |
-| `output_subdir` | Subcarpeta donde Pagefind genera el buscador |
-| `exclude_selectors` | Elementos adicionales que no se indexan |
+## Commands
 
-## 🚀 Uso
-
-### Compilar y Generar Índice
+Build the site and the search index:
 
 ```bash
 npm run build
 ```
 
-Esto:
-1. Compila el sitio con Astro
-2. Ejecuta Pagefind para indexar el contenido
-3. Genera archivos en `dist/_pagefind/`
-
-### Desarrollo
+Build only the search index from the current `dist` folder:
 
 ```bash
-npm run dev
+npm run search:index
 ```
 
-**Nota**: `astro dev` no genera el índice. Para probar la búsqueda localmente, ejecuta primero `npm run build` y después `npm run preview`.
+The search index is not available in the Astro development server. To test search locally:
 
-## 🎯 Personalización
-
-### Agregar Botón de Búsqueda al Navbar
-
-En `src/components/Navbar.astro`:
-
-```astro
----
-import SearchButton from '@components/SearchButton.astro';
----
-
-<!-- En tu navbar -->
-<SearchButton />
+```bash
+npm run build
+npm run preview
 ```
 
-### Excluir Contenido de la Búsqueda
+## Excluding content
 
-Agrega la clase `no-search` a cualquier elemento que no quieras indexar:
+Add the `no-search` class to content that should not be indexed:
 
 ```astro
 <div class="no-search">
-  Este contenido no aparecerá en los resultados de búsqueda
+  This content will not appear in search results.
 </div>
 ```
 
-## 📊 Información de Índices
+## Generated files
 
-- **Ubicación**: `/dist/pagefind/`
-- **Archivos generados**:
-  - `pagefind-component-ui.css` - Estilos
-  - `pagefind-component-ui.js` - Interfaz
-  - `pagefind.js` - Motor de búsqueda
-  - `index.*.pf` - Índices de búsqueda
+Pagefind writes its files to `dist/pagefind/`. This folder contains the search JavaScript,
+styles, metadata, and index chunks.
 
-## 🔗 Recursos
+## References
 
-- [Documentación de Pagefind](https://pagefind.app/docs/)
-- [Integración con Astro](https://pagefind.app/docs/running-pagefind/)
-- [Configuración avanzada](https://pagefind.app/docs/config/)
+- [Pagefind documentation](https://pagefind.app/docs/)
+- [Running Pagefind](https://pagefind.app/docs/running-pagefind/)
+- [Pagefind configuration](https://pagefind.app/docs/config-options/)

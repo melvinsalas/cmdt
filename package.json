@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "stop": "astro dev stop",
     "check": "astro check",
-    "build": "astro build && pagefind",
+    "search:index": "node scripts/build-search-index.mjs",
+    "build": "astro build && npm run search:index",
     "preview": "astro preview",
     "validate": "npm run check && npm run build",
     "astro": "astro"
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.0",
-    "pagefind": "^1.5.2"
+    "pagefind": "^1.5.2",
+    "unpdf": "^1.6.2"
   }
 }
