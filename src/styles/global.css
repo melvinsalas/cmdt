@@ -169,6 +169,68 @@ body {
 	border-radius: 0.375rem;
 }
 
+.markdown-content table:not([class]) {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	overflow-x: auto;
+	border: 1px solid var(--color-slate-200);
+	border-radius: 0.625rem;
+	border-spacing: 0;
+	background: var(--surface-paper-soft);
+	font-size: 0.925rem;
+	line-height: 1.5;
+	-webkit-overflow-scrolling: touch;
+}
+
+.markdown-content table:not([class]) thead {
+	background: var(--color-slate-100);
+}
+
+.markdown-content table:not([class]) th,
+.markdown-content table:not([class]) td {
+	min-width: 10rem;
+	padding: 0.75rem 1rem;
+	border-right: 1px solid var(--color-slate-200);
+	border-bottom: 1px solid var(--color-slate-200);
+	text-align: left;
+	vertical-align: top;
+}
+
+.markdown-content table:not([class]) th {
+	color: var(--color-slate-800);
+	font-size: 0.8125rem;
+	font-weight: 700;
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
+}
+
+.markdown-content table:not([class]) th:last-child,
+.markdown-content table:not([class]) td:last-child {
+	border-right: 0;
+}
+
+.markdown-content table:not([class]) tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.markdown-content table:not([class]) tbody tr:nth-child(even) {
+	background: var(--color-slate-50);
+}
+
+.markdown-content table:not([class]) tbody tr:hover {
+	background: var(--color-blue-50);
+}
+
+.markdown-content table:not([class]) a {
+	font-weight: 500;
+	color: var(--color-blue-700);
+}
+
+.markdown-content table:not([class]) code {
+	white-space: nowrap;
+}
+
 .markdown-content code {
 	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace;
 	font-size: 0.92em;
