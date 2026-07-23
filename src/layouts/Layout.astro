@@ -3,9 +3,17 @@ import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footbar from '../components/Footbar.astro';
 import ThirdPartyScripts from '../components/ThirdPartyScripts.astro';
+import socialImage from '../assets/logo.png';
 import { SITE_BRAND, SITE_DESCRIPTION_DEFAULT, SITE_LOCALE, SITE_NAME } from '../data/site';
 
-const { title = SITE_NAME, description = SITE_DESCRIPTION_DEFAULT } = Astro.props;
+const {
+	title = SITE_NAME,
+	description = SITE_DESCRIPTION_DEFAULT,
+	noindex = false,
+} = Astro.props;
+const documentTitle = title === SITE_NAME ? SITE_NAME : `${title} | ${SITE_NAME}`;
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+const socialImageURL = Astro.site ? new URL(socialImage.src, Astro.site) : new URL(socialImage.src, Astro.url);
 ---
 
 <!doctype html>
@@ -14,11 +22,27 @@ const { title = SITE_NAME, description = SITE_DESCRIPTION_DEFAULT } = Astro.prop
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
+		<link rel="canonical" href={canonicalURL} />
 		<meta name="generator" content={Astro.generator} />
 		{description && <meta name="description" content={description} />}
-		<title>{title}</title>
+		{noindex && <meta name="robots" content="noindex, nofollow" />}
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:title" content={documentTitle} />
+		{description && <meta property="og:description" content={description} />}
+		<meta property="og:site_name" content={SITE_NAME} />
+		<meta property="og:locale" content="es_CR" />
+		<meta property="og:image" content={socialImageURL} />
+		<meta property="og:image:width" content={String(socialImage.width)} />
+		<meta property="og:image:height" content={String(socialImage.height)} />
+		<meta property="og:image:alt" content={`Escudo de ${SITE_NAME}`} />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={documentTitle} />
+		{description && <meta name="twitter:description" content={description} />}
+		<meta name="twitter:image" content={socialImageURL} />
+		<meta name="twitter:image:alt" content={`Escudo de ${SITE_NAME}`} />
+		<title>{documentTitle}</title>
 		<ThirdPartyScripts />
 	</head>
 	<body>

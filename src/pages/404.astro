@@ -1,0 +1,27 @@
+---
+import Button from '@components/Button.astro';
+import Layout from '@layouts/Layout.astro';
+---
+
+<Layout
+	title="Página no encontrada"
+	description="La página que buscas no existe o cambió de dirección."
+	noindex
+>
+	<main class="mx-auto max-w-3xl px-4 py-16">
+		<article class="markdown-content">
+			<p class="mb-3 text-sm font-semibold tracking-wide text-slate-500 uppercase">
+				Error 404
+			</p>
+			<h1>Página no encontrada</h1>
+			<p>
+				La página que buscas no existe o cambió de dirección. Puedes volver al inicio o
+				utilizar el buscador para encontrar la información que necesitas.
+			</p>
+			<div class="mt-8 grid gap-3 sm:grid-cols-2">
+				<Button href="/" text="Volver al inicio" emoji="🏛️" />
+				<Button href="/buscador" text="Buscar en el sitio" emoji="🔍" />
+			</div>
+		</article>
+	</main>
+</Layout>
