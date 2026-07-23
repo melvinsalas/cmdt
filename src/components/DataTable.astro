@@ -126,11 +126,30 @@ const latestYear = years[0];
 			</table>
 		</div>
 
+		{showYearFilter && years.length > 1 && (
+			<nav aria-label="Navegación por año" class="mt-3 flex items-center justify-between gap-3">
+				<button
+					type="button"
+					data-previous-year
+					hidden
+					class="paper-surface rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+				/>
+				<button
+					type="button"
+					data-next-year
+					hidden
+					class="paper-surface ml-auto rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+				/>
+			</nav>
+		)}
+
 		<script is:inline>
 			const tableRoot = document.currentScript?.closest('[data-data-table]');
 
 			if (tableRoot) {
 				const select = tableRoot.querySelector('[data-year-select]');
+				const previousYearButton = tableRoot.querySelector('[data-previous-year]');
+				const nextYearButton = tableRoot.querySelector('[data-next-year]');
 				const rows = tableRoot.querySelectorAll('tr[data-row]');
 				const stripeClasses = ['paper-surface-soft', 'paper-surface'];
 
@@ -148,8 +167,34 @@ const latestYear = years[0];
 				};
 
 				if (select instanceof HTMLSelectElement) {
-					applyFilter(select.value);
-					select.addEventListener('change', () => applyFilter(select.value));
+					const updateYearButton = (button, option, arrow) => {
+						if (!(button instanceof HTMLButtonElement)) return;
+
+						button.hidden = !option;
+						if (option) {
+							button.textContent = arrow === 'left' ? `← ${option.value}` : `${option.value} →`;
+						}
+					};
+
+					const updateTable = () => {
+						applyFilter(select.value);
+						updateYearButton(previousYearButton, select.options[select.selectedIndex + 1], 'left');
+						updateYearButton(nextYearButton, select.options[select.selectedIndex - 1], 'right');
+					};
+
+					const navigateYear = (button, offset) => {
+						if (button instanceof HTMLButtonElement) {
+							button.addEventListener('click', () => {
+								select.selectedIndex += offset;
+								updateTable();
+							});
+						}
+					};
+
+					updateTable();
+					select.addEventListener('change', updateTable);
+					navigateYear(previousYearButton, 1);
+					navigateYear(nextYearButton, -1);
 				} else {
 					applyStriping();
 				}
