@@ -1,11 +1,13 @@
 ---
 import { formatDateEs, formatDateEsShort } from '../utils/date';
+import IconBadge from './IconBadge.astro';
 import TypeBadge from './TypeBadge.astro';
 
 type DataRow = {
 	title: string;
 	date: Date;
 	type?: string;
+	badges?: string[];
 	href?: string;
 };
 
@@ -93,7 +95,10 @@ const latestYear = years[0];
 											{formatDateEsShort(row.date)}
 										</span>
 									</div>
-									<div class="mt-2 text-sm font-medium text-slate-900">{row.title}</div>
+									<div class="mt-2 inline-flex items-center gap-2 text-sm font-medium text-slate-900">
+										<span>{row.title}</span>
+										<IconBadge badges={row.badges} />
+									</div>
 								</td>
 								<td class="relative hidden px-4 py-3 font-medium text-slate-900 sm:table-cell">
 									{rowHref && (
@@ -105,7 +110,10 @@ const latestYear = years[0];
 											style="left: 0; right: 0;"
 										/>
 									)}
-									{row.title}
+									<span class="inline-flex items-center gap-2">
+										<span>{row.title}</span>
+										<IconBadge badges={row.badges} />
+									</span>
 								</td>
 								<td class="relative hidden px-4 py-3 text-slate-600 sm:table-cell">
 									{rowHref && (

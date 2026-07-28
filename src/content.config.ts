@@ -8,6 +8,7 @@ const schema = z.object({
 	type: z.enum(['ordinaria', 'extraordinaria', 'concurso', 'licitacion', 'plan']),
 	description: z.string().optional(),
 	files: z.array(z.string()).optional(),
+	badges: z.array(z.string()).optional(),
 });
 
 const archive = defineCollection({

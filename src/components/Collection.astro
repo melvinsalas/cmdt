@@ -40,6 +40,7 @@ const data = entries
 			title: entry.data.title,
 			date: new Date(entry.data.date),
 			type: entry.data.type,
+			badges: entry.data.badges,
 			href: encodeURI(`${normalizedBaseUri}/${routeSlug}/`),
 		};
 	})

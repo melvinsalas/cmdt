@@ -1,0 +1,29 @@
+---
+import { Video } from '@lucide/astro';
+
+interface Props {
+	badges?: string[];
+}
+
+const { badges = [] } = Astro.props;
+
+const iconDefinitions = {
+	video: {
+		Icon: Video,
+		label: 'Incluye video',
+	},
+};
+
+const icons = badges.flatMap((badge) => {
+	const definition = iconDefinitions[badge as keyof typeof iconDefinitions];
+	return definition ? [definition] : [];
+});
+---
+
+{
+	icons.map(({ Icon, label }) => (
+		<span title={label} aria-label={label} class="inline-flex text-slate-500">
+			<Icon aria-hidden="true" class="h-4 w-4" />
+		</span>
+	))
+}
