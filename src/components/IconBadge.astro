@@ -1,5 +1,6 @@
 ---
-import { Video } from '@lucide/astro';
+import { YoutubeIcon } from '@hugeicons/core-free-icons';
+import HugeIcon from './HugeIcon.astro';
 
 interface Props {
 	badges?: string[];
@@ -9,7 +10,7 @@ const { badges = [] } = Astro.props;
 
 const iconDefinitions = {
 	video: {
-		Icon: Video,
+		icon: YoutubeIcon,
 		label: 'Incluye video',
 	},
 };
@@ -21,9 +22,9 @@ const icons = badges.flatMap((badge) => {
 ---
 
 {
-	icons.map(({ Icon, label }) => (
+	icons.map(({ icon, label }) => (
 		<span title={label} aria-label={label} class="inline-flex text-slate-500">
-			<Icon aria-hidden="true" class="h-4 w-4" />
+			<HugeIcon icon={icon} aria-hidden="true" class="h-4 w-4" />
 		</span>
 	))
 }

@@ -1,0 +1,49 @@
+---
+import type { IconSvgObject } from '@hugeicons/core-free-icons/types';
+
+type Props = Omit<astroHTML.JSX.SVGAttributes, 'icon' | 'size'> & {
+	icon: IconSvgObject;
+	size?: number | string;
+	strokeWidth?: number;
+};
+
+const {
+	icon,
+	size = 24,
+	strokeWidth,
+	...attributes
+}: Props = Astro.props;
+
+const attributeNames: Record<string, string> = {
+	strokeLinecap: 'stroke-linecap',
+	strokeLinejoin: 'stroke-linejoin',
+	strokeWidth: 'stroke-width',
+};
+
+const nodes = icon.map(([tag, iconAttributes]) => {
+	const Element = tag as any;
+	const normalizedAttributes = Object.fromEntries(
+		Object.entries(iconAttributes)
+			.filter(([name]) => name !== 'key')
+			.map(([name, value]) => [attributeNames[name] ?? name, value]),
+	);
+
+	if (strokeWidth !== undefined) {
+		normalizedAttributes['stroke-width'] = strokeWidth;
+	}
+
+	return { Element, attributes: normalizedAttributes };
+});
+---
+
+<svg
+	xmlns="http://www.w3.org/2000/svg"
+	width={size}
+	height={size}
+	viewBox="0 0 24 24"
+	fill="none"
+	focusable="false"
+	{...attributes}
+>
+	{nodes.map(({ Element, attributes }) => <Element {...attributes} />)}
+</svg>

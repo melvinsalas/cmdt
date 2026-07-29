@@ -3,8 +3,9 @@ const { brand = "Home" } = Astro.props;
 
 import MenuItem from "./MenuItem.astro";
 import SearchButton from "./SearchButton.astro";
+import HugeIcon from "./HugeIcon.astro";
 import { menus } from "../data/menus";
-import { Menu, X } from "@lucide/astro";
+import { Cancel01Icon, Menu01Icon } from "@hugeicons/core-free-icons";
 import logo from "../assets/logo_alt_96x96.png";
 ---
 
@@ -26,8 +27,8 @@ import logo from "../assets/logo_alt_96x96.png";
 				<summary
 					class="inline-flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-slate-200 text-slate-700 marker:content-none hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
 				>
-					<Menu aria-hidden="true" class="h-5 w-5 group-open:hidden" />
-					<X aria-hidden="true" class="hidden h-5 w-5 group-open:block" />
+					<HugeIcon icon={Menu01Icon} aria-hidden="true" class="h-5 w-5 group-open:hidden" />
+					<HugeIcon icon={Cancel01Icon} aria-hidden="true" class="hidden h-5 w-5 group-open:block" />
 				</summary>
 
 				<div
@@ -40,7 +41,7 @@ import logo from "../assets/logo_alt_96x96.png";
 							class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
 							aria-label="Cerrar menú"
 						>
-							<X aria-hidden="true" class="h-5 w-5" />
+							<HugeIcon icon={Cancel01Icon} aria-hidden="true" class="h-5 w-5" />
 						</button>
 					</div>
 					{

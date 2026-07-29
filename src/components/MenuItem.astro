@@ -1,23 +1,25 @@
 ---
 import {
-	Archive,
-	Award,
-	Building,
-	ClipboardPen,
-	ExternalLink,
-	Eye,
-	FolderOpen,
-	Heart,
-	Landmark,
-	Mail,
-	Map,
-	PhoneCall,
-	ThumbsUp,
-	TreeDeciduous,
-	User,
-	UserRoundCheck,
-} from '@lucide/astro';
+	ArchiveRestoreIcon,
+	CheckmarkBadge02Icon,
+	BankIcon,
+	Building02Icon,
+	Call02Icon,
+	ClipboardPenIcon,
+	ExternalLinkIcon,
+	FavouriteIcon,
+	FolderOpenIcon,
+	Mail01Icon,
+	NavigationIcon,
+	ThumbsUpIcon,
+	Tree01Icon,
+	UserCheck01Icon,
+	UserIcon,
+	ViewIcon,
+} from '@hugeicons/core-free-icons';
+import type { IconSvgObject } from '@hugeicons/core-free-icons/types';
 import type { MenuIconName } from '../data/menus';
+import HugeIcon from './HugeIcon.astro';
 
 const { href, title, description, icon, external = false } = Astro.props as {
 	href: string;
@@ -28,24 +30,24 @@ const { href, title, description, icon, external = false } = Astro.props as {
 };
 
 const iconMap = {
-	archive: Archive,
-	award: Award,
-	map: Map,
-	building: Building,
-	user: User,
-	'folder-open': FolderOpen,
-	'clipboard-pen': ClipboardPen,
-	'tree-deciduous': TreeDeciduous,
-	'user-round-check': UserRoundCheck,
-	eye: Eye,
-	landmark: Landmark,
-	heart: Heart,
-	'phone-call': PhoneCall,
-	mail: Mail,
-	'thumbs-up': ThumbsUp,
-} satisfies Record<MenuIconName, typeof Award>;
+	archive: ArchiveRestoreIcon,
+	award: CheckmarkBadge02Icon,
+	map: NavigationIcon,
+	building: Building02Icon,
+	user: UserIcon,
+	'folder-open': FolderOpenIcon,
+	'clipboard-pen': ClipboardPenIcon,
+	'tree-deciduous': Tree01Icon,
+	'user-round-check': UserCheck01Icon,
+	eye: ViewIcon,
+	landmark: BankIcon,
+	heart: FavouriteIcon,
+	'phone-call': Call02Icon,
+	mail: Mail01Icon,
+	'thumbs-up': ThumbsUpIcon,
+} satisfies Record<MenuIconName, IconSvgObject>;
 
-const IconComponent = iconMap[icon];
+const iconData = iconMap[icon];
 const hasDescription = Boolean(description);
 ---
 
@@ -62,7 +64,7 @@ const hasDescription = Boolean(description);
 		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900',
 		hasDescription ? 'mt-0.5' : 'mt-0',
 	]}>
-		<IconComponent aria-hidden="true" class="h-4.5 w-4.5" />
+		<HugeIcon icon={iconData} aria-hidden="true" class="h-4.5 w-4.5" />
 	</span>
 
 	<span class="min-w-0 flex-1">
@@ -71,6 +73,6 @@ const hasDescription = Boolean(description);
 	</span>
 
 	{external ? (
-		<ExternalLink aria-hidden="true" class="h-4 w-4 shrink-0 text-slate-400 self-center" />
+		<HugeIcon icon={ExternalLinkIcon} aria-hidden="true" class="h-4 w-4 shrink-0 text-slate-400 self-center" />
 	) : null}
 </a>

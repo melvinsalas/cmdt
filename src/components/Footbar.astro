@@ -2,7 +2,8 @@
 import { menus } from "../data/menus";
 import { SITE_NAME, SITE_URLS } from "../data/site";
 import logo from "../assets/logo.png";
-import { ExternalLink } from "@lucide/astro";
+import { ExternalLinkIcon } from "@hugeicons/core-free-icons";
+import HugeIcon from "./HugeIcon.astro";
 
 const year = new Date().getFullYear();
 ---
@@ -68,7 +69,8 @@ const year = new Date().getFullYear();
 											>
 												<span>{item.title}</span>
 												{item.external ? (
-													<ExternalLink
+													<HugeIcon
+														icon={ExternalLinkIcon}
 														aria-hidden="true"
 														class="h-3.5 w-3.5 shrink-0 text-slate-500"
 													/>
@@ -100,7 +102,7 @@ const year = new Date().getFullYear();
 					class="inline-flex items-center gap-1.5 transition hover:text-slate-900 hover:underline"
 				>
 					<span>Estadísticas</span>
-					<ExternalLink aria-hidden="true" class="h-3.5 w-3.5 shrink-0" />
+					<HugeIcon icon={ExternalLinkIcon} aria-hidden="true" class="h-3.5 w-3.5 shrink-0" />
 				</a>
 			</nav>
 		</div>

@@ -1,7 +1,14 @@
 ---
 import { FileSize } from '../utils/file-size';
 import { getTypeVariant } from '../utils/type-colors';
-import { FileSpreadsheet, FileText, Package, ShieldQuestionMark } from '@lucide/astro';
+import {
+	Doc01Icon,
+	FileQuestionMarkIcon,
+	Pdf01Icon,
+	Xls01Icon,
+	Zip01Icon,
+} from '@hugeicons/core-free-icons';
+import HugeIcon from './HugeIcon.astro';
 
 type Props = {
 	href: string;
@@ -21,10 +28,11 @@ const { callout, calloutIcon } = getTypeVariant(type);
 
 const extension = fileName.split('.').pop()?.toLowerCase();
 const Icon = (() => {
-	if (extension === 'xls' || extension === 'xlsx') return FileSpreadsheet;
-	if (extension === 'doc' || extension === 'docx' || extension === 'pdf') return FileText;
-	if (extension === 'zip') return Package;
-	return ShieldQuestionMark;
+	if (extension === 'doc' || extension === 'docx') return Doc01Icon;
+	if (extension === 'pdf') return Pdf01Icon;
+	if (extension === 'xls' || extension === 'xlsx') return Xls01Icon;
+	if (extension === 'zip') return Zip01Icon;
+	return FileQuestionMarkIcon;
 })();
 ---
 
@@ -35,7 +43,7 @@ const Icon = (() => {
 	]}
 	role="note"
 >
-	<Icon aria-hidden="true" class:list={['h-5 w-5 shrink-0', calloutIcon]} />
+	<HugeIcon icon={Icon} aria-hidden="true" class:list={['h-5 w-5 shrink-0', calloutIcon]} />
 	<span class="min-w-0">
 		<a href={href} target="_blank" rel="noopener noreferrer" class="file-callout-link block text-lg">
 			{fileName}
