@@ -5,6 +5,7 @@ import {
 	BankIcon,
 	Building02Icon,
 	Call02Icon,
+	ChatIcon,
 	ClipboardPenIcon,
 	ExternalLinkIcon,
 	FavouriteIcon,
@@ -16,6 +17,7 @@ import {
 	UserCheck01Icon,
 	UserIcon,
 	ViewIcon,
+	YoutubeIcon,
 } from '@hugeicons/core-free-icons';
 import type { IconSvgObject } from '@hugeicons/core-free-icons/types';
 import type { MenuIconName } from '../data/menus';
@@ -45,6 +47,8 @@ const iconMap = {
 	'phone-call': Call02Icon,
 	mail: Mail01Icon,
 	'thumbs-up': ThumbsUpIcon,
+	youtube: YoutubeIcon,
+	whatsapp: ChatIcon,
 } satisfies Record<MenuIconName, IconSvgObject>;
 
 const iconData = iconMap[icon];

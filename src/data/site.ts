@@ -14,4 +14,6 @@ export const SITE_URLS = {
 	estadisticas: 'https://cloud.umami.is/analytics/eu/share/XDt82GVFDkyVKTP2?date=30day&country=eq.CR',
 	correo: 'https://www.spacemail.com/es-ES/login/',
 	facebook: 'https://www.facebook.com/tucurrique.go.cr',
+	youtube: 'https://www.youtube.com/@tucurriquegocr',
+	whatsapp: 'https://chat.whatsapp.com/JFvtVu02XdYFjDQVOKIbEW',
 } as const;

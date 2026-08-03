@@ -15,7 +15,9 @@ export type MenuIconName =
 	| "heart"
 	| "phone-call"
 	| "mail"
-	| "thumbs-up";
+	| "thumbs-up"
+	| "youtube"
+	| "whatsapp";
 
 export type MenuItem = {
 	href: string;
@@ -110,7 +112,7 @@ export const menus: MenuSection[] = [
 			{ href: "/contacto/", title: "Contacto", icon: "phone-call" },
 			{
 				href: SITE_URLS.correo,
-				title: "Correo",
+				title: "Correo Institucional",
 				icon: "mail",
 				external: true,
 			},
@@ -118,6 +120,18 @@ export const menus: MenuSection[] = [
 				href: SITE_URLS.facebook,
 				title: "Facebook",
 				icon: "thumbs-up",
+				external: true,
+			},
+			{
+				href: SITE_URLS.youtube,
+				title: "YouTube",
+				icon: "youtube",
+				external: true,
+			},
+			{
+				href: SITE_URLS.whatsapp,
+				title: "WhatsApp",
+				icon: "whatsapp",
 				external: true,
 			},
 		],
