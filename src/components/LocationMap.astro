@@ -1,0 +1,29 @@
+---
+import DirectionsLinks from './DirectionsLinks.astro';
+
+type Props = {
+	location: string;
+	title: string;
+};
+
+const { location, title }: Props = Astro.props;
+const encodedLocation = encodeURIComponent(location);
+const mapURL = `https://www.google.com/maps?q=${encodedLocation}&output=embed`;
+---
+
+<div class="my-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+	<div class="aspect-[4/3] sm:aspect-video">
+		<iframe
+			class="block h-full w-full border-0"
+			title={title}
+			src={mapURL}
+			loading="lazy"
+			referrerpolicy="no-referrer-when-downgrade"
+			allowfullscreen
+		></iframe>
+	</div>
+</div>
+
+<div class="my-4">
+	<DirectionsLinks destination={location} />
+</div>

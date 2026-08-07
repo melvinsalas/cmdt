@@ -169,18 +169,29 @@ body {
 	border-radius: 0.375rem;
 }
 
-.markdown-content table:not([class]) {
-	display: block;
+.markdown-table-scroll {
 	width: 100%;
 	max-width: 100%;
+	margin-bottom: 1rem;
 	overflow-x: auto;
 	border: 1px solid var(--color-slate-200);
 	border-radius: 0.625rem;
+	background: var(--surface-paper-soft);
+	-webkit-overflow-scrolling: touch;
+}
+
+.markdown-content .markdown-table-scroll table:not([class]) {
+	display: table;
+	width: 100%;
+	min-width: 100%;
+	max-width: none;
+	margin-bottom: 0;
+	border: 0;
+	border-radius: 0;
 	border-spacing: 0;
 	background: var(--surface-paper-soft);
 	font-size: 0.925rem;
 	line-height: 1.5;
-	-webkit-overflow-scrolling: touch;
 }
 
 .markdown-content table:not([class]) thead {

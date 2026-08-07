@@ -1,0 +1,49 @@
+---
+import { GoogleMapsIcon, WazeIcon } from '@hugeicons/core-free-icons';
+import HugeIcon from './HugeIcon.astro';
+
+type Props = {
+	destination: string;
+	origin?: string;
+	service?: 'google-maps' | 'waze' | 'both';
+};
+
+const { destination, origin, service = 'both' }: Props = Astro.props;
+const encodedDestination = encodeURIComponent(destination);
+const encodedOrigin = origin ? encodeURIComponent(origin) : undefined;
+const googleMapsURL = `https://www.google.com/maps/dir/?api=1${encodedOrigin ? `&origin=${encodedOrigin}` : ''}&destination=${encodedDestination}`;
+const wazeURL = `https://waze.com/ul?q=${encodedDestination}&navigate=yes&utm_source=tucurrique.go.cr`;
+---
+
+<div class="flex flex-wrap gap-2">
+	{service !== 'waze' && (
+		<a
+			class="direction-button inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm font-medium text-slate-800 transition hover:bg-slate-100 hover:text-slate-950"
+			href={googleMapsURL}
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<HugeIcon icon={GoogleMapsIcon} aria-hidden="true" class="h-4 w-4 shrink-0" />
+			<span>Google Maps</span>
+		</a>
+	)}
+	{service !== 'google-maps' && (
+		<a
+			class="direction-button inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm font-medium text-slate-800 transition hover:bg-slate-100 hover:text-slate-950"
+			href={wazeURL}
+			target="_blank"
+			rel="noopener noreferrer"
+		>
+			<HugeIcon icon={WazeIcon} aria-hidden="true" class="h-4 w-4 shrink-0" />
+			<span>Waze</span>
+		</a>
+	)}
+</div>
+
+<style>
+	a.direction-button,
+	a.direction-button:hover {
+		color: var(--color-slate-800);
+		text-decoration: none;
+	}
+</style>

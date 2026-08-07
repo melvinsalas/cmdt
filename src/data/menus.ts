@@ -102,6 +102,7 @@ export const menus: MenuSection[] = [
 			{ href: "/nosotros/", title: "Misión y Visión", icon: "eye" },
 			{ href: "/nosotros/historia", title: "Historia", icon: "landmark" },
 			{ href: "/nosotros/cantonato", title: "Cantonato", icon: "heart" },
+			{ href: "/donde-queda-tucurrique/", title: "¿Dónde queda Tucurrique?", icon: "map" },
 		],
 	},
 	{
