@@ -11,30 +11,30 @@ import FaqList from '@components/FaqList.astro';
 import DirectionsLinks from '@components/DirectionsLinks.astro';
 
 export const faqs = [
-{
-question: '¿Dónde queda Tucurrique?',
-answer: 'Tucurrique se encuentra en Costa Rica, en la provincia de Cartago. Es el distrito segundo del cantón de Jiménez.',
-},
-{
-question: '¿A qué cantón pertenece Tucurrique?',
-answer: 'Tucurrique pertenece al cantón de Jiménez, el cantón número 4 de la provincia de Cartago.',
-},
-{
-question: '¿Cuánto hay de Cartago a Tucurrique?',
-answer: 'Tucurrique está aproximadamente a 31 kilómetros de Cartago por carretera. La distancia y el tiempo pueden variar según el punto de salida, la ruta y el tránsito.',
-},
-{
-question: '¿Cuánto hay de San José a Tucurrique?',
-answer: 'Desde el centro de San José hay aproximadamente 55 kilómetros por carretera. El tiempo de viaje depende del tránsito y de las condiciones de la vía.',
-},
-{
-question: '¿Cuánto hay de Turrialba a Tucurrique?',
-answer: 'La distancia desde Turrialba depende de la ruta utilizada. Antes de salir, consulte el mapa para conocer el recorrido recomendado y las condiciones de la vía.',
-},
-{
-question: '¿Cómo se llega a Tucurrique?',
-answer: 'Se puede llegar a Tucurrique en carro o autobús desde Cartago y Turrialba. Desde Cartago, la ruta habitual pasa por Paraíso, Ujarrás y Cachí.',
-},
+	{
+		question: '¿Dónde queda Tucurrique?',
+		answer: 'Tucurrique se encuentra en Costa Rica, en la provincia de Cartago. Es el distrito segundo del cantón de Jiménez.',
+	},
+	{
+		question: '¿A qué cantón pertenece Tucurrique?',
+		answer: 'Tucurrique pertenece al cantón de Jiménez, el cantón número 4 de la provincia de Cartago.',
+	},
+	{
+		question: '¿Cuánto hay de Cartago a Tucurrique?',
+		answer: 'Tucurrique está aproximadamente a 31 kilómetros de Cartago por carretera. La distancia y el tiempo pueden variar según el punto de salida, la ruta y el tránsito.',
+	},
+	{
+		question: '¿Cuánto hay de San José a Tucurrique?',
+		answer: 'Desde el centro de San José hay aproximadamente 55 kilómetros por carretera. El tiempo de viaje depende del tránsito y de las condiciones de la vía.',
+	},
+	{
+		question: '¿Cuánto hay de Turrialba a Tucurrique?',
+		answer: 'La distancia desde Turrialba depende de la ruta utilizada. Antes de salir, consulte el mapa para conocer el recorrido recomendado y las condiciones de la vía.',
+	},
+	{
+		question: '¿Cómo se llega a Tucurrique?',
+		answer: 'Se puede llegar a Tucurrique en carro o autobús desde Cartago y Turrialba. Desde Cartago, la ruta habitual pasa por Paraíso, Ujarrás y Cachí.',
+	},
 ];
 
 <TextCallout variant="info" title="Tucurrique queda en la provincia de Cartago, Costa Rica">
@@ -137,6 +137,8 @@ La zona también conserva sitios arqueológicos y petroglifos que muestran la pr
 [Conozca más sobre la historia de Tucurrique →](/nosotros/historia)
 
 ## Preguntas frecuentes
+
+<FaqList faqs={faqs} />
 
 ## Fuentes de referencia
 
