@@ -1,5 +1,5 @@
 ---
-import { YoutubeIcon } from '@hugeicons/core-free-icons';
+import { CalendarCheckIcon, YoutubeIcon } from '@hugeicons/core-free-icons';
 import HugeIcon from './HugeIcon.astro';
 
 interface Props {
@@ -11,7 +11,11 @@ const { badges = [] } = Astro.props;
 const iconDefinitions = {
 	video: {
 		icon: YoutubeIcon,
-		label: 'Incluye video',
+		label: 'Grabación en Video',
+	},
+	orden: {
+		icon: CalendarCheckIcon,
+		label: 'Orden del Día',
 	},
 };
 
@@ -23,8 +27,17 @@ const icons = badges.flatMap((badge) => {
 
 {
 	icons.map(({ icon, label }) => (
-		<span title={label} aria-label={label} class="inline-flex text-slate-500">
+		<span
+			aria-label={label}
+			class="group relative z-20 inline-flex text-slate-500"
+		>
 			<HugeIcon icon={icon} aria-hidden="true" class="h-4 w-4" />
+			<span
+				role="tooltip"
+				class="pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs font-normal text-white opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+			>
+				{label}
+			</span>
 		</span>
 	))
 }

@@ -36,6 +36,12 @@ export const typeVariants: Record<string, TypeVariant> = {
 		callout: 'border-violet-500 bg-violet-50',
 		calloutIcon: 'text-violet-500',
 	},
+	orden: {
+		label: 'Orden del Día',
+		badge: 'bg-orange-50 text-orange-700 ring-orange-200',
+		callout: 'border-orange-500 bg-orange-50',
+		calloutIcon: 'text-orange-500',
+	},
 };
 
 const fallback: TypeVariant = {
