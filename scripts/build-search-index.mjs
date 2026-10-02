@@ -150,7 +150,7 @@ async function extractPdfText(publicPath) {
 			const { text } = await extractText(pdf, { mergePages: true });
 			normalizedText = normalizeText(text);
 		} finally {
-			await pdf.destroy();
+			await pdf.loadingTask.destroy();
 		}
 
 		if (normalizedText.length >= 20) {
