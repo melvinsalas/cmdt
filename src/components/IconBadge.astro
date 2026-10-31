@@ -1,5 +1,5 @@
 ---
-import { CalendarCheckIcon, YoutubeIcon } from '@hugeicons/core-free-icons';
+import { CalendarCheckIcon, FileQuestionMarkIcon, YoutubeIcon } from '@hugeicons/core-free-icons';
 import HugeIcon from './HugeIcon.astro';
 
 interface Props {
@@ -16,6 +16,10 @@ const iconDefinitions = {
 	orden: {
 		icon: CalendarCheckIcon,
 		label: 'Orden del Día',
+	},
+	missing: {
+		icon: FileQuestionMarkIcon,
+		label: 'Acta no disponible',
 	},
 };
 
