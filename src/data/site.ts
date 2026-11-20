@@ -1,7 +1,13 @@
 export const SITE_NAME = 'Concejo Municipal del Distrito de Tucurrique';
-export const SITE_BRAND = 'tucurrique.go.cr';
 export const SITE_DESCRIPTION_DEFAULT = 'Trabajamos para servirle';
 export const SITE_LOCALE = 'es';
+
+export const SITE_CONTACT = {
+	phone: '2535-0115',
+	phoneHref: 'tel:+50625350115',
+	address: 'Frente a la plaza de deportes, Tucurrique, Jiménez, Cartago',
+	hours: 'Lunes a viernes, 7:30 a. m. a 3:30 p. m.',
+} as const;
 
 // Third-party services. Leave an identifier empty to disable its integration.
 export const USERWAY_ACCOUNT = 'Txt3QSFuIj';

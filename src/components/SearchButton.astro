@@ -1,13 +1,15 @@
 ---
 import { Search01Icon } from '@hugeicons/core-free-icons';
 import HugeIcon from './HugeIcon.astro';
+
+const current = Astro.url.pathname.replace(/\/+$/, '') === '/buscador';
 ---
 
 <a
 	href="/buscador"
-	class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400 md:h-auto md:w-auto md:rounded md:border-0 md:px-2 md:py-1"
-	aria-label="Abrir buscador"
+	aria-current={current ? 'page' : undefined}
+	class="inline-flex h-10 w-10 items-center justify-center gap-1.5 rounded-md border border-slate-200 text-slate-700 no-underline transition-colors hover:bg-slate-100 hover:text-slate-900 md:h-9 md:w-auto md:px-3"
 >
-	<HugeIcon icon={Search01Icon} aria-hidden="true" class="h-5 w-5 md:hidden" />
-	<span class="hidden md:inline">Buscador</span>
+	<HugeIcon icon={Search01Icon} aria-hidden="true" class="h-5 w-5 md:h-4 md:w-4" />
+	<span class="sr-only md:not-sr-only">Buscar</span>
 </a>

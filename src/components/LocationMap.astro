@@ -8,7 +8,7 @@ type Props = {
 
 const { location, title }: Props = Astro.props;
 const encodedLocation = encodeURIComponent(location);
-const mapURL = `https://www.google.com/maps?q=${encodedLocation}&output=embed`;
+const mapURL = `https://www.google.com/maps?q=${encodedLocation}&hl=es&output=embed`;
 ---
 
 <div class="my-4 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">

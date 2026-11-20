@@ -1,7 +1,7 @@
 ---
 layout: '@layouts/MarkdownLayout.astro'
-title: Municipalidad de Tucurrique
-description: Trabajamos para servirle
+title: Concejo Municipal del Distrito de Tucurrique
+description: Trabajamos para servirle. Aquí encontrará las actas del Concejo, trámites, información del distrito y formas de contacto.
 ---
 
 import Collection from '@components/Collection.astro';
@@ -23,7 +23,7 @@ Nos preocupamos por informar a la población sobre nuestro trabajo, por lo que t
 
 <Columns columns={2} mobileColumns={1} gap="1rem">
 	<div class="md:col-start-2">
-		<Button href="/transparencia/actas" text="Ir a Actas Municipales →" emoji="📚" />
+		<Button href="/transparencia/actas" text="Ver todas las actas" emoji="📚" description="Busque por año, tipo de sesión o número." />
 	</div>
 </Columns>
 
@@ -31,8 +31,8 @@ Nos preocupamos por informar a la población sobre nuestro trabajo, por lo que t
 
 <Columns columns={2} mobileColumns={1} gap="1rem">
 	<div>
+		<Button href="/gestion/formularios" text="Formularios y trámites" emoji="📝" />
 		<Button href="/nosotros" text="Sobre Nosotros" emoji="🏛️" />
-		<Button href="/covid-19" text="Información sobre COVID-19" emoji="🦠" />
 	</div>
 	<div>
 		<Button href="/contacto" text="Formas de Contacto" emoji="☎️" description="Para servirle mejor, puede comunicarse con nosotros consultando nuestro directorio interno o rellenando nuestro formulario de contacto." />

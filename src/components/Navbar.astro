@@ -1,31 +1,54 @@
 ---
-const { brand = "Home" } = Astro.props;
-
 import MenuItem from "./MenuItem.astro";
 import SearchButton from "./SearchButton.astro";
 import HugeIcon from "./HugeIcon.astro";
-import { menus } from "../data/menus";
-import { Cancel01Icon, Menu01Icon } from "@hugeicons/core-free-icons";
+import { desktopMenuIds, isCurrentPath, menus, primaryLinks } from "../data/menus";
+import { SITE_NAME } from "../data/site";
+import { ArrowDown01Icon, Cancel01Icon, Menu01Icon } from "@hugeicons/core-free-icons";
 import logo from "../assets/logo_alt_96x96.png";
+
+const pathname = Astro.url.pathname;
+const desktopMenus = menus.filter((menu) => desktopMenuIds.includes(menu.id));
+const sectionIsCurrent = (menu: (typeof menus)[number]) =>
+	menu.items.some((item) => isCurrentPath(item.href, pathname));
+const topLinkClass =
+	"inline-flex h-9 items-center rounded-md px-3 text-slate-700 no-underline transition-colors hover:bg-slate-100 hover:text-slate-900";
+const currentTopLinkClass = "bg-brand-50 text-brand-800 hover:bg-brand-100 hover:text-brand-900";
+const primary = Object.values(primaryLinks);
 ---
 
-<header class="paper-surface relative z-[60] border-b border-slate-200 px-4 py-3">
+<a
+	href="#contenido"
+	class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:font-medium focus:shadow-lg"
+>
+	Saltar al contenido
+</a>
+
+<header class="paper-surface relative z-[60] border-t-4 border-b border-t-gold-400 border-b-slate-200 px-4 py-2.5">
 	<nav
-		class="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-between gap-4 text-sm font-medium text-slate-700"
+		aria-label="Principal"
+		class="mx-auto flex w-full max-w-5xl items-center justify-between gap-3 text-sm font-medium text-slate-700"
 	>
 		<a
-			class="inline-flex items-center gap-2 self-center rounded px-2 py-1 text-slate-900 hover:bg-slate-100"
+			class="inline-flex min-w-0 items-center gap-2 self-center rounded-md py-1 pr-1 text-slate-900 no-underline sm:gap-2.5"
 			href="/"
+			aria-label={`${SITE_NAME}, página de inicio`}
 		>
-			<img src={logo.src} alt="Logo" class="h-8 w-8 object-contain" />
-			<span class="text-xl font-semibold leading-none">{brand}</span>
+			<img src={logo.src} alt="" width="40" height="40" class="h-10 w-10 object-contain" />
+			<span class="flex flex-col leading-none" aria-hidden="true">
+				<span class="whitespace-nowrap text-[0.625rem] font-semibold uppercase tracking-[0.04em] text-slate-600 sm:text-[0.6875rem] sm:tracking-[0.08em] md:hidden lg:block">
+					Concejo Municipal del Distrito
+				</span>
+				<span class="text-[1.375rem] font-extrabold leading-tight tracking-[-0.01em] text-wine-800">Tucurrique</span>
+			</span>
 		</a>
 
-		<div class="ml-auto flex items-center gap-2 md:hidden">
+		<div class="ml-auto flex shrink-0 items-center gap-2 md:hidden">
 			<SearchButton />
 			<details class="group relative" id="mobile-menu">
 				<summary
-					class="inline-flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-slate-200 text-slate-700 marker:content-none hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-400"
+					aria-label="Abrir menú"
+					class="inline-flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md border border-slate-200 text-slate-700 marker:content-none hover:bg-slate-100 hover:text-slate-900"
 				>
 					<HugeIcon icon={Menu01Icon} aria-hidden="true" class="h-5 w-5 group-open:hidden" />
 					<HugeIcon icon={Cancel01Icon} aria-hidden="true" class="hidden h-5 w-5 group-open:block" />
@@ -35,23 +58,44 @@ import logo from "../assets/logo_alt_96x96.png";
 					class="paper-surface fixed right-0 top-0 z-[80] h-full w-[min(22rem,calc(100vw-2rem))] overflow-y-auto border-l border-slate-200 px-4 py-3"
 					id="mobile-nav-accordion"
 				>
-					<div class="mb-4 flex items-center justify-end">
+					<div class="mb-4 flex items-center justify-between">
+						<span class="pl-1 text-sm font-semibold text-slate-700">Menú</span>
 						<button
 							id="mobile-close-btn"
+							type="button"
 							class="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 text-slate-700 hover:bg-slate-100 hover:text-slate-900"
 							aria-label="Cerrar menú"
 						>
 							<HugeIcon icon={Cancel01Icon} aria-hidden="true" class="h-5 w-5" />
 						</button>
 					</div>
+					<div class="grid grid-cols-2 gap-2">
+						{primary.map((link) => {
+							const current = isCurrentPath(link.href, pathname);
+							return (
+								<a
+									href={link.href}
+									aria-current={current ? "page" : undefined}
+									class:list={[
+										"rounded-lg border px-3 py-2.5 text-center text-base font-semibold no-underline",
+										current
+											? "border-brand-200 bg-brand-50 text-brand-800"
+											: "border-slate-200 text-slate-800 hover:bg-slate-100",
+									]}
+								>
+									{link.title}
+								</a>
+							);
+						})}
+					</div>
 					{
-						menus.map((menu, index) => (
-							<div class:list={[index > 0 && "mt-4"]}>
-								<p class="mb-1 px-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+						menus.map((menu) => (
+							<div class="mt-5">
+								<p class="mb-1 px-3 text-xs font-semibold uppercase tracking-wide text-slate-600">
 									{menu.title}
 								</p>
 								{menu.items.map((item) => (
-									<MenuItem {...item} />
+									<MenuItem {...item} current={isCurrentPath(item.href, pathname)} />
 								))}
 							</div>
 						))
@@ -60,24 +104,49 @@ import logo from "../assets/logo_alt_96x96.png";
 			</details>
 		</div>
 
-		<div class="hidden items-center gap-4 md:flex" id="desktop-nav-menus">
-			<SearchButton />
+		<div class="hidden shrink-0 items-center gap-1 md:flex" id="desktop-nav-menus">
+			<a
+				href={primaryLinks.actas.href}
+				aria-current={isCurrentPath(primaryLinks.actas.href, pathname) ? "page" : undefined}
+				class:list={[topLinkClass, isCurrentPath(primaryLinks.actas.href, pathname) && currentTopLinkClass]}
+			>
+				{primaryLinks.actas.title}
+			</a>
 			{
-				menus.map((menu) => (
+				desktopMenus.map((menu) => (
 					<details class="group relative">
-						<summary class="inline-flex cursor-pointer list-none items-center rounded px-2 py-1 marker:content-none hover:bg-slate-100 hover:text-slate-900">
+						<summary
+							class:list={[
+								topLinkClass,
+								"cursor-pointer list-none gap-1 marker:content-none",
+								sectionIsCurrent(menu) && currentTopLinkClass,
+							]}
+						>
 							<span>{menu.title}</span>
+							<HugeIcon
+								icon={ArrowDown01Icon}
+								aria-hidden="true"
+								class="h-4 w-4 transition-transform group-open:rotate-180"
+							/>
 						</summary>
 						<div class="desktop-submenu animate-surface absolute right-0 top-full z-[70] min-w-80 pt-2">
-							<div class="paper-surface-soft rounded-xl border border-slate-200 p-2">
+							<div class="paper-surface-soft rounded-xl border border-slate-200 p-2 shadow-[0_12px_32px_-12px_rgb(15_23_42/0.25)]">
 								{menu.items.map((item) => (
-									<MenuItem {...item} />
+									<MenuItem {...item} current={isCurrentPath(item.href, pathname)} />
 								))}
 							</div>
 						</div>
 					</details>
 				))
 			}
+			<a
+				href={primaryLinks.contacto.href}
+				aria-current={isCurrentPath(primaryLinks.contacto.href, pathname) ? "page" : undefined}
+				class:list={[topLinkClass, isCurrentPath(primaryLinks.contacto.href, pathname) && currentTopLinkClass]}
+			>
+				{primaryLinks.contacto.title}
+			</a>
+			<span class="ml-2"><SearchButton /></span>
 		</div>
 	</nav>
 </header>
@@ -104,6 +173,17 @@ import logo from "../assets/logo_alt_96x96.png";
 			if (item !== current) item.open = false;
 		});
 	};
+
+	// Escape cierra el menú abierto y devuelve el foco a su botón.
+	document.addEventListener("keydown", (event) => {
+		if (event.key !== "Escape") return;
+		const openMenu = document.querySelector<HTMLDetailsElement>(
+			"#desktop-nav-menus > details[open], #mobile-menu[open]",
+		);
+		if (!openMenu) return;
+		openMenu.open = false;
+		openMenu.querySelector("summary")?.focus();
+	});
 
 	if (desktopWrapper) {
 		const desktopMenus = getDirectDetails(desktopWrapper);

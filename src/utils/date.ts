@@ -14,7 +14,6 @@ const monthNamesLong = [
 ] as const;
 
 const monthNamesShort = [
-	// ponytail: ISO YYYY-MM-DD is rendered via split to avoid timezone shifts; fallback uses UTC formatter.
 	'ene',
 	'feb',
 	'mar',
@@ -29,6 +28,7 @@ const monthNamesShort = [
 	'dic',
 ] as const;
 
+// ISO YYYY-MM-DD values are split directly to avoid timezone shifts; other values use UTC parts.
 function parseDateParts(value: string | Date) {
 	const rawValue = value instanceof Date ? value.toISOString() : String(value).trim();
 	const isoCandidate = rawValue.split('T')[0];
@@ -69,11 +69,12 @@ export function formatDateEs(value: string | Date): string {
 		return parts.rawValue;
 	}
 
+	const day = String(Number(parts.day));
 	const monthName = monthNamesLong[parts.monthIndex];
 	if (monthName) {
-		return `${parts.day} de ${monthName} de ${parts.year}`;
+		return `${day} de ${monthName} de ${parts.year}`;
 	}
-	return `${parts.day} de ${String(parts.monthIndex + 1).padStart(2, '0')} de ${parts.year}`;
+	return `${day} de ${String(parts.monthIndex + 1).padStart(2, '0')} de ${parts.year}`;
 }
 
 export function formatDateEsShort(value: string | Date): string {
@@ -88,4 +89,21 @@ export function formatDateEsShort(value: string | Date): string {
 		return `${parts.day}/${monthName}/${yearShort}`;
 	}
 	return `${parts.day}/${String(parts.monthIndex + 1).padStart(2, '0')}/${yearShort}`;
+}
+
+/** Fecha corta legible: "17 nov. 2026". */
+export function formatDateEsCompact(value: string | Date): string {
+	const parts = parseDateParts(value);
+	if (parts.monthIndex < 0) {
+		return parts.rawValue;
+	}
+
+	const monthName = monthNamesShort[parts.monthIndex];
+	return `${Number(parts.day)} ${monthName ?? parts.monthIndex + 1}. ${parts.year}`;
+}
+
+/** Nombre del mes con mayúscula inicial: "Noviembre". */
+export function monthNameEs(monthIndex: number): string {
+	const name = monthNamesLong[monthIndex] ?? '';
+	return name.charAt(0).toUpperCase() + name.slice(1);
 }

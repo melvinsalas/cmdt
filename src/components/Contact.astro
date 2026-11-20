@@ -10,21 +10,35 @@ type Props = {
 };
 
 const { name, role, email, phone }: Props = Astro.props;
+
+// "2535-0115 ext. 3" -> "tel:+50625350115,3" (la coma marca la extensión en la mayoría de teléfonos).
+const phoneHref = (() => {
+	if (!phone) return undefined;
+	const [main, extension] = phone.split(/\s*ext\.?\s*/i);
+	const digits = main.replace(/\D/g, "");
+	if (digits.length !== 8) return undefined;
+	const extensionDigits = extension?.replace(/\D/g, "");
+	return `tel:+506${digits}${extensionDigits ? `,${extensionDigits}` : ""}`;
+})();
 ---
 
-<div class="flex flex-col gap-0.5 py-2 border-b border-slate-100 last:border-0">
-	<span class="text-sm font-semibold text-slate-900">{name}</span>
-	<span class="text-xs text-slate-500">{role}</span>
-	<div class="flex flex-wrap gap-x-4 gap-y-0.5 mt-0.5">
+<div class="flex flex-col gap-0.5 border-b border-slate-200 py-3 last:border-0">
+	<span class="font-semibold leading-6 text-slate-900">{name}</span>
+	<span class="text-sm text-slate-600">{role}</span>
+	<div class="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm">
 		{email && (
-			<a href={`mailto:${email}`} class="flex items-center gap-1 text-xs text-blue-600 hover:underline">
-				<HugeIcon icon={Mail01Icon} size={12} aria-hidden="true" />{email}
+			<a href={`mailto:${email}`} class="inline-flex items-center gap-1.5 hover:underline">
+				<HugeIcon icon={Mail01Icon} size={14} aria-hidden="true" />{email}
 			</a>
 		)}
-		{phone && (
-			<span class="flex items-center gap-1 text-xs text-slate-600">
-				<HugeIcon icon={Call02Icon} size={12} aria-hidden="true" />{phone}
+		{phone && (phoneHref ? (
+			<a href={phoneHref} class="inline-flex items-center gap-1.5 hover:underline">
+				<HugeIcon icon={Call02Icon} size={14} aria-hidden="true" />{phone}
+			</a>
+		) : (
+			<span class="inline-flex items-center gap-1.5 text-slate-700">
+				<HugeIcon icon={Call02Icon} size={14} aria-hidden="true" />{phone}
 			</span>
-		)}
+		))}
 	</div>
 </div>

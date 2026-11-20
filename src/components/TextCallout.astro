@@ -10,20 +10,20 @@ const { variant = "warning", title }: Props = Astro.props;
 
 const variantStyles: Record<Variant, { box: string }> = {
     warning: {
-        box: "border-orange-500 bg-orange-50 text-orange-900",
+        box: "border-gold-300 bg-gold-100 text-slate-900",
     },
     info: {
-        box: "border-sky-500 bg-sky-50 text-sky-900",
+        box: "border-sky-200 bg-sky-50 text-sky-950",
     },
     success: {
-        box: "border-emerald-500 bg-emerald-50 text-emerald-900",
+        box: "border-brand-200 bg-brand-50 text-brand-900",
     },
 };
 
 const styles = variantStyles[variant];
 ---
 
-<aside class:list={["my-3 border-l-4 p-4", styles.box]} role="alert">
+<aside class:list={["my-3 rounded-lg border p-4", styles.box]} role="note">
 	<strong class="mb-1 block font-semibold">{title}</strong>
 	<div class="text-callout__content">
 		<slot />

@@ -5,23 +5,27 @@ interface Props {
 	title?: string;
 	description?: string;
 	date?: string | Date;
+	/** Se conserva por compatibilidad con el frontmatter; ya no se muestra. */
 	emoji?: string;
+	/** Línea divisoria bajo el encabezado. */
+	divider?: boolean;
 }
 
-const { title, description, date, emoji }: Props = Astro.props;
+const { title, description, date, divider = true }: Props = Astro.props;
 ---
 
-<header class="mb-8 border-b border-slate-200 pb-4">
-	{emoji && (
-		<p class="mb-2 text-7xl leading-none" aria-hidden="true">{emoji}</p>
-	)}
+<header class:list={["mb-8", divider && "border-b border-slate-200 pb-6"]}>
 	{Astro.slots.has('eyebrow') && (
 		<div class="mb-3 leading-none">
 			<slot name="eyebrow" />
 		</div>
 	)}
 	{title && <h1>{title}</h1>}
-	{date && <p class="mt-2 mb-0 text-sm text-slate-500">{formatDateEs(date)}</p>}
-	{description && <p class="m-0 text-slate-600">{description}</p>}
+	{date && (
+		<p class="mt-2 mb-0 text-sm font-medium text-slate-600">
+			<time datetime={new Date(date).toISOString().slice(0, 10)}>{formatDateEs(date)}</time>
+		</p>
+	)}
+	{description && <p class="m-0 max-w-[60ch] text-lg leading-7 text-slate-700 text-pretty">{description}</p>}
 	<slot />
 </header>

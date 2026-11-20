@@ -23,12 +23,13 @@ import type { IconSvgObject } from '@hugeicons/core-free-icons/types';
 import type { MenuIconName } from '../data/menus';
 import HugeIcon from './HugeIcon.astro';
 
-const { href, title, description, icon, external = false } = Astro.props as {
+const { href, title, description, icon, external = false, current = false } = Astro.props as {
 	href: string;
 	title: string;
 	description?: string;
 	icon: MenuIconName;
 	external?: boolean;
+	current?: boolean;
 };
 
 const iconMap = {
@@ -59,13 +60,16 @@ const hasDescription = Boolean(description);
 	class:list={[
 		'group flex gap-3 rounded-lg px-3 py-2 text-slate-700 transition hover:bg-slate-100 hover:text-slate-900',
 		hasDescription ? 'items-start' : 'items-center',
+		current && 'bg-brand-50',
 	]}
 	href={href}
+	aria-current={current ? 'page' : undefined}
 	target={external ? '_blank' : undefined}
 	rel={external ? 'noopener noreferrer' : undefined}
 >
 	<span class:list={[
-		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-700 transition group-hover:bg-slate-200 group-hover:text-slate-900',
+		'flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition',
+		current ? 'bg-brand-100 text-brand-800' : 'bg-slate-100 text-slate-700 group-hover:bg-slate-200 group-hover:text-slate-900',
 		hasDescription ? 'mt-0.5' : 'mt-0',
 	]}>
 		<HugeIcon icon={iconData} aria-hidden="true" class="h-4.5 w-4.5" />
@@ -73,10 +77,13 @@ const hasDescription = Boolean(description);
 
 	<span class="min-w-0 flex-1">
 		<span class="block text-sm font-semibold leading-5 text-slate-900">{title}</span>
-		{description ? <span class="mt-0.5 block text-xs leading-5 text-slate-500">{description}</span> : null}
+		{description ? <span class="mt-0.5 block text-xs leading-5 text-slate-600">{description}</span> : null}
 	</span>
 
 	{external ? (
-		<HugeIcon icon={ExternalLinkIcon} aria-hidden="true" class="h-4 w-4 shrink-0 text-slate-400 self-center" />
+		<HugeIcon icon={ExternalLinkIcon} aria-hidden="true" class="h-4 w-4 shrink-0 self-center text-slate-500" />
+	) : null}
+	{external ? (
+		<span class="sr-only">(abre en una pestaña nueva)</span>
 	) : null}
 </a>

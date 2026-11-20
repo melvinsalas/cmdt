@@ -1,108 +1,92 @@
 ---
 import { menus } from "../data/menus";
-import { SITE_NAME, SITE_URLS } from "../data/site";
+import { SITE_CONTACT, SITE_NAME, SITE_URLS } from "../data/site";
 import logo from "../assets/logo.png";
-import { ExternalLinkIcon } from "@hugeicons/core-free-icons";
+import { Call02Icon, Clock01Icon, ExternalLinkIcon, Location01Icon } from "@hugeicons/core-free-icons";
 import HugeIcon from "./HugeIcon.astro";
 
 const year = new Date().getFullYear();
 ---
 
-<footer class="paper-surface-strong mt-10 px-4 py-8 text-sm text-slate-700">
+<footer class="paper-surface-strong mt-16 border-t border-slate-200 px-4 py-10 text-sm text-slate-700">
 	<div class="mx-auto w-full max-w-5xl">
-		<div
-			class="flex flex-col gap-y-12 lg:flex-row lg:items-start"
-		>
-			<section class="px-2 py-1 lg:max-w-[17rem] lg:flex-none lg:px-4 lg:py-2">
-				<a
-					href="/"
-					class="inline-flex flex-col items-start gap-3 text-slate-900"
-				>
-					<img
-						src={logo.src}
-						alt="Logo Municipalidad de Tucurrique"
-						class="h-14 w-14 object-contain"
-					/>
-					<div>
-						<p class="text-lg font-semibold leading-tight">
-							{SITE_NAME}
-						</p>
-						<p
-							class="mt-1 text-xs uppercase tracking-[0.2em] text-slate-500"
-						>
-							Gobierno local
-						</p>
-					</div>
+		<div class="flex flex-col gap-y-10 lg:flex-row lg:items-start lg:gap-x-10">
+			<section class="lg:max-w-[18rem] lg:flex-none" aria-label="Datos de contacto">
+				<a href="/" class="flex items-center gap-3 text-slate-900 no-underline">
+					<img src={logo.src} alt="" width="56" height="56" class="h-14 w-14 object-contain" />
+					<span class="text-lg font-bold leading-tight text-wine-800">{SITE_NAME}</span>
 				</a>
+				<ul class="mt-5 space-y-2.5 text-slate-700">
+					<li class="flex gap-2">
+						<HugeIcon icon={Call02Icon} aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-brand-700" />
+						<a href={SITE_CONTACT.phoneHref} class="font-medium">{SITE_CONTACT.phone}</a>
+					</li>
+					<li class="flex gap-2">
+						<HugeIcon icon={Clock01Icon} aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-brand-700" />
+						<span>{SITE_CONTACT.hours}</span>
+					</li>
+					<li class="flex gap-2">
+						<HugeIcon icon={Location01Icon} aria-hidden="true" class="mt-0.5 h-4 w-4 shrink-0 text-brand-700" />
+						<span>{SITE_CONTACT.address}</span>
+					</li>
+				</ul>
 			</section>
 
-			<section class="px-2 py-1 lg:min-w-0 lg:flex-1 lg:px-4 lg:py-2">
-				<div class="flex flex-wrap gap-x-8 gap-y-6">
-					{
-						menus.map((section) => (
-							<nav
-								aria-labelledby={`footbar-${section.id}`}
-								class="basis-full sm:basis-[calc(50%-1rem)] xl:basis-[calc(25%-1.5rem)]"
+			<div class="grid grid-cols-2 gap-x-6 gap-y-8 lg:flex-1 xl:grid-cols-4">
+				{
+					menus.map((section) => (
+						<nav aria-labelledby={`footbar-${section.id}`}>
+							<p
+								id={`footbar-${section.id}`}
+								class="text-xs font-semibold uppercase tracking-[0.12em] text-slate-700"
 							>
-								<p
-									id={`footbar-${section.id}`}
-									class="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500"
-								>
-									{section.title}
-								</p>
-								<ul class="mt-3 space-y-2">
-									{section.items.map((item) => (
-										<li>
-											<a
-												class="inline-flex items-center gap-1.5 text-sm text-slate-700 transition hover:text-slate-900 hover:underline"
-												href={item.href}
-												target={
-													item.external
-														? "_blank"
-														: undefined
-												}
-												rel={
-													item.external
-														? "noopener noreferrer"
-														: undefined
-												}
-											>
-												<span>{item.title}</span>
-												{item.external ? (
+								{section.title}
+							</p>
+							<ul class="mt-3 space-y-2">
+								{section.items.map((item) => (
+									<li>
+										<a
+											class="inline-flex items-center gap-1.5 text-sm text-slate-700 underline-offset-4 transition hover:text-slate-950 hover:underline"
+											href={item.href}
+											target={item.external ? "_blank" : undefined}
+											rel={item.external ? "noopener noreferrer" : undefined}
+										>
+											<span>{item.title}</span>
+											{item.external ? (
+												<>
 													<HugeIcon
 														icon={ExternalLinkIcon}
 														aria-hidden="true"
 														class="h-3.5 w-3.5 shrink-0 text-slate-500"
 													/>
-												) : null}
-											</a>
-										</li>
-									))}
-								</ul>
-							</nav>
-						))
-					}
-				</div>
-			</section>
+													<span class="sr-only">(abre en una pestaña nueva)</span>
+												</>
+											) : null}
+										</a>
+									</li>
+								))}
+							</ul>
+						</nav>
+					))
+				}
+			</div>
 		</div>
 
-		<div class="mt-6 flex flex-col gap-3 border-t border-slate-200 pt-5 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
-			<p class="flex flex-wrap gap-x-1 gap-y-0.5">
-				<span class="whitespace-nowrap">{SITE_NAME} ·</span>
-				<span class="whitespace-nowrap">{year}. Todos los derechos reservados.</span>
-			</p>
+		<div class="mt-8 flex flex-col gap-3 border-t border-slate-300 pt-5 text-xs text-slate-700 sm:flex-row sm:items-center sm:justify-between">
+			<p class="m-0">© {year} {SITE_NAME}</p>
 			<nav aria-label="Enlaces legales y estadísticas" class="flex flex-wrap items-center gap-x-4 gap-y-2">
-				<a href="/privacidad" class="transition hover:text-slate-900 hover:underline">
+				<a href="/privacidad" class="text-slate-700 underline-offset-4 transition hover:text-slate-950 hover:underline">
 					Privacidad
 				</a>
 				<a
 					href={SITE_URLS.estadisticas}
 					target="_blank"
 					rel="noopener noreferrer"
-					class="inline-flex items-center gap-1.5 transition hover:text-slate-900 hover:underline"
+					class="inline-flex items-center gap-1.5 text-slate-700 underline-offset-4 transition hover:text-slate-950 hover:underline"
 				>
-					<span>Estadísticas</span>
+					<span>Estadísticas del sitio</span>
 					<HugeIcon icon={ExternalLinkIcon} aria-hidden="true" class="h-3.5 w-3.5 shrink-0" />
+					<span class="sr-only">(abre en una pestaña nueva)</span>
 				</a>
 			</nav>
 		</div>

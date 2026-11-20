@@ -63,9 +63,15 @@ export const menus: MenuSection[] = [
 				icon: "user",
 			},
 			{
+				href: "/archivo",
+				title: "Archivo",
+				description: "Todos los documentos publicados",
+				icon: "archive",
+			},
+			{
 				href: SITE_URLS.expediente,
 				title: "Expediente",
-				description: "Expediente electrónico en SICOP",
+				description: "Compras públicas en SICOP, el sistema de compras del Estado",
 				icon: "folder-open",
 				external: true,
 			},
@@ -106,14 +112,12 @@ export const menus: MenuSection[] = [
 		],
 	},
 	{
-		id: "mas",
-		title: "Más",
+		id: "redes",
+		title: "Redes y correo",
 		items: [
-			{ href: "/archivo", title: "Archivo", icon: "archive" },
-			{ href: "/contacto/", title: "Contacto", icon: "phone-call" },
 			{
 				href: SITE_URLS.correo,
-				title: "Correo Institucional",
+				title: "Correo institucional",
 				icon: "mail",
 				external: true,
 			},
@@ -138,3 +142,22 @@ export const menus: MenuSection[] = [
 		],
 	},
 ];
+
+/** Enlaces directos de primer nivel en la barra de navegación. */
+export const primaryLinks = {
+	actas: { href: "/transparencia/actas", title: "Actas" },
+	contacto: { href: "/contacto/", title: "Contacto" },
+} as const;
+
+/** Secciones que aparecen como menús desplegables en escritorio. */
+export const desktopMenuIds = ["transparencia", "gestion", "nosotros"];
+
+const trimSlash = (value: string) => value.replace(/\/+$/, "") || "/";
+
+/** Indica si `href` corresponde a la página actual o a una de sus subpáginas. */
+export const isCurrentPath = (href: string, pathname: string) => {
+	if (/^https?:/.test(href)) return false;
+	const target = trimSlash(href);
+	const current = trimSlash(pathname);
+	return target === "/" ? current === "/" : current === target || current.startsWith(`${target}/`);
+};

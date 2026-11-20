@@ -11,43 +11,83 @@ import {
 import HugeIcon from './HugeIcon.astro';
 
 type Props = {
-	href: string;
+	/** Ruta del archivo. Sin `href` el documento se muestra como pendiente de publicar. */
+	href?: string;
 	type?: string;
+	/** Nombre visible del documento. Si se omite, se deduce del tipo y del nombre del archivo. */
+	label?: string;
+	/** Texto secundario cuando el documento aún no está publicado. */
+	pendingText?: string;
 };
 
-const { href, type }: Props = Astro.props;
+const { href, type, label, pendingText = 'Aún no se ha publicado' }: Props = Astro.props;
+const isPending = !href;
 
 const fileName = (() => {
-	const last = href.split("/").filter(Boolean).pop();
+	const last = href?.split("/").filter(Boolean).pop();
 	if (!last) return "Archivo";
 	return decodeURIComponent(last);
 })();
 
-const sizeText = FileSize.getFromPublicHref(href);
+const extension = fileName.split('.').pop()?.toLowerCase() ?? '';
+const baseName = fileName.replace(/\.[^.]+$/, '');
+const sessionTypes = ['ordinaria', 'extraordinaria'];
+
+const displayLabel = (() => {
+	if (label) return label;
+	if (type === 'orden' || /orden del d[ií]a/i.test(fileName)) return 'Orden del día';
+	if (type && sessionTypes.includes(type)) return 'Acta de la sesión';
+	return baseName;
+})();
+
+const sizeText = href ? FileSize.getFromPublicHref(href) : '';
 const { callout, calloutIcon } = getTypeVariant(type);
 
-const extension = fileName.split('.').pop()?.toLowerCase();
 const Icon = (() => {
 	if (extension === 'doc' || extension === 'docx') return Doc01Icon;
 	if (extension === 'pdf') return Pdf01Icon;
 	if (extension === 'xls' || extension === 'xlsx') return Xls01Icon;
 	if (extension === 'zip') return Zip01Icon;
+	if (isPending) return Pdf01Icon;
 	return FileQuestionMarkIcon;
 })();
 ---
 
-<aside
+{isPending ? (
+<div class="my-3 flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-slate-900">
+	<HugeIcon icon={Icon} aria-hidden="true" class="h-6 w-6 shrink-0 text-red-700" />
+	<span class="min-w-0 flex-1">
+		<span class="block text-base font-semibold leading-6 text-slate-900">{displayLabel}</span>
+		<span class="block text-sm text-red-800">{pendingText}</span>
+	</span>
+</div>
+) : (
+<a
+	href={href}
+	target="_blank"
+	rel="noopener noreferrer"
 	class:list={[
-		"my-3 flex items-center gap-3 border-l-4 p-4 text-slate-900",
+		"file-callout group my-3 flex items-center gap-3 rounded-lg border p-4 text-slate-900 no-underline transition-colors",
 		callout,
 	]}
-	role="note"
 >
-	<HugeIcon icon={Icon} aria-hidden="true" class:list={['h-5 w-5 shrink-0', calloutIcon]} />
-	<span class="min-w-0">
-		<a href={href} target="_blank" rel="noopener noreferrer" class="file-callout-link block text-lg">
-			{fileName}
-		</a>
-		<span class="block whitespace-nowrap font-mono text-sm text-slate-600">{sizeText}</span>
+	<HugeIcon icon={Icon} aria-hidden="true" class:list={['h-6 w-6 shrink-0', calloutIcon]} />
+	<span class="min-w-0 flex-1">
+		<span class="block text-base font-semibold leading-6 text-slate-900 group-hover:underline">
+			{displayLabel}
+		</span>
+		<span class="block break-words text-sm text-slate-600">
+			{fileName} · {sizeText}
+		</span>
 	</span>
-</aside>
+	<span class="shrink-0 text-sm font-medium text-slate-700 group-hover:text-slate-950">
+		Descargar
+	</span>
+</a>
+)}
+
+<style>
+	.file-callout:hover {
+		text-decoration: none;
+	}
+</style>

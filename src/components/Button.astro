@@ -1,4 +1,8 @@
 ---
+import { ArrowRight01Icon, LinkSquare02Icon } from '@hugeicons/core-free-icons';
+import { iconForEmoji } from '../utils/emoji-icons';
+import HugeIcon from './HugeIcon.astro';
+
 type Props = {
 	href: string;
 	text: string;
@@ -8,40 +12,41 @@ type Props = {
 };
 
 const { href, text, description, emoji, external = false }: Props = Astro.props;
+const icon = iconForEmoji(emoji);
+// La flecha la dibuja el componente; se quita la que venga escrita en el texto.
+const label = text.replace(/\s*→\s*$/, '');
 ---
 
 <a
 	href={href}
 	target={external ? '_blank' : undefined}
 	rel={external ? 'noopener noreferrer' : undefined}
-	class="boton-card-link my-3 flex items-center gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 text-slate-900 no-underline transition-colors hover:border-slate-300 hover:bg-slate-100"
+	class="boton-card-link group my-3 flex items-start gap-3 rounded-lg border border-slate-200 bg-white p-4 text-slate-900 transition-colors hover:border-brand-300 hover:bg-brand-50"
 >
-	{emoji && <span class="boton-card-emoji text-2xl leading-none" aria-hidden="true">{emoji}</span>}
-	<span class="boton-card-content flex flex-col gap-1">
-		<span class="boton-card-text font-medium">{text}</span>
-		{description && <span class="boton-card-description text-sm leading-6 text-slate-600">{description}</span>}
+	{icon && (
+		<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-brand-50 text-brand-700 transition-colors group-hover:bg-white" aria-hidden="true">
+			<HugeIcon icon={icon} class="h-5 w-5" />
+		</span>
+	)}
+	<span class="flex min-w-0 flex-1 flex-col gap-1">
+		<span class="boton-card-text font-semibold leading-6">{label}</span>
+		{description && <span class="text-sm leading-6 text-slate-600">{description}</span>}
 	</span>
+	<HugeIcon
+		icon={external ? LinkSquare02Icon : ArrowRight01Icon}
+		aria-hidden="true"
+		class="mt-1 h-4 w-4 shrink-0 text-slate-500 transition-transform group-hover:translate-x-0.5 group-hover:text-brand-700"
+	/>
+	{external && <span class="sr-only">(abre en una pestaña nueva)</span>}
 </a>
 
 <style>
-	.boton-card-link {
-		align-items: flex-start;
-	}
-
 	.boton-card-link:hover {
 		text-decoration: none;
 	}
 
 	.boton-card-link:hover .boton-card-text {
 		text-decoration: underline;
-	}
-
-	.boton-card-link:hover .boton-card-description {
-		text-decoration: none;
-	}
-
-	.boton-card-emoji {
-		display: inline-block;
-		text-decoration: none;
+		text-underline-offset: 0.2em;
 	}
 </style>

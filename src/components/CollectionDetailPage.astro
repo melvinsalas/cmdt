@@ -1,9 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import FileCallout from "./FileCallout.astro";
+import HugeIcon from "./HugeIcon.astro";
+import IconBadge from "./IconBadge.astro";
 import PageHeader from "./PageHeader.astro";
 import TypeBadge from "./TypeBadge.astro";
-import { render, type CollectionEntry } from "astro:content";
+import { ArrowLeft01Icon, ArrowRight01Icon } from "@hugeicons/core-free-icons";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 
 interface Props {
 	entry: CollectionEntry<"archive">;
@@ -13,22 +16,57 @@ const { entry }: Props = Astro.props;
 const { Content } = await render(entry);
 const description = entry.data.description;
 const files = entry.data.files ?? [];
+const badges = entry.data.badges ?? [];
+const isActaMissing = badges.includes("missing");
+const visibleBadges = badges.filter((badge) => badge !== "missing");
+
+const sessionTypes = ["ordinaria", "extraordinaria"];
+const isSession = sessionTypes.includes(entry.data.type);
+const toHref = (item: CollectionEntry<"archive">) =>
+	encodeURI(`/archivo/${item.id.replace(/\.(md|mdx)$/, "")}/`);
+
+// Sesiones anteriores y siguientes dentro del mismo grupo (sesiones o del mismo tipo).
+const siblings = (
+	await getCollection("archive", ({ data }) =>
+		isSession ? sessionTypes.includes(data.type) : data.type === entry.data.type,
+	)
+).sort((a, b) => a.data.date.getTime() - b.data.date.getTime() || a.id.localeCompare(b.id));
+const position = siblings.findIndex((item) => item.id === entry.id);
+const previous = position > 0 ? siblings[position - 1] : undefined;
+const next = position >= 0 && position < siblings.length - 1 ? siblings[position + 1] : undefined;
+const listHref = isSession ? "/transparencia/actas" : "/archivo";
+const listLabel = isSession ? "Todas las actas" : "Todo el archivo";
 ---
 
 <Layout title={entry.data.title} description={description}>
 	<main class="mx-auto max-w-[768px] px-4 py-8">
+		<nav aria-label="Ruta de navegación" class="mb-4 text-sm text-slate-600">
+			<a href={listHref} class="inline-flex items-center gap-1 font-medium underline-offset-4 hover:underline">
+				<HugeIcon icon={ArrowLeft01Icon} aria-hidden="true" class="h-4 w-4" />
+				{listLabel}
+			</a>
+		</nav>
 		<article class="markdown-content">
 			<PageHeader
 				title={entry.data.title}
 				description={description}
 				date={entry.data.date}
+				divider={false}
 			>
-				<div slot="eyebrow">
+				<div slot="eyebrow" class="flex flex-wrap items-center gap-2">
 					<TypeBadge type={entry.data.type} />
+					<IconBadge badges={visibleBadges} variant="chip" />
 				</div>
 				{
-					files.length > 0 && (
-						<section class="mt-4">
+					(files.length > 0 || isActaMissing) && (
+						<section class="mt-4" aria-label="Documentos">
+							{isActaMissing && (
+								<FileCallout
+									type={entry.data.type}
+									label="Acta de la sesión"
+									pendingText="El acta aún no se ha publicado"
+								/>
+							)}
 							{files.map((href) => (
 								<FileCallout
 									href={href}
@@ -41,5 +79,39 @@ const files = entry.data.files ?? [];
 			</PageHeader>
 			<Content />
 		</article>
+
+		{(previous || next) && (
+			<nav
+				aria-label={isSession ? "Otras sesiones" : "Otros documentos"}
+				class="mt-10 grid gap-3 border-t border-slate-200 pt-6 sm:grid-cols-2"
+			>
+				{previous ? (
+					<a
+						href={toHref(previous)}
+						rel="prev"
+						class="group flex flex-col rounded-lg border border-slate-200 bg-white p-4 no-underline transition-colors hover:border-brand-300"
+					>
+						<span class="inline-flex items-center gap-1 text-sm text-slate-600">
+							<HugeIcon icon={ArrowLeft01Icon} aria-hidden="true" class="h-4 w-4" />
+							Anterior
+						</span>
+						<span class="font-semibold text-slate-900 group-hover:underline">{previous.data.title}</span>
+					</a>
+				) : <span class="hidden sm:block" />}
+				{next && (
+					<a
+						href={toHref(next)}
+						rel="next"
+						class="group flex flex-col rounded-lg border border-slate-200 bg-white p-4 text-right no-underline transition-colors hover:border-brand-300"
+					>
+						<span class="inline-flex items-center justify-end gap-1 text-sm text-slate-600">
+							Siguiente
+							<HugeIcon icon={ArrowRight01Icon} aria-hidden="true" class="h-4 w-4" />
+						</span>
+						<span class="font-semibold text-slate-900 group-hover:underline">{next.data.title}</span>
+					</a>
+				)}
+			</nav>
+		)}
 	</main>
 </Layout>

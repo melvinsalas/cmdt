@@ -1,5 +1,8 @@
 ---
-import { formatDateEs, formatDateEsShort } from '../utils/date';
+import { formatDateEs, formatDateEsCompact, monthNameEs } from '../utils/date';
+import { badgeDefinitions, type BadgeKey } from '../data/badges';
+import { getTypeVariant } from '../utils/type-colors';
+import HugeIcon from './HugeIcon.astro';
 import IconBadge from './IconBadge.astro';
 import TypeBadge from './TypeBadge.astro';
 
@@ -21,62 +24,151 @@ interface Props {
 const { data, emptyMessage = 'No hay registros', showYearFilter = true, heading } = Astro.props;
 
 const sortedData = [...data].sort((a, b) => b.date.getTime() - a.date.getTime());
-const years = Array.from(new Set(sortedData.map((row) => row.date.getFullYear()))).sort((a, b) => b - a);
+const years = Array.from(new Set(sortedData.map((row) => row.date.getUTCFullYear()))).sort((a, b) => b - a);
 const latestYear = years[0];
+const types = Array.from(new Set(sortedData.map((row) => row.type).filter(Boolean))) as string[];
+const showFilters = showYearFilter;
+const showTypeFilter = showFilters && types.length > 1;
+const groupByMonth = showFilters;
+
+const usedBadges = (Object.keys(badgeDefinitions) as BadgeKey[]).filter((key) =>
+	sortedData.some((row) => row.badges?.includes(key)),
+);
+
+const normalize = (value: string) =>
+	value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+
+// Filas intercaladas con encabezados de mes cuando la tabla es el listado completo.
+type Item =
+	| { kind: 'month'; year: number; month: number }
+	| { kind: 'row'; row: DataRow };
+const items: Item[] = [];
+let lastKey = '';
+for (const row of sortedData) {
+	const year = row.date.getUTCFullYear();
+	const month = row.date.getUTCMonth();
+	const key = `${year}-${month}`;
+	if (groupByMonth && key !== lastKey) {
+		items.push({ kind: 'month', year, month });
+		lastKey = key;
+	}
+	items.push({ kind: 'row', row });
+}
 ---
 
 {sortedData.length === 0 ? (
 	<p>{emptyMessage}</p>
 ) : (
 	<div data-data-table class="mt-4">
-		{(showYearFilter || heading) && (
-			<div class="mb-3 flex items-center justify-between gap-2">
-				{heading ? <span class="text-base font-semibold text-slate-800">{heading}</span> : <span />}
-				{showYearFilter && (
-					<div class="flex items-center gap-2">
-						<label class="text-sm font-medium text-slate-700" for="year-filter">Año</label>
+		{heading && <h3 class="mb-3! mt-0!">{heading}</h3>}
+
+		{showFilters && (
+			<form
+				data-filters
+				role="search"
+				aria-label="Filtrar registros"
+				class="mb-3 grid gap-3 rounded-lg border border-slate-200 bg-white p-3 sm:grid-cols-[auto_auto_1fr] sm:items-end"
+				onsubmit="return false"
+			>
+				<label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+					Año
+					<select
+						name="anio"
+						data-year-select
+						class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
+					>
+						{years.map((year) => (
+							<option value={year} selected={year === latestYear}>{year}</option>
+						))}
+					</select>
+				</label>
+				{showTypeFilter && (
+					<label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+						Tipo
 						<select
-							id="year-filter"
-							data-year-select
-							class="paper-surface rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700 focus:border-slate-500 focus:outline-none"
+							name="tipo"
+							data-type-select
+							class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900"
 						>
-							{years.map((year) => (
-								<option value={year} selected={year === latestYear}>{year}</option>
+							<option value="">Todos</option>
+							{types.map((type) => (
+								<option value={type}>{getTypeVariant(type).label}</option>
 							))}
 						</select>
-					</div>
+					</label>
 				)}
-			</div>
+				<label class="flex flex-col gap-1 text-sm font-medium text-slate-700">
+					Buscar por número o nombre
+					<input
+						type="search"
+						name="q"
+						data-search-input
+						inputmode="search"
+						autocomplete="off"
+						placeholder="Ej.: 132"
+						class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-500"
+					/>
+				</label>
+			</form>
+		)}
+
+		{showFilters && (
+			<p data-result-count aria-live="polite" class="mb-2 text-sm text-slate-600"></p>
 		)}
 
 		<div class="overflow-x-auto rounded-xl border border-slate-200">
 			<table class="paper-surface min-w-full divide-y divide-slate-200 text-sm">
-				<thead class="bg-slate-50">
+				<thead class="bg-slate-100">
 					<tr>
-						<th class="hidden w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-700 sm:table-cell">Tipo</th>
-						<th class="hidden px-4 py-3 text-left font-semibold text-slate-700 sm:table-cell">Título</th>
-						<th class="hidden px-4 py-3 text-left font-semibold text-slate-700 sm:table-cell">Fecha</th>
-						<th class="px-4 py-3 text-left font-semibold text-slate-700 sm:hidden">Registro</th>
+						<th scope="col" class="hidden w-px whitespace-nowrap px-4 py-3 text-left font-semibold text-slate-800 sm:table-cell">Tipo</th>
+						<th scope="col" class="hidden px-4 py-3 text-left font-semibold text-slate-800 sm:table-cell">Título</th>
+						<th scope="col" class="hidden px-4 py-3 text-left font-semibold text-slate-800 sm:table-cell">Fecha</th>
+						<th scope="col" class="px-4 py-3 text-left font-semibold text-slate-800 sm:hidden">Registro</th>
 					</tr>
 				</thead>
 				<tbody class="divide-y divide-slate-100">
-					{sortedData.map((row) => {
-						const rowYear = row.date.getFullYear();
+					{items.map((item) => {
+						if (item.kind === 'month') {
+							return (
+								<tr
+									data-month-row
+									data-year={item.year}
+									class:list={['bg-slate-50', showFilters && item.year !== latestYear && 'hidden']}
+								>
+									<th
+										colspan="3"
+										scope="colgroup"
+										class="px-4 pb-1.5 pt-4 text-left text-xs font-semibold uppercase tracking-wider text-slate-600"
+									>
+										{monthNameEs(item.month)} {item.year}
+									</th>
+								</tr>
+							);
+						}
+
+						const { row } = item;
+						const rowYear = row.date.getUTCFullYear();
 						const rowHref = row.href?.trim();
 
 						return (
 							<tr
 								data-row
 								data-year={rowYear}
+								data-type={row.type}
+								data-search={normalize(row.title)}
 								data-row-link={rowHref ? 'true' : undefined}
-								class={`relative align-middle${showYearFilter && rowYear !== latestYear ? ' hidden' : ''}${rowHref ? ' cursor-pointer' : ''}`}
+								class:list={[
+									'relative align-middle',
+									showFilters && rowYear !== latestYear && 'hidden',
+									rowHref && 'cursor-pointer',
+								]}
 							>
 								<td class="relative hidden w-px whitespace-nowrap px-4 py-3 sm:table-cell">
 									{rowHref && (
 										<a
 											href={rowHref}
-											aria-label={row.title}
-											class="absolute inset-0 z-10 hidden rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:block"
+											aria-label={`${row.title}, ${formatDateEs(row.date)}`}
+											class="absolute inset-0 z-10 hidden rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-600 sm:block"
 										/>
 									)}
 									<TypeBadge type={row.type} />
@@ -85,20 +177,22 @@ const latestYear = years[0];
 									{rowHref && (
 										<a
 											href={rowHref}
-											aria-label={row.title}
-											class="absolute inset-0 z-10 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:hidden"
+											aria-label={`${row.title}, ${formatDateEs(row.date)}`}
+											class="absolute inset-0 z-10 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-600 sm:hidden"
 										/>
 									)}
 									<div class="flex items-start justify-between gap-3">
 										<TypeBadge type={row.type} />
-										<span class="whitespace-nowrap text-xs font-medium uppercase tracking-wide text-slate-500">
-											{formatDateEsShort(row.date)}
+										<span class="whitespace-nowrap text-sm text-slate-600">
+											{formatDateEsCompact(row.date)}
 										</span>
 									</div>
-									<div class="mt-2 inline-flex items-center gap-2 text-sm font-medium text-slate-900">
-										<span>{row.title}</span>
-										<IconBadge badges={row.badges} />
-									</div>
+									<div class="mt-2 text-base font-semibold text-slate-900">{row.title}</div>
+									{row.badges && row.badges.length > 0 && (
+										<div class="mt-1.5">
+											<IconBadge badges={row.badges} />
+										</div>
+									)}
 								</td>
 								<td class="relative hidden px-4 py-3 font-medium text-slate-900 sm:table-cell">
 									{rowHref && (
@@ -106,60 +200,90 @@ const latestYear = years[0];
 											href={rowHref}
 											tabindex="-1"
 											aria-hidden="true"
-											class="absolute inset-y-0 z-10 hidden rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-500 sm:block"
-											style="left: 0; right: 0;"
+											class="absolute inset-0 z-10 hidden sm:block"
 										/>
 									)}
-									<span class="inline-flex items-center gap-2">
+									<span class="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
 										<span>{row.title}</span>
 										<IconBadge badges={row.badges} />
 									</span>
 								</td>
-								<td class="relative hidden px-4 py-3 text-slate-600 sm:table-cell">
+								<td class="relative hidden whitespace-nowrap px-4 py-3 text-slate-700 sm:table-cell">
 									{rowHref && (
 										<a
 											href={rowHref}
 											tabindex="-1"
 											aria-hidden="true"
-											class="absolute inset-0 z-10 hidden rounded-sm sm:block"
+											class="absolute inset-0 z-10 hidden sm:block"
 										/>
 									)}
-									<span class="sm:hidden">{formatDateEsShort(row.date)}</span>
-									<span class="hidden sm:inline">{formatDateEs(row.date)}</span>
+									{formatDateEs(row.date)}
 								</td>
 							</tr>
 						);
 					})}
+					{showFilters && (
+						<tr data-empty-row hidden>
+							<td colspan="3" class="px-4 py-8 text-center text-slate-600">
+								No hay registros que coincidan con la búsqueda.
+								<button type="button" data-clear-filters class="ml-1 font-medium text-brand-700 underline underline-offset-4">
+									Limpiar filtros
+								</button>
+							</td>
+						</tr>
+					)}
 				</tbody>
 			</table>
 		</div>
 
-		{showYearFilter && years.length > 1 && (
+		{usedBadges.length > 0 && (
+			<p class="mt-2 hidden flex-wrap items-center justify-end gap-x-4 gap-y-1 text-sm text-slate-600 sm:flex">
+				<span class="font-medium text-slate-700">Leyenda:</span>
+				{usedBadges.map((key) => (
+					<span class="inline-flex items-center gap-1">
+						<HugeIcon icon={badgeDefinitions[key].icon} aria-hidden="true" class="h-4 w-4" />
+						{badgeDefinitions[key].label}
+					</span>
+				))}
+			</p>
+		)}
+
+		{showFilters && years.length > 1 && (
 			<nav aria-label="Navegación por año" class="mt-3 flex items-center justify-between gap-3">
 				<button
 					type="button"
 					data-previous-year
 					hidden
-					class="paper-surface rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+					class="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:border-brand-300 hover:text-slate-900"
 				/>
 				<button
 					type="button"
 					data-next-year
 					hidden
-					class="paper-surface ml-auto rounded-md border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+					class="ml-auto rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700 hover:border-brand-300 hover:text-slate-900"
 				/>
 			</nav>
 		)}
 
 		<script is:inline>
-			const tableRoot = document.currentScript?.closest('[data-data-table]');
+			(() => {
+				const tableRoot = document.currentScript?.closest('[data-data-table]');
+				if (!tableRoot) return;
 
-			if (tableRoot) {
-				const select = tableRoot.querySelector('[data-year-select]');
+				const yearSelect = tableRoot.querySelector('[data-year-select]');
+				const typeSelect = tableRoot.querySelector('[data-type-select]');
+				const searchInput = tableRoot.querySelector('[data-search-input]');
 				const previousYearButton = tableRoot.querySelector('[data-previous-year]');
 				const nextYearButton = tableRoot.querySelector('[data-next-year]');
-				const rows = tableRoot.querySelectorAll('tr[data-row]');
+				const countText = tableRoot.querySelector('[data-result-count]');
+				const emptyRow = tableRoot.querySelector('[data-empty-row]');
+				const clearButton = tableRoot.querySelector('[data-clear-filters]');
+				const rows = [...tableRoot.querySelectorAll('tr[data-row]')];
+				const monthRows = [...tableRoot.querySelectorAll('tr[data-month-row]')];
 				const stripeClasses = ['paper-surface-soft', 'paper-surface'];
+
+				const normalize = (value) =>
+					value.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 
 				const applyStriping = () => {
 					let i = 0;
@@ -169,50 +293,112 @@ const latestYear = years[0];
 					});
 				};
 
-				const applyFilter = (year) => {
-					rows.forEach((row) => row.classList.toggle('hidden', row.getAttribute('data-year') !== year));
+				if (!(yearSelect instanceof HTMLSelectElement)) {
 					applyStriping();
+					return;
+				}
+
+				// Estado inicial desde la URL (?anio=2025&tipo=ordinaria&q=132).
+				const params = new URLSearchParams(window.location.search);
+				const initialYear = params.get('anio');
+				if (initialYear && [...yearSelect.options].some((option) => option.value === initialYear)) {
+					yearSelect.value = initialYear;
+				}
+				if (typeSelect instanceof HTMLSelectElement && params.get('tipo')) {
+					typeSelect.value = params.get('tipo');
+					if (typeSelect.selectedIndex < 0) typeSelect.value = '';
+				}
+				if (searchInput instanceof HTMLInputElement && params.get('q')) {
+					searchInput.value = params.get('q');
+				}
+
+				const updateYearButton = (button, option, arrow) => {
+					if (!(button instanceof HTMLButtonElement)) return;
+					button.hidden = !option;
+					if (option) button.textContent = arrow === 'left' ? `← ${option.value}` : `${option.value} →`;
 				};
 
-				if (select instanceof HTMLSelectElement) {
-					const updateYearButton = (button, option, arrow) => {
-						if (!(button instanceof HTMLButtonElement)) return;
+				const syncUrl = (year, type, query) => {
+					const url = new URL(window.location.href);
+					const set = (key, value) => (value ? url.searchParams.set(key, value) : url.searchParams.delete(key));
+					set('anio', year === yearSelect.options[0]?.value ? '' : year);
+					set('tipo', type);
+					set('q', query);
+					window.history.replaceState(null, '', url);
+				};
 
-						button.hidden = !option;
-						if (option) {
-							button.textContent = arrow === 'left' ? `← ${option.value}` : `${option.value} →`;
+				const update = () => {
+					const year = yearSelect.value;
+					const type = typeSelect instanceof HTMLSelectElement ? typeSelect.value : '';
+					const rawQuery = searchInput instanceof HTMLInputElement ? searchInput.value : '';
+					const query = normalize(rawQuery);
+					// Con búsqueda activa se consultan todos los años.
+					const searchAllYears = query.length > 0;
+					let visible = 0;
+
+					rows.forEach((row) => {
+						const matches =
+							(searchAllYears || row.dataset.year === year) &&
+							(!type || row.dataset.type === type) &&
+							(!query || (row.dataset.search ?? '').includes(query));
+						row.classList.toggle('hidden', !matches);
+						if (matches) visible++;
+					});
+
+					monthRows.forEach((monthRow) => {
+						let sibling = monthRow.nextElementSibling;
+						let hasVisibleRow = false;
+						while (sibling && sibling.hasAttribute('data-row')) {
+							if (!sibling.classList.contains('hidden')) hasVisibleRow = true;
+							sibling = sibling.nextElementSibling;
 						}
-					};
+						monthRow.classList.toggle('hidden', !hasVisibleRow);
+					});
 
-					const updateTable = () => {
-						applyFilter(select.value);
-						updateYearButton(previousYearButton, select.options[select.selectedIndex + 1], 'left');
-						updateYearButton(nextYearButton, select.options[select.selectedIndex - 1], 'right');
-					};
+					if (emptyRow) emptyRow.hidden = visible > 0;
+					if (countText) {
+						const scope = searchAllYears ? 'en todos los años' : `en ${year}`;
+						countText.textContent = `${visible} ${visible === 1 ? 'registro' : 'registros'} ${scope}`;
+					}
 
-					const navigateYear = (button, offset) => {
-						if (button instanceof HTMLButtonElement) {
-							button.addEventListener('click', () => {
-								select.selectedIndex += offset;
-								updateTable();
-							});
-						}
-					};
-
-					updateTable();
-					select.addEventListener('change', updateTable);
-					navigateYear(previousYearButton, 1);
-					navigateYear(nextYearButton, -1);
-				} else {
+					yearSelect.disabled = searchAllYears;
+					updateYearButton(previousYearButton, searchAllYears ? null : yearSelect.options[yearSelect.selectedIndex + 1], 'left');
+					updateYearButton(nextYearButton, searchAllYears ? null : yearSelect.options[yearSelect.selectedIndex - 1], 'right');
 					applyStriping();
-				}
-			}
+					syncUrl(year, type, rawQuery.trim());
+				};
+
+				const stepYear = (button, offset) => {
+					button?.addEventListener('click', () => {
+						yearSelect.selectedIndex += offset;
+						update();
+					});
+				};
+
+				yearSelect.addEventListener('change', update);
+				typeSelect?.addEventListener('change', update);
+				searchInput?.addEventListener('input', update);
+				clearButton?.addEventListener('click', () => {
+					if (typeSelect instanceof HTMLSelectElement) typeSelect.value = '';
+					if (searchInput instanceof HTMLInputElement) searchInput.value = '';
+					update();
+					searchInput?.focus();
+				});
+				stepYear(previousYearButton, 1);
+				stepYear(nextYearButton, -1);
+				update();
+			})();
 		</script>
 
 		<style>
 			[data-data-table] tr[data-row-link='true']:hover,
 			[data-data-table] tr[data-row-link='true']:focus-within {
-				background-color: rgb(241 245 249);
+				background-color: var(--color-brand-50);
+			}
+
+			[data-data-table] select:disabled {
+				opacity: 0.55;
+				cursor: not-allowed;
 			}
 		</style>
 	</div>

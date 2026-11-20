@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar.astro';
 import Footbar from '../components/Footbar.astro';
 import ThirdPartyScripts from '../components/ThirdPartyScripts.astro';
 import socialImage from '../assets/logo.png';
-import { SITE_BRAND, SITE_DESCRIPTION_DEFAULT, SITE_LOCALE, SITE_NAME } from '../data/site';
+import { SITE_DESCRIPTION_DEFAULT, SITE_LOCALE, SITE_NAME } from '../data/site';
 
 const {
 	title = SITE_NAME,
@@ -21,7 +21,9 @@ const socialImageURL = Astro.site ? new URL(socialImage.src, Astro.site) : new U
 <html lang={SITE_LOCALE}>
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="theme-color" content="#1b5b33" />
+		<link rel="preload" href="/fonts/public-sans-latin.woff2" as="font" type="font/woff2" crossorigin />
 		<link rel="icon" href="/favicon.ico" />
 		<link rel="canonical" href={canonicalURL} />
 		<meta name="generator" content={Astro.generator} />
@@ -46,8 +48,10 @@ const socialImageURL = Astro.site ? new URL(socialImage.src, Astro.site) : new U
 		<ThirdPartyScripts />
 	</head>
 	<body>
-		<Navbar brand={SITE_BRAND} />
-		<slot />
+		<Navbar />
+		<div id="contenido" tabindex="-1" class="outline-none">
+			<slot />
+		</div>
 		<Footbar />
 	</body>
 </html>

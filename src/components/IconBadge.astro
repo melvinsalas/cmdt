@@ -1,47 +1,46 @@
 ---
-import { CalendarCheckIcon, FileQuestionMarkIcon, YoutubeIcon } from '@hugeicons/core-free-icons';
+import { resolveBadges } from '../data/badges';
 import HugeIcon from './HugeIcon.astro';
 
 interface Props {
 	badges?: string[];
+	/** `chip` muestra el texto siempre; `compact` solo el ícono en pantallas grandes. */
+	variant?: 'chip' | 'compact';
 }
 
-const { badges = [] } = Astro.props;
-
-const iconDefinitions = {
-	video: {
-		icon: YoutubeIcon,
-		label: 'Grabación en Video',
-	},
-	orden: {
-		icon: CalendarCheckIcon,
-		label: 'Orden del Día',
-	},
-	missing: {
-		icon: FileQuestionMarkIcon,
-		label: 'Acta no disponible',
-	},
-};
-
-const icons = badges.flatMap((badge) => {
-	const definition = iconDefinitions[badge as keyof typeof iconDefinitions];
-	return definition ? [definition] : [];
-});
+const { badges = [], variant = 'compact' } = Astro.props;
+const items = resolveBadges(badges);
 ---
 
-{
-	icons.map(({ icon, label }) => (
-		<span
-			aria-label={label}
-			class="group relative z-20 inline-flex text-slate-500"
-		>
-			<HugeIcon icon={icon} aria-hidden="true" class="h-4 w-4" />
+{items.length > 0 && (
+	<span class="inline-flex flex-wrap items-center gap-1.5">
+		{items.map(({ icon, label, chip, key }) => (
 			<span
-				role="tooltip"
-				class="pointer-events-none absolute bottom-full left-1/2 z-30 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-slate-900 px-2 py-1 text-xs font-normal text-white opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-within:opacity-100"
+				data-badge={key}
+				title={label}
+				class:list={[
+					'relative inline-flex items-center gap-1 rounded-full border text-xs font-medium leading-5',
+					chip,
+					variant === 'chip' ? 'px-2 py-0.5' : 'px-1.5 py-0.5 sm:border-transparent sm:bg-transparent sm:px-0.5',
+				]}
 			>
-				{label}
+				<HugeIcon icon={icon} aria-hidden="true" class="h-4 w-4 shrink-0" />
+				<span class:list={[variant === 'compact' && 'badge-label-compact']}>{label}</span>
 			</span>
-		</span>
-	))
-}
+		))}
+	</span>
+)}
+
+<style>
+	@media (min-width: 40rem) {
+		.badge-label-compact {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			margin: -1px;
+			overflow: hidden;
+			clip: rect(0, 0, 0, 0);
+			white-space: nowrap;
+		}
+	}
+</style>
